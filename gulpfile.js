@@ -1,0 +1,87 @@
+// Load some modules which are installed through NPM.
+var gulp = require('gulp'),
+    browserify = require('browserify'),  // Bundles JS.
+    reactify = require('reactify'),  // Transforms React JSX to JS.    
+	del = require('del'),  // Deletes files.
+    browserSync = require('browser-sync'),
+    reload = browserSync.reload;
+    recess = require('gulp-recess'),
+    less = require('gulp-less'),    
+	envify = require('envify/custom'),
+	uglify = require('gulp-uglify'),
+	buffer = require('vinyl-buffer'),
+	source = require('vinyl-source-stream');
+	
+var paths = {
+    css: ['src/css/app.less'],
+    js: ['src/js/**/*.js'],
+    html: ['src/index.html'],
+	xml: ['src/config.xml']
+};
+
+gulp.task('clean-xml', function (done) {
+    del(['build/config.xml'], done);
+});
+gulp.task('clean-html', function (done) {
+    del(['build/index.html'], done);
+});
+gulp.task('clean-css', function (done) {
+    del(['build/css'], done);
+});
+gulp.task('clean-js', function (done) {
+    del(['build/js'], done);
+});
+
+gulp.task('browser-sync', function() {
+    browserSync({
+        browser: ["google chrome"],
+        server: {
+            baseDir: "./Build"
+        }
+    });
+});
+
+gulp.task('xml', ['clean-xml'], function () {
+    var dest = 'build';
+    return gulp.src(paths.xml)
+    .pipe(gulp.dest(dest));
+});
+gulp.task('html', ['clean-html'], function () {
+    var dest = 'build';
+    return gulp.src(paths.html)
+    .pipe(gulp.dest(dest))
+    .pipe(reload({ stream: true }));
+});
+gulp.task('css', ['clean-css'], function () {
+    return gulp.src(paths.css)
+      /*.pipe(recess())*/
+      .pipe(less())
+      .pipe(gulp.dest('build/css'))
+      .pipe(reload({ stream: true }));
+});
+
+gulp.task('browserify', function () {
+    return browserify({
+        entries: './src/js/app.js',
+        extensions: ['.jsx', 'js'],
+        paths: ['./node_modules', 'src/js/**/*.js']
+    })
+    .transform('reactify')
+	/*.transform(envify({
+		NODE_ENV: 'production'
+	}))*/	
+    .bundle()
+    .pipe(source('bundle.js'))
+	/*.pipe(buffer())
+	.pipe(uglify())*/
+    .pipe(gulp.dest('build/js'));
+});
+
+gulp.task('watch', ['browser-sync'], function () {
+    gulp.watch(paths.css, ['css', reload]);
+    gulp.watch(paths.js, ['browserify', reload]);
+    gulp.watch(paths.html, ['html', reload]);
+	gulp.watch(paths.xml, ['xml', reload]);
+});
+
+gulp.task('default', ['watch', 'html', 'css', 'browserify', 'xml']);

@@ -1,0 +1,92 @@
+// 
+// Runopoly
+// ==============================
+
+
+
+// Variables
+// ------------------------------
+
+@runopoly-border-green:		rgb(10, 67, 108);
+@runopoly-darkest-green:	#039E79;
+@runopoly-dark-green:		#039E79;
+@runopoly-light-green:		#42B49A;
+@runopoly-faded-green:		#ABD0CB;
+@runopoly-dark-grey:		#43494B;
+@runopoly-black:			#000000;
+@runopoly-darkest-grey:		#43494B;
+@runopoly-dark-grey:		#787B84;
+@runopoly-light-grey:		#AAAAAA;
+@runopoly-lightest-grey:	#DFDFDF;
+@runopoly-white:			#FFFFFF;
+
+//Nearby Area List
+
+.panel--first {
+  margin-left: 5px;
+  margin-right: 5px;
+  border: 1px solid @runopoly-lightest-grey;
+}
+
+.list-item
+{
+	height: 90px;
+	margin-left: 3px;
+	margin-right: 3px;
+}
+
+.item-media + .item-inner {
+  margin-left: 40px;
+}
+
+.list-avatar {
+	height: 60px;
+	width: 	60px;
+	background-color: @runopoly-light-green;
+	border: 1px solid @runopoly-light-green;
+}
+.item-title {
+	text-transform: uppercase;
+	color: @runopoly-black;
+}
+.item-subtitle {
+	color: @runopoly-dark-grey;
+	margin-top: 5px;
+}
+.FlexLayout.view {
+	background-color: @runopoly-lightest-grey;
+}
+
+.Headerbar.runopoly {
+	.retina-1px-border-bottom( @runopoly-border-green );
+	background-color: @runopoly-light-green;
+	color: @runopoly-white;
+
+	&:after {
+		width: 100%;
+		height: 1px;
+		background-color: @runopoly-border-green;
+		bottom: -1px;
+		content: " ";
+		left: 0;
+		position: absolute;	
+	}		
+	
+	.Headerbar-button {
+		color: @runopoly-white;
+	}	
+}
+
+// Running Page
+
+.panel-header {
+  margin-bottom: 5px;
+  margin-top: 20px;
+}
+
+.panel {
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border: 1px solid @runopoly-lightest-grey;
+}
