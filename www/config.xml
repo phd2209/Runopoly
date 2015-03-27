@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
+﻿<?xml version='1.0' encoding='utf-8'?>
 <widget id="com.projects.runopoly" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
 	<name>Runopoly</name>
 	<description>Løb dig til områder</description>
 	<feature name="http://api.phonegap.com/1.0/device" />
 	
 	<!-- PHONEGAP PREFERENCES -->
-	<preference name="phonegap-version" value="3.7.0" />
+	<preference name="phonegap-version" value="3.6.0" />
 	<preference name="target-device" value="handset" />
 	<preference name="prerendered-icon" value="true" />
 	<preference name="ios-statusbarstyle" value="black-opaque" />

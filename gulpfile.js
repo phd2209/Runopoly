@@ -20,34 +20,34 @@ var paths = {
 };
 
 gulp.task('clean-xml', function (done) {
-    del(['build/config.xml'], done);
+    del(['www/config.xml'], done);
 });
 gulp.task('clean-html', function (done) {
-    del(['build/index.html'], done);
+    del(['www/index.html'], done);
 });
 gulp.task('clean-css', function (done) {
-    del(['build/css'], done);
+    del(['www/css'], done);
 });
 gulp.task('clean-js', function (done) {
-    del(['build/js'], done);
+    del(['www/js'], done);
 });
 
 gulp.task('browser-sync', function() {
     browserSync({
         browser: ["google chrome"],
         server: {
-            baseDir: "./Build"
+            baseDir: "./www"
         }
     });
 });
 
 gulp.task('xml', ['clean-xml'], function () {
-    var dest = 'build';
+    var dest = 'www';
     return gulp.src(paths.xml)
     .pipe(gulp.dest(dest));
 });
 gulp.task('html', ['clean-html'], function () {
-    var dest = 'build';
+    var dest = 'www';
     return gulp.src(paths.html)
     .pipe(gulp.dest(dest))
     .pipe(reload({ stream: true }));
@@ -56,7 +56,7 @@ gulp.task('css', ['clean-css'], function () {
     return gulp.src(paths.css)
       /*.pipe(recess())*/
       .pipe(less())
-      .pipe(gulp.dest('build/css'))
+      .pipe(gulp.dest('www/css'))
       .pipe(reload({ stream: true }));
 });
 
@@ -74,7 +74,7 @@ gulp.task('browserify', function () {
     .pipe(source('bundle.js'))
 	/*.pipe(buffer())
 	.pipe(uglify())*/
-    .pipe(gulp.dest('build/js'));
+    .pipe(gulp.dest('www/js'));
 });
 
 gulp.task('watch', ['browser-sync'], function () {
