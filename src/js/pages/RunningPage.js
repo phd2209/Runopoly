@@ -80,16 +80,16 @@ var RunningPage = React.createClass({
 
     PointInEllipse: function (area, point) {
 
-        var xvec = _.pluck(area.coords, "latitude"),
-		yvec = _.pluck(area.coords, "longitude"),
-		pnt = [];
+        var xvec = _.pluck(area.coords, "latitude");
+		var yvec = _.pluck(area.coords, "longitude");
+		var pnt = [];
 
         pnt.push(point.latitude);
         pnt.push(point.longitude);
 
         var Nx = xvec.length, Ny = yvec.length;
 
-        if (Nx !== Ny) {
+        if (Nx != Ny) {
             var P = 999;
             return P;
         }
@@ -111,7 +111,7 @@ var RunningPage = React.createClass({
             ///////////////////////////////////
             if (((xvec[k] < pnt[0] && pnt[0] < xvec[k - 1]) || (xvec[k - 1] < pnt[0] && pnt[0] < xvec[k])) || ((yvec[k] < pnt[1]) && pnt[1] < yvec[k - 1]) || (yvec[k - 1] < pnt[1] && pnt[1] < yvec[k])) {
 
-                if ((xvec[k] !== xvec[k - 1]) && (yvec[k] !== yvec[k - 1])) {
+                if ((xvec[k] != xvec[k - 1]) && (yvec[k] != yvec[k - 1])) {
                     a = (yvec[k] - yvec[k - 1]) / (xvec[k] - xvec[k - 1]);
                     b = yvec[k] - a * (xvec[k] - pnt[0]);
                     x = (pnt[1] - b) / a + pnt[0];
@@ -309,7 +309,7 @@ var RunningPage = React.createClass({
 		//reset state		
 		this.setState({
 			tracking: false,
-			duration: 0,
+			duration: 0
 		});
 		
 		//save running information
@@ -350,9 +350,9 @@ var RunningPage = React.createClass({
 				}
 			}
 		}
-		
+	
 		totalkm = total_km.toFixed(1);
-		areakm  = total_km_in_area.toFixed(1);	
+		areakm = total_km_in_area.toFixed(1);
 	
 		return (
 			<UI.FlexLayout className={this.props.viewClassName}>
