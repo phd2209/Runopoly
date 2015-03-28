@@ -11,7 +11,7 @@ var NearbyAreaPage = React.createClass({
 
 	getDefaultProps: function () {
         return {
-			maximumAge: 600000,
+			maximumAge: 3000,
 			timeout: 10000,
 			enableHighAccuracy: true
 		};
