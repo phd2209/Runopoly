@@ -22,7 +22,7 @@ var RunAreaStatus = React.createClass({
 	getStyle: function () {
 		return {
 			display: 'flex',
-			height: 120,
+			height: 90,
 			backgroundColor: '#42B49A',
 			color: "#FFFFFF"
 		};

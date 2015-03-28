@@ -26,7 +26,7 @@ var RunAreaRank = React.createClass({
 	getStyle: function () {
 		return {
 			display: 'flex',
-			height: 120,
+			height: 90,
 			backgroundColor: '#039E79',
 			color: "#FFFFFF"
 		};

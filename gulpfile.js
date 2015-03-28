@@ -67,13 +67,13 @@ gulp.task('browserify', function () {
         paths: ['./node_modules', 'src/js/**/*.js']
     })
     .transform('reactify')
-	/*.transform(envify({
+	.transform(envify({
 		NODE_ENV: 'production'
-	}))*/	
+	}))	
     .bundle()
     .pipe(source('bundle.js'))
-	/*.pipe(buffer())
-	.pipe(uglify())*/
+	.pipe(buffer())
+	.pipe(uglify())
     .pipe(gulp.dest('www/js'));
 });
 
