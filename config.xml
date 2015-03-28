@@ -6,6 +6,7 @@
 	
 	<!-- PHONEGAP PREFERENCES -->
 	<preference name="phonegap-version" value="3.7.0" />
+	<preference name="DisallowOverscroll" value="true"/> 
 	<preference name="target-device" value="handset" />
 	<preference name="prerendered-icon" value="true" />
 	<preference name="ios-statusbarstyle" value="black-opaque" />
