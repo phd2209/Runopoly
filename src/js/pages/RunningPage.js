@@ -29,7 +29,7 @@ var RunningPage = React.createClass({
 	getInitialState: function () {
 		return {
 			tracking: false,
-			location: null,
+			location: {latitude: 0, longitude: 0},
 			duration: 0,
 			area: null,
 			modalLoadingVisible: false
@@ -309,7 +309,8 @@ var RunningPage = React.createClass({
 		//reset state		
 		this.setState({
 			tracking: false,
-			duration: 0
+			duration: 0,
+			location: {latitude: 0, longitude: 0},
 		});
 		
 		//save running information
@@ -342,9 +343,7 @@ var RunningPage = React.createClass({
 
 			if (this.tracking_data[j].tracking && this.tracking_data[j + 1].tracking) {
 				total_km += this.gps_distance(this.tracking_data[j].latitude, this.tracking_data[j].longitude, this.tracking_data[j + 1].latitude, this.tracking_data[j + 1].longitude);
-			}
-			
-			if (this.tracking_data[j].tracking && this.tracking_data[j + 1].tracking) {
+									
 				if (this.tracking_data[j].inarea && this.tracking_data[j + 1].inarea) {
 					total_km_in_area += this.gps_distance(this.tracking_data[j].latitude, this.tracking_data[j].longitude, this.tracking_data[j + 1].latitude, this.tracking_data[j + 1].longitude)
 				}
@@ -370,7 +369,7 @@ var RunningPage = React.createClass({
 					<div className="panel-header text-caps">{this.state.area.name}</div>
 					<div className="panel">
 						<RunAreaStatus areaKm={areakm} />
-						<RunAreaRank currentRank={areakm} currentRankKm={areakm} nextRankKm={totalkm} />
+						<RunAreaRank currentRank={this.state.location.latitude} currentRankKm={this.state.location.longitude} nextRankKm={areakm} />
 					</div>
 					<div className="panel-header text-caps"></div>
 					<div className="panel">

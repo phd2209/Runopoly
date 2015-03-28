@@ -12,10 +12,12 @@ var RunAreaRank = React.createClass({
 	render: function () {
 
 		var text = this.props.currentRank + ' | ' + this.props.currentRankKm;
-
+		//<RunDisplay totalKm={this.props.nextRankKm}/>
+		
 		return (
 			<div style={this.getStyle()}>
-				<RunDisplay totalKm={this.props.currentRank}/>
+				<span>{text}</span>
+				
 			</div>
 		);
 	},
