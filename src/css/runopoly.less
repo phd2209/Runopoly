@@ -21,6 +21,26 @@
 @runopoly-white:			#FFFFFF;
 
 //Nearby Area List
+#main {
+	width: 100%;
+	height: 100%;
+}
+.view-wrapper {
+	height: 100%;
+}
+
+.start-flag {		
+	font-size: 32px;
+	color : green;	
+}
+.stop-flag {		
+	font-size: 32px;
+	color : red;	
+}
+.checkpoint-flag {		
+	font-size: 32px;
+	color : blue;	
+}
 
 .panel--first {
   margin-left: 5px;
@@ -30,7 +50,7 @@
 
 .list-item
 {
-	height: 90px;
+	height: 60px;
 	margin-left: 3px;
 	margin-right: 3px;
 }
@@ -56,7 +76,14 @@
 .FlexLayout.view {
 	background-color: @runopoly-lightest-grey;
 }
-
+.btn-runopoly {
+	background-color: @runopoly-light-green;
+	color: @runopoly-white;
+}
+.action-button {
+	width: 96%;
+	margin: auto;
+}
 .Headerbar.runopoly {
 	.retina-1px-border-bottom( @runopoly-border-green );
 	background-color: @runopoly-light-green;
@@ -76,17 +103,12 @@
 		color: @runopoly-white;
 	}	
 }
-
-// Running Page
-
-.panel-header {
-  margin-bottom: 5px;
-  margin-top: 20px;
+.field-label {
+	color: @runopoly-black;
 }
-
-.panel {
-  margin-bottom: 5px;
-  margin-left: 5px;
-  margin-right: 5px;
-  border: 1px solid @runopoly-lightest-grey;
+.field {
+	color: @runopoly-dark-green
+}
+.select-field {
+	color: @runopoly-dark-green
 }

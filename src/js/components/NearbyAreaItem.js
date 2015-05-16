@@ -14,7 +14,7 @@ var NearbyAreaItem = React.createClass({
 		imageUrl: React.PropTypes.string.isRequired,
 		distance: React.PropTypes.number.isRequired,
 		difficulty: React.PropTypes.number.isRequired,
-		itemIndex: React.PropTypes.number.isRequired
+		itemIndex: React.PropTypes.string.isRequired
 	},
 
     render: function () {

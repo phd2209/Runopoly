@@ -1,0 +1,56 @@
+<NotepadPlus>
+    <Project name="Runopoly">
+        <Folder name="css">
+            <File name="src\css\app.less" />
+            <File name="src\css\ionicons-animation.less" />
+            <File name="src\css\ionicons-font.less" />
+            <File name="src\css\ionicons-icons.less" />
+            <File name="src\css\ionicons-variables.less" />
+            <File name="src\css\ionicons.less" />
+            <File name="src\css\runopoly.less" />
+        </Folder>
+        <Folder name="fonts">
+            <File name="src\fonts\ionicons.eot" />
+            <File name="src\fonts\ionicons.svg" />
+            <File name="src\fonts\ionicons.ttf" />
+            <File name="src\fonts\ionicons.woff" />
+        </Folder>
+        <Folder name="js">
+            <Folder name="components">
+                <File name="src\js\components\GoogleMap.js" />
+                <File name="src\js\components\LabelInput.js" />
+                <File name="src\js\components\NearbyAreaItem.js" />
+                <File name="src\js\components\NearbyAreaList.js" />
+                <File name="src\js\components\RunAreaRank.js" />
+                <File name="src\js\components\RunAreaStatus.js" />
+                <File name="src\js\components\RunButton.js" />
+                <File name="src\js\components\RunDisplay.js" />
+                <File name="src\js\components\RunTimer.js" />
+                <File name="src\js\components\ChallengeMap.js" />
+                <File name="src\js\components\CheckPointItem.js" />
+                <File name="src\js\components\LabelSelect.js" />
+            </Folder>
+            <Folder name="mixins">
+                <File name="src\js\mixins\geolocationMixin.js" />
+            </Folder>
+            <Folder name="pages">
+                <File name="src\js\pages\AreaOwnersPage.js" />
+                <File name="src\js\pages\LoginWrapper.js" />
+                <File name="src\js\pages\NearbyAreaPage.js" />
+                <File name="src\js\pages\RunningPage - Kopi.js" />
+                <File name="src\js\pages\Create - Step1.js" />
+                <File name="src\js\pages\Create - Step2.js" />
+                <File name="src\js\pages\Create - Step3.js" />
+                <File name="src\js\pages\Home.js" />
+            </Folder>
+            <Folder name="utils">
+                <File name="src\js\utils\areaService.js" />
+            </Folder>
+            <File name="src\js\app.js" />
+        </Folder>
+        <File name="src\config.xml" />
+        <File name="src\index.html" />
+        <File name="gulpfile.js" />
+        <File name="package.json" />
+    </Project>
+</NotepadPlus>

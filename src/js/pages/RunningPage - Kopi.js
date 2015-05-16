@@ -1,5 +1,6 @@
 var React = require("react");
-var areaService = require('../utils/areaService');
+var Parse = require('parse').Parse;
+var ParseReact = require('parse-react');
 var RunTimer = require("../components/RunTimer");
 var RunDisplay = require("../components/RunDisplay");
 var RunAreaStatus = require('../components/RunAreaStatus');
@@ -10,13 +11,21 @@ var Navigation = require('touchstonejs').Navigation;
 var geolocationMixin = require('../mixins/geoLocationMixin');
 
 var RunningPage = React.createClass({
-	mixins: [geolocationMixin, Navigation],
+	mixins: [geolocationMixin, Navigation, ParseReact.Mixin],
 
 	propTypes: {
 		preview: React.PropTypes.string.isRequired,
 		selectedAreaId: React.PropTypes.string.isRequired
 	},
 
+	observe: function() {
+		return {
+			area: (new Parse.Query('Area'))
+			.equalTo("objectId", this.props.selectedAreaId),
+			user: ParseReact.currentUser
+		};
+	},	
+	
 	getDefaultProps: function () {
         return {
 			prevView: 'NearbyAreaPage',
@@ -31,25 +40,15 @@ var RunningPage = React.createClass({
 			tracking: false,
 			location: {latitude: 0, longitude: 0},
 			duration: 0,
-			area: null,
-			modalLoadingVisible: false
+			processing: false
 		};
 	},
 
 	componentWillMount: function () {
 		this.tracking_data = [];
+		this.areaKm = 0;
+		this.totalKm = 0;
 		this.watchPosition();
-
-		this.setState({
-			modalLoadingVisible: true
-		});
-
-		areaService.findById(this.props.selectedAreaId).done(function (area) {
-			this.setState({
-				area: area,
-				modalLoadingVisible: false
-			});
-		}.bind(this));
 	},
 
 	componentDidMount: function () {
@@ -302,9 +301,17 @@ var RunningPage = React.createClass({
 	
 	// Stops tracking of a run
     stopTracking: function () {		
+	
+		this.setState({
+			processing: true
+		});
+	
 		console.log("stopTracking" +this.state.tracking);
 		
 		clearInterval(this.intervalID);
+		
+		//Save run
+		this.saveRun();
 		
 		//reset state		
 		this.setState({
@@ -313,12 +320,47 @@ var RunningPage = React.createClass({
 			location: {latitude: 0, longitude: 0},
 		});
 		
-		//save running information
-		console.log(this.tracking_data);
+		this.areaKm = 0;
+		this.totalKm = 0;
+		
+		setTimeout(function() {
+			this.showView('page-areaowners', 'fade', {selectedAreaId: this.props.selectedAreaId});
+		}.bind(this), 0);			
+		
     },
 	
+	saveRun: function() {
+		
+		// ACL, so that only the current user can access this object
+		var Area = Parse.Object.extend("Area");		
+		var User = Parse.Object.extend("User"); 		
+		var acl = new Parse.ACL(new User({id: this.data.user.objectId}));
+		acl.setPublicReadAccess(true);
+        acl.setPublicWriteAccess(true);
+		
+		console.log(this.data.user);	
+		ParseReact.Mutation.Create('Run', {
+			areaKm: Number(this.areaKm),
+			totalKm: Number(this.totalKm),
+			duration: Number(this.state.duration),
+			route: this.tracking_data,
+			area: new Area({id: this.props.selectedAreaId}),
+			user: new User({id: this.data.user.objectId}),
+			ACL: acl
+		}).dispatch().then(function() {
+			areaKm = 0;
+			totalKm = 0;
+			duration = 0;
+			route = [];
+			area = null,
+			user = null,
+			ACL = null;
+		});
+	},		
+		
 	render: function () {
 		
+		var selectedArea = this.data.area;
 		var buttonlabel  = (this.state.tracking) ? 'Pause' : 'Start';
 		var totalkm = 0;
 		var areakm = 0;		
@@ -327,7 +369,7 @@ var RunningPage = React.createClass({
 			this.tracking_data.push(this.state.location);			
 			this.state.location.tracking = this.state.tracking;
 			
-			if (this.PointInEllipse(this.state.area, this.state.location)) {
+			if (this.PointInEllipse(selectedArea, this.state.location)) {
 				this.state.location.inarea = true;
 			}
 		}
@@ -352,7 +394,11 @@ var RunningPage = React.createClass({
 	
 		totalkm = total_km.toFixed(1);
 		areakm = total_km_in_area.toFixed(1);
-	
+		
+		//Store the values
+		this.areaKm = areakm;
+		this.totalKm = totalkm;
+				
 		return (
 			<UI.FlexLayout className={this.props.viewClassName}>
 				<UI.Headerbar label="EROBRE OMRÅDE" type="runopoly">
@@ -366,7 +412,7 @@ var RunningPage = React.createClass({
 							<div className='action-button'><RunDisplay totalKm={totalkm} color="#43494B"  fontsize={35}/></div>
 						</div>		
 					</div>
-					<div className="panel-header text-caps">{this.state.area.name}</div>
+					<div className="panel-header text-caps">{selectedArea.name}</div>
 					<div className="panel">
 						<RunAreaStatus areaKm={areakm} />
 						<RunAreaRank currentRank={this.state.location.latitude} currentRankKm={this.state.location.longitude} nextRankKm={areakm} />
@@ -379,7 +425,7 @@ var RunningPage = React.createClass({
 						</UI.ActionButtons>
 					</div>					
 				</UI.FlexBlock>
-				<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.state.modalLoadingVisible} className="Modal-loading" />
+				<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length || this.state.processing} className="Modal-loading" />
 			</UI.FlexLayout>
 		);
 	}

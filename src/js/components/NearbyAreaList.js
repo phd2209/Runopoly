@@ -14,12 +14,12 @@ var NearbyAreaList = React.createClass({
 				<div className="panel panel--first avatar-list">
 					{this.props.areas.map(function(area) {
 						return <NearbyAreaItem 
-									key={area.id} 
+									key={area.objectId} 
 									name={area.name}
 									imageUrl={area.imageUrl}
 									distance={area.distance}
 									difficulty={area.difficulty}
-									itemIndex={area.id}
+									itemIndex={area.objectId}
 								/>;
 					})}
 				</div>

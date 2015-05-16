@@ -31,7 +31,7 @@ var geolocationMixin = {
 
 	getCurrentPosition: function (location) {
 		if (location != undefined && !isNaN(location.latitude) && !isNaN(location.longitude)) {
-			this.setState({location: location});
+			this.setState({location: location, checkPoint: false});
 		}
 	}
 };

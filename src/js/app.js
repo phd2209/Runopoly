@@ -3,20 +3,31 @@
 var React = require('react/addons');
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 var Touchstone = require('touchstonejs');
+var Parse = require('parse').Parse;
+
+// Initialize parse
+Parse.initialize('pClUhwHZ3hntw3Nyn3YAdipsFXWsgIgOM05ZJzKy', 'B3wiPTnwBfyNXPJxpm88K86Rd6qYGe8blvVXxi1i');
 
 var views = {
 	//pages 
-	'page-nearbyarea': React.createFactory(require('./pages/NearbyAreaPage')),
-	'page-running': React.createFactory(require('./pages/RunningPage')),
-
+	'page-home': require('./pages/Home'),
+	'page-create-step1': require('./pages/Create - Step1'),
+	'page-create-step2': require('./pages/Create - Step2'),
+	'page-create-step3': require('./pages/Create - Step3'),
+	/*'page-running': require('./pages/RunningPage'),
+	'page-login': require('./pages/LoginWrapper'),
+	'page-areaowners': require('./pages/AreaOwnersPage'),*/
+	
 	//Components
-	'component-nearbyarealist': React.createFactory(require('./components/NearbyAreaList')),
-	'component-nearbyareaitem': React.createFactory(require('./components/NearbyAreaItem')),
-	'component-runbutton': React.createFactory(require('./components/RunButton')),
-	'component-rundisplay': React.createFactory(require('./components/RunDisplay')),
-	'component-runtimer': React.createFactory(require('./components/RunTimer')),
-	'component-runareastatus': React.createFactory(require('./components/RunAreaStatus')),
-	'component-runarearank': React.createFactory(require('./components/RunAreaRank'))
+	'component-map': require('./components/GoogleMap'),
+	'component-challenge-map': require('./components/ChallengeMap')
+	/*'component-nearbyarealist': require('./components/NearbyAreaList'),
+	'component-nearbyareaitem': require('./components/NearbyAreaItem'),
+	'component-rundisplay': require('./components/RunDisplay'),
+	'component-runtimer': require('./components/RunTimer'),
+	'component-runareastatus': require('./components/RunAreaStatus'),
+	'component-runarearank': require('./components/RunAreaRank'),
+	'component-labelinput': require('./components/LabelInput')*/
 };
 
 var App = React.createClass({
@@ -24,7 +35,7 @@ var App = React.createClass({
 
 	getInitialState: function () {
 		var initialState = {
-			currentView: 'page-nearbyarea',
+			currentView: 'page-home',
 			online: true,
 			isNativeApp: (typeof cordova !== 'undefined')
 		};
@@ -38,7 +49,7 @@ var App = React.createClass({
 	},
 
 	gotoDefaultView: function () {
-		this.showView('page-nearbyarea', 'fade');
+		this.showView('page-home', 'fade');
 	},
 
 	render: function () {
