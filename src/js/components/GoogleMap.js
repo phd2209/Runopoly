@@ -40,14 +40,14 @@ var GoogleMap = React.createClass({
 		    nextProps.longitude !== this.props.longitude ||
 			nextProps.checkPoint !== this.props.checkPoint ||
 			nextProps.tracking !== this.props.tracking);
-	},	
+	},
+	
 	render: function () {
 		
 		if (this.map) {
 			this.map.setCenter(this.mapCenterLatLng());
 			
 			if (this.locationCircle) {
-				//this.locationCircle.setMap(null);
 				this.locationCircle.setCenter(this.mapCenterLatLng());				
 			}
 			else {
@@ -59,7 +59,7 @@ var GoogleMap = React.createClass({
 						fillOpacity: 0.25,
 						map: this.map,
 						center: this.mapCenterLatLng(),
-						radius: Math.sqrt(1) * 75
+						radius: Math.sqrt(1) * 50
 					};
 				// Add the circle for this city to the map.			
 				this.locationCircle = new google.maps.Circle(circleOptions);	
@@ -74,8 +74,9 @@ var GoogleMap = React.createClass({
 				geodesic: true,
 				strokeColor: '#FF0000',
 				strokeOpacity: 1,
-				strokeWeight: 1
+				strokeWeight: 1.2
 			});
+			
 			route.setMap(this.map);
 			
 			if (this.props.checkPoint)

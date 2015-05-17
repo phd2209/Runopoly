@@ -36328,14 +36328,14 @@ var GoogleMap = React.createClass({displayName: "GoogleMap",
 		    nextProps.longitude !== this.props.longitude ||
 			nextProps.checkPoint !== this.props.checkPoint ||
 			nextProps.tracking !== this.props.tracking);
-	},	
+	},
+	
 	render: function () {
 		
 		if (this.map) {
 			this.map.setCenter(this.mapCenterLatLng());
 			
 			if (this.locationCircle) {
-				//this.locationCircle.setMap(null);
 				this.locationCircle.setCenter(this.mapCenterLatLng());				
 			}
 			else {
@@ -36347,7 +36347,7 @@ var GoogleMap = React.createClass({displayName: "GoogleMap",
 						fillOpacity: 0.25,
 						map: this.map,
 						center: this.mapCenterLatLng(),
-						radius: Math.sqrt(1) * 75
+						radius: Math.sqrt(1) * 50
 					};
 				// Add the circle for this city to the map.			
 				this.locationCircle = new google.maps.Circle(circleOptions);	
@@ -36362,8 +36362,9 @@ var GoogleMap = React.createClass({displayName: "GoogleMap",
 				geodesic: true,
 				strokeColor: '#FF0000',
 				strokeOpacity: 1,
-				strokeWeight: 1
+				strokeWeight: 1.2
 			});
+			
 			route.setMap(this.map);
 			
 			if (this.props.checkPoint)
@@ -36747,15 +36748,15 @@ var CreateStep2 = React.createClass({displayName: "CreateStep2",
 
 		return (
 			React.createElement(UI.FlexLayout, {className: this.props.viewClassName}, 
-				React.createElement(UI.Headerbar, {label: "STEP2", type: "runopoly"}, 
+				React.createElement(UI.Headerbar, {label: "Record Route", type: "runopoly"}, 
 					React.createElement(UI.HeaderbarButton, {showView: this.props.prevView, viewTransition: "reveal-from-right", label: "Back", icon: "ion-chevron-left"})				
 				), 		
 				React.createElement("div", {style: this.getStyle()}, 				
 					React.createElement(GoogleMap, {
-					latitude: this.state.location.latitude, 
-					longitude: this.state.location.longitude, 
-					tracking: this.state.tracking, 
-					checkPoint: this.state.checkPoint}
+						latitude: this.state.location.latitude, 
+						longitude: this.state.location.longitude, 
+						tracking: this.state.tracking, 
+						checkPoint: this.state.checkPoint}
 					), 
 					React.createElement(Tappable, {style: this.getButtonStyle(), onTap: this.state.tracking ? this.stopTracking : this.startTracking}, this.state.tracking ? 'STOP' : 'START'), 
 					React.createElement(Tappable, {style: this.getCheckPointButtonStyle(), onTap: this.saveCheckPoint}, "Create CheckPoint")

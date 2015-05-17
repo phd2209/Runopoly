@@ -75,15 +75,15 @@ var CreateStep2 = React.createClass({
 
 		return (
 			<UI.FlexLayout className={this.props.viewClassName}>
-				<UI.Headerbar label="STEP2" type="runopoly">
+				<UI.Headerbar label="Record Route" type="runopoly">
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />				
 				</UI.Headerbar>		
 				<div style={this.getStyle()}>				
 					<GoogleMap 
-					latitude={this.state.location.latitude} 
-					longitude={this.state.location.longitude}
-					tracking={this.state.tracking}
-					checkPoint={this.state.checkPoint}
+						latitude={this.state.location.latitude} 
+						longitude={this.state.location.longitude}
+						tracking={this.state.tracking}
+						checkPoint={this.state.checkPoint}
 					/>
 					<Tappable style={this.getButtonStyle()} onTap={this.state.tracking ? this.stopTracking : this.startTracking}>{this.state.tracking ? 'STOP' : 'START'}</Tappable>
 					<Tappable style={this.getCheckPointButtonStyle()} onTap={this.saveCheckPoint}>Create CheckPoint</Tappable>
