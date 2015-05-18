@@ -20,14 +20,10 @@ var views = {
 	
 	//Components
 	'component-map': require('./components/GoogleMap'),
-	'component-challenge-map': require('./components/ChallengeMap')
-	/*'component-nearbyarealist': require('./components/NearbyAreaList'),
-	'component-nearbyareaitem': require('./components/NearbyAreaItem'),
-	'component-rundisplay': require('./components/RunDisplay'),
-	'component-runtimer': require('./components/RunTimer'),
-	'component-runareastatus': require('./components/RunAreaStatus'),
-	'component-runarearank': require('./components/RunAreaRank'),
-	'component-labelinput': require('./components/LabelInput')*/
+	'component-challenge-map': require('./components/ChallengeMap'),
+	'component-checkpoint-item': require('./components/CheckPointItem'),
+	'component-labelselect': require('./components/LabelSelect'),
+	'component-labelinput': require('./components/LabelInput')
 };
 
 var App = React.createClass({
