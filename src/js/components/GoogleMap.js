@@ -34,8 +34,7 @@ var GoogleMap = React.createClass({
 		
 		var mapdiv = document.getElementById("map");
 		
-		if (this.state.isNativeApp) {		
-			if (plugin.google.maps) {			
+		if (this.state.isNativeApp) {			
 				this.map = plugin.google.maps.Map.getMap(mapDiv, {
 					'backgroundColor': 'white',
 					'mapType': plugin.google.maps.MapTypeId.HYBRID,
@@ -48,8 +47,7 @@ var GoogleMap = React.createClass({
 						'bearing': 50
 					}
 				});
-			
-			}		
+				console.log(this.map);
 		}
 		else {
 			var mapOptions = {
