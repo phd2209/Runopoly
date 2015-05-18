@@ -21,14 +21,10 @@ var views = {
 	
 	//Components
 	'component-map': require('./components/GoogleMap'),
-	'component-challenge-map': require('./components/ChallengeMap')
-	/*'component-nearbyarealist': require('./components/NearbyAreaList'),
-	'component-nearbyareaitem': require('./components/NearbyAreaItem'),
-	'component-rundisplay': require('./components/RunDisplay'),
-	'component-runtimer': require('./components/RunTimer'),
-	'component-runareastatus': require('./components/RunAreaStatus'),
-	'component-runarearank': require('./components/RunAreaRank'),
-	'component-labelinput': require('./components/LabelInput')*/
+	'component-challenge-map': require('./components/ChallengeMap'),
+	'component-checkpoint-item': require('./components/CheckPointItem'),
+	'component-labelselect': require('./components/LabelSelect'),
+	'component-labelinput': require('./components/LabelInput')
 };
 
 var App = React.createClass({displayName: "App",
@@ -83,7 +79,7 @@ if (typeof cordova === 'undefined') {
 }
 
 
-},{"./components/ChallengeMap":214,"./components/GoogleMap":216,"./pages/Create - Step1":220,"./pages/Create - Step2":221,"./pages/Create - Step3":222,"./pages/Home":223,"parse":21,"react/addons":23,"touchstonejs":185}],2:[function(require,module,exports){
+},{"./components/ChallengeMap":214,"./components/CheckPointItem":215,"./components/GoogleMap":216,"./components/LabelInput":217,"./components/LabelSelect":218,"./pages/Create - Step1":220,"./pages/Create - Step2":221,"./pages/Create - Step3":222,"./pages/Home":223,"parse":21,"react/addons":23,"touchstonejs":185}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -36293,6 +36289,11 @@ var GoogleMap = React.createClass({displayName: "GoogleMap",
 		longitude: React.PropTypes.number.isRequired,
 		tracking: React.PropTypes.bool.isRequired,
 		checkPoint: React.PropTypes.bool.isRequired
+	},
+	getInitialState: function () {
+		return {
+			isNativeApp: (typeof cordova !== 'undefined')
+		};
 	},	
 	getDefaultProps: function () {
         return {			
@@ -36314,31 +36315,89 @@ var GoogleMap = React.createClass({displayName: "GoogleMap",
 	componentDidMount: function () {
 		
 		this.locationCircle = null; 
-			
-		var mapOptions = {
-            center: this.mapCenterLatLng(),
-            zoom: this.props.initialZoom
-        };
 		
-        this.map = new google.maps.Map(document.getElementById("map"),
-            mapOptions);
+		var mapdiv = document.getElementById("map");
+		
+		if (this.state.isNativeApp) {		
+			if (plugin.google.maps) {			
+				this.map = plugin.google.maps.Map.getMap(mapDiv, {
+					'backgroundColor': 'white',
+					'mapType': plugin.google.maps.MapTypeId.HYBRID,
+					'controls': {},
+					'gestures': {},
+					'camera': {
+						'latLng': this.mapCenterLatLng(),
+						'tilt': 30,
+						'zoom': this.props.initialZoom,
+						'bearing': 50
+					}
+				});
+			
+			}		
+		}
+		else {
+			var mapOptions = {
+				center: this.mapCenterLatLng(),
+				zoom: this.props.initialZoom
+			};			
+			this.map = new google.maps.Map(mapdiv, mapOptions);
+		}
 	},	
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return (nextProps.latitude !== this.props.latitude || 
 		    nextProps.longitude !== this.props.longitude ||
 			nextProps.checkPoint !== this.props.checkPoint ||
 			nextProps.tracking !== this.props.tracking);
-	},
-	
+	},	
 	render: function () {
 		
 		if (this.map) {
 			this.map.setCenter(this.mapCenterLatLng());
 			
-			if (this.locationCircle) {
-				this.locationCircle.setCenter(this.mapCenterLatLng());				
+			if (this.state.isNativeApp)
+			{
+				circle.remove();
+				this.map.addCircle({
+					'center': this.mapCenterLatLng(),
+					'radius': Math.sqrt(1) * 50,
+					'strokeColor' : '#FF0000',
+					'strokeWidth': 1,
+					'fillColor' :  '#FF0000'
+				});
+				
+				if (this.props.tracking) {
+					this.coordinates.push(this.mapCenterLatLng());
+					
+					this.map.addPolyline({
+						points: this.coordinates,
+						'color' : '#FF0000',
+						'width': 1.2,
+						'geodesic': true
+					});
+					
+					if (this.props.checkPoint)
+					{
+						this.map.addCircle({
+							'strokeColor': '#000000',
+							'strokeWidth': 1.2,
+							'fillColor': '#000000',
+							'center': this.mapCenterLatLng(),
+							'radius': Math.sqrt(1) * 50
+						});
+						this.map.map.addMarker({
+							'position': this.mapCenterLatLng(),
+							'icon': " ",
+							'draggable': false
+						 });						
+					}
+				}
 			}
-			else {
+			else 
+			{
+				if (this.locationCircle) {
+					this.locationCircle.setCenter(this.mapCenterLatLng());				
+				}
+				else {
 					var circleOptions = {
 						strokeColor: '#FF0000',
 						strokeOpacity: 0.5,
@@ -36349,59 +36408,61 @@ var GoogleMap = React.createClass({displayName: "GoogleMap",
 						center: this.mapCenterLatLng(),
 						radius: Math.sqrt(1) * 50
 					};
-				// Add the circle for this city to the map.			
-				this.locationCircle = new google.maps.Circle(circleOptions);	
-			}						
-		}
-		
-		if (this.props.tracking) {
-			this.coordinates.push(this.mapCenterLatLng());
+					// Add the circle for this city to the map.			
+					this.locationCircle = new google.maps.Circle(circleOptions);					
+				}
+				
+				if (this.props.tracking) {
+					this.coordinates.push(this.mapCenterLatLng());
 			
-			var route = new google.maps.Polyline({
-				path: this.coordinates,
-				geodesic: true,
-				strokeColor: '#FF0000',
-				strokeOpacity: 1,
-				strokeWeight: 1.2
-			});
+					var route = new google.maps.Polyline({
+						path: this.coordinates,
+						geodesic: true,
+						strokeColor: '#FF0000',
+						strokeOpacity: 1,
+						strokeWeight: 1.2
+					});
 			
-			route.setMap(this.map);
+					route.setMap(this.map);
 			
-			if (this.props.checkPoint)
-			{
-				var checkPointOptions = {
-				  strokeColor: '#000000',
-				  strokeOpacity: 0.5,
-				  strokeWeight: 1.2,
-				  fillColor: '#000000',
-				  fillOpacity: 0.25,
-				  map: this.map,
-				  center: this.mapCenterLatLng(),
-				  radius: Math.sqrt(1) * 50
-				};
+					if (this.props.checkPoint)
+					{
+						var checkPointOptions = {
+							strokeColor: '#000000',
+							strokeOpacity: 0.5,
+							strokeWeight: 1.2,
+							fillColor: '#000000',
+							fillOpacity: 0.25,
+							map: this.map,
+							center: this.mapCenterLatLng(),
+							radius: Math.sqrt(1) * 50
+						};
 
-				var marker = new MarkerWithLabel({
-						icon: " ",
-						position: this.mapCenterLatLng(),
-						draggable: false,
-						map: this.map,
-						labelContent: "<i class='icon ion-flag checkpoint-flag'></i>",
-						labelAnchor: new google.maps.Point(0, 32),
-						labelClass: "labels", // the CSS class for the label
-						labelStyle: {opacity: 0.75}
-					});		
+						var marker = new MarkerWithLabel({
+							icon: " ",
+							position: this.mapCenterLatLng(),
+							draggable: false,
+							map: this.map,
+							labelContent: "<i class='icon ion-flag checkpoint-flag'></i>",
+							labelAnchor: new google.maps.Point(0, 32),
+							labelClass: "labels", // the CSS class for the label
+							labelStyle: {opacity: 0.75}
+						});		
 					
-				marker.setMap( this.map );
-				var checkpoint = new google.maps.Circle(checkPointOptions);							
-			}
-		};			
+						marker.setMap( this.map );
+						var checkpoint = new google.maps.Circle(checkPointOptions);							
+					}
+				};				
+			}	
+		}			
 		
 		return (
 			React.createElement("div", {id: "map", style: this.getStyle()})			
 		);
 	},
     mapCenterLatLng: function () {
-        return new google.maps.LatLng(this.props.latitude, this.props.longitude);
+		if (this.state.isNativeApp) return new plugin.google.maps.LatLng(this.props.latitude,this.props.longitude);
+		return new google.maps.LatLng(this.props.latitude, this.props.longitude);		 
     },	
 	getStyle: function () {
 		return {
