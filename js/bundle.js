@@ -36315,7 +36315,7 @@ var GoogleMap = React.createClass({displayName: "GoogleMap",
 	componentDidMount: function () {
 		
 		this.locationCircle = null; 		
-		var mapdiv = document.getElementById("map");
+		//var mapdiv = document.getElementById("map");
 		
 		/*if (this.state.isNativeApp) {
 				this.map = plugin.google.maps.Map.getMap(mapDiv, {
@@ -36337,7 +36337,7 @@ var GoogleMap = React.createClass({displayName: "GoogleMap",
 				center: this.mapCenterLatLng(),
 				zoom: this.props.initialZoom
 			};			
-			this.map = new google.maps.Map(mapdiv, mapOptions);
+			this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 		/*}*/
 	},	
 	shouldComponentUpdate: function(nextProps, nextState) {
