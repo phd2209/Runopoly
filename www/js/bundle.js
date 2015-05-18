@@ -36391,24 +36391,24 @@ var GoogleMap = React.createClass({displayName: "GoogleMap",
 			}
 			else 
 			{*/
-				if (this.locationCircle) {
-					this.locationCircle.setCenter(this.mapCenterLatLng());				
+					if (this.locationCircle) {
+						this.locationCircle.setCenter(this.mapCenterLatLng());				
+					}
+					else {
+						var circleOptions = {
+							strokeColor: '#FF0000',
+							strokeOpacity: 0.5,
+							strokeWeight: 1,
+							fillColor: '#FF0000',
+							fillOpacity: 0.25,
+							map: this.map,
+							center: this.mapCenterLatLng(),
+							radius: Math.sqrt(1) * 50
+						};
+						// Add the circle for this city to the map.			
+						this.locationCircle = new google.maps.Circle(circleOptions);					
+					}
 				}
-				else {
-					var circleOptions = {
-						strokeColor: '#FF0000',
-						strokeOpacity: 0.5,
-						strokeWeight: 1,
-						fillColor: '#FF0000',
-						fillOpacity: 0.25,
-						map: this.map,
-						center: this.mapCenterLatLng(),
-						radius: Math.sqrt(1) * 50
-					};
-					// Add the circle for this city to the map.			
-					this.locationCircle = new google.maps.Circle(circleOptions);					
-				}
-				
 				if (this.props.tracking) {
 					this.coordinates.push(this.mapCenterLatLng());
 			
@@ -36451,7 +36451,7 @@ var GoogleMap = React.createClass({displayName: "GoogleMap",
 					}
 				};				
 			/*}*/	
-		}			
+					
 		
 		return (
 			React.createElement("div", {id: "map", style: this.getStyle()})			
