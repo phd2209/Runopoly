@@ -30,11 +30,10 @@ var GoogleMap = React.createClass({
 	},
 	componentDidMount: function () {
 		
-		this.locationCircle = null; 
-		
+		this.locationCircle = null; 		
 		var mapdiv = document.getElementById("map");
 		
-		if (this.state.isNativeApp) {			
+		/*if (this.state.isNativeApp) {
 				this.map = plugin.google.maps.Map.getMap(mapDiv, {
 					'backgroundColor': 'white',
 					'mapType': plugin.google.maps.MapTypeId.HYBRID,
@@ -49,13 +48,13 @@ var GoogleMap = React.createClass({
 				});
 				console.log(this.map);
 		}
-		else {
+		else {*/
 			var mapOptions = {
 				center: this.mapCenterLatLng(),
 				zoom: this.props.initialZoom
 			};			
 			this.map = new google.maps.Map(mapdiv, mapOptions);
-		}
+		/*}*/
 	},	
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return (nextProps.latitude !== this.props.latitude || 
@@ -67,7 +66,7 @@ var GoogleMap = React.createClass({
 		
 		if (this.map) {
 			this.map.setCenter(this.mapCenterLatLng());
-			
+			/*
 			if (this.state.isNativeApp)
 			{
 				circle.remove();
@@ -107,7 +106,7 @@ var GoogleMap = React.createClass({
 				}
 			}
 			else 
-			{
+			{*/
 				if (this.locationCircle) {
 					this.locationCircle.setCenter(this.mapCenterLatLng());				
 				}
@@ -167,7 +166,7 @@ var GoogleMap = React.createClass({
 						var checkpoint = new google.maps.Circle(checkPointOptions);							
 					}
 				};				
-			}	
+			/*}*/	
 		}			
 		
 		return (
