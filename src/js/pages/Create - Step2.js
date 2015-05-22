@@ -14,7 +14,8 @@ var CreateStep2 = React.createClass({
 		name: React.PropTypes.string.isRequired,
 		type: React.PropTypes.number.isRequired,
 		difficulty: React.PropTypes.number.isRequired
-	},		
+	},
+	
 	getDefaultProps: function () {
         return {
 			prevView: 'page-create-step1',
@@ -23,6 +24,7 @@ var CreateStep2 = React.createClass({
 			enableHighAccuracy: true
 		};
     },
+	
 	getInitialState: function () {
 		return {
 			tracking: false,
@@ -40,13 +42,16 @@ var CreateStep2 = React.createClass({
 		this.totalKm = 0;
 		this.checkPoints = [];
 	},
+	
 	componentDidMount: function () {
 		this.keepAlive();
-	},		
+	},
+	
 	componentWillUnmount: function () {
 		this.allowSleep();
 		this.unwatchPosition();
-	},	
+	},
+	
 	render: function () {
 		var totalkm = 0;	
 
@@ -91,6 +96,7 @@ var CreateStep2 = React.createClass({
 			</UI.FlexLayout>
 		);
 	},
+
 	// Phonegap extension 
 	// - prevent device from sleeping
 	// - allow device to sleep
@@ -162,7 +168,7 @@ var CreateStep2 = React.createClass({
 		});
 		
 		setTimeout(function() {
-			this.showView('page-create-step3', 'fade', {challenge: this.getChallenge()});
+			this.showView('page-create-step3', 'show-from-bottom', {challenge: this.getChallenge()});
 		}.bind(this), 0);					
     },	
 	saveCheckPoint: function() {	

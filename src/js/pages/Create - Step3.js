@@ -44,10 +44,10 @@ var CreateStep3 = React.createClass({
 	render: function () {
 		return (
 			<UI.FlexLayout className={this.props.viewClassName}>
-				<UI.Headerbar label="Final Step" type="runopoly">					
-				</UI.Headerbar> 
-				<UI.FlexBlock grow scrollable>
-					<div className="panel-header">Route</div>
+				<UI.Headerbar label="Save Challenge" type="runopoly">					
+				</UI.Headerbar>
+				<UI.FlexBlock scrollable>
+					<div className="panel-header text-caps">Route</div>
 					<ChallengeMap
 						challenge={this.props.challenge} 
 					/>

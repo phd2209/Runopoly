@@ -64,7 +64,7 @@ var CreateStep1 = React.createClass({
 
 		if (name.length) {			
 			setTimeout(function() {
-				this.showView('page-create-step2', 'fade', {prevView: 'page-create-step1', name: name, type: type, difficulty: difficulty});
+				this.showView('page-create-step2', 'show-from-bottom', {prevView: 'page-create-step1', name: name, type: type, difficulty: difficulty});
 			}.bind(this), 0);
 		}
 		else {

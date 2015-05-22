@@ -25,7 +25,14 @@ var ChallengeMap = React.createClass({
             center: this.mapCenterLatLng(
 				this.props.challenge.startPosition.latitude,
 				this.props.challenge.startPosition.longitude),
-				zoom: this.props.initialZoom
+				zoom: this.props.initialZoom,
+				disableDefaultUI: true,
+			    panControl: false,
+				zoomControl: true,
+				scaleControl: false,
+				zoomControlOptions: {
+					style: google.maps.ZoomControlStyle.SMALL
+				}
         };		
         this.map = new google.maps.Map(document.getElementById("map"),
             mapOptions);
@@ -60,7 +67,8 @@ var ChallengeMap = React.createClass({
 				stoppoint,
 				stopflag,
 				checkpoint,
-				chekpointflag;
+				chekpointflag,
+				checkpointorder;
 				
 			startpoint = new google.maps.Circle(this.createPoint(
 				this.props.challenge.startPosition.latitude,
@@ -69,17 +77,10 @@ var ChallengeMap = React.createClass({
 				'#a1d99b'				
 			));
 			
-			startflag = new MarkerWithLabel({
-				icon: " ",
-				position: this.mapCenterLatLng(this.props.challenge.startPosition.latitude,
-											   this.props.challenge.startPosition.longitude),
-				draggable: false,
-				map: this.map,
-				labelContent: "<i class='icon ion-ios7-flag start-flag'></i>",
-				labelAnchor: new google.maps.Point(0, 32),
-				labelClass: "labels", // the CSS class for the label
-				labelStyle: {opacity: 0.75}
-			});
+			startflag = this.markerWithLabel(" ", "<i class='icon ion-ios7-flag start-flag'></i>", 
+				this.props.challenge.startPosition.latitude,
+				this.props.challenge.startPosition.longitude,
+				0, 32, 0.75);
 						
 			stoppoint = new google.maps.Circle(this.createPoint(
 				this.props.challenge.stopPosition.latitude,
@@ -88,18 +89,10 @@ var ChallengeMap = React.createClass({
 				'#7fcdbb'
 			));			
 			
-			stopflag = new MarkerWithLabel({
-				icon: " ",
-				position: this.mapCenterLatLng(this.props.challenge.stopPosition.latitude,
-											   this.props.challenge.stopPosition.longitude),
-				draggable: false,
-				map: this.map,
-				labelContent: "<i class='icon ion-ios7-flag stop-flag'></i>",
-				labelAnchor: new google.maps.Point(0, 32),
-				labelClass: "labels", // the CSS class for the label
-				labelStyle: {opacity: 0.75}
-			});			
-			
+			stopflag = this.markerWithLabel(" ", "<i class='icon ion-ios7-flag stop-flag'></i>", 
+				this.props.challenge.stopPosition.latitude,
+				this.props.challenge.stopPosition.longitude,
+				0, 32, 0.75);
 			
 			if (this.props.challenge.checkPoints)
 			{
@@ -112,17 +105,18 @@ var ChallengeMap = React.createClass({
 						'#fdae6b'
 					));
 					
-					chekpointflag = new MarkerWithLabel({
-						icon: " ",
-						position: this.mapCenterLatLng(this.props.challenge.checkPoints[point].latitude,
-													   this.props.challenge.checkPoints[point].longitude),
-						draggable: false,
-						map: this.map,
-						labelContent: "<i class='icon ion-flag checkpoint-flag'></i>",
-						labelAnchor: new google.maps.Point(0, 32),
-						labelClass: "labels", // the CSS class for the label
-						labelStyle: {opacity: 0.75}
-					});						
+							
+					chekpointflag = this.markerWithLabel(" ", "<i class='icon ion-flag checkpoint-flag'></i>", 
+						this.props.challenge.checkPoints[point].latitude,
+						this.props.challenge.checkPoints[point].longitude,
+						0, 32, 0.75);
+					
+					var number = this.props.challenge.checkPoints[point].order;					
+					console.log(number);	
+					checkpointorder = this.markerWithLabel(" ", "<h2>"+number+"</h2>", 
+						this.props.challenge.checkPoints[point].latitude,
+						this.props.challenge.checkPoints[point].longitude,					
+						-5, 15, 0.75);					
 				}
 			}		
 		}		
@@ -144,6 +138,18 @@ var ChallengeMap = React.createClass({
 			    radius: Math.sqrt(1) * 75
 			};		
 	},
+	markerWithLabel: function(icon, labelContent, latitude, longitude, x, y, opacity) {
+		return new MarkerWithLabel({
+					icon: icon,
+					position: this.mapCenterLatLng(latitude, longitude),
+					draggable: false,
+					map: this.state.map,
+					labelContent: labelContent,
+					labelAnchor: new google.maps.Point(x, y),
+					labelClass: "labels", // the CSS class for the label
+					labelStyle: {opacity: opacity}
+				});		
+	},	
     mapCenterLatLng: function (latitude, longitude) {
         return new google.maps.LatLng(latitude, longitude);
     },
