@@ -15,7 +15,6 @@ var CreateStep2 = React.createClass({
 		type: React.PropTypes.number.isRequired,
 		difficulty: React.PropTypes.number.isRequired
 	},
-	
 	getDefaultProps: function () {
         return {
 			prevView: 'page-create-step1',
@@ -23,35 +22,36 @@ var CreateStep2 = React.createClass({
 			timeout: 10000,
 			enableHighAccuracy: true
 		};
-    },
-	
+    },	
 	getInitialState: function () {
 		return {
 			tracking: false,
 			location: {latitude: 0, longitude: 0},
-			duration: 0,
 			processing: false,
 			checkPoint: false
 		};
 	},
 	componentWillMount: function () {
+		
+		console.log(this.props.name);
+		console.log(this.props.type);
+		console.log(this.props.difficulty);
+		
 		this.watchPosition();
 		this.startPosition = null;
 		this.stopPosition = null;
 		this.route = [];
 		this.totalKm = 0;
 		this.checkPoints = [];
+		this.duration = 0;
 	},
-	
 	componentDidMount: function () {
 		this.keepAlive();
 	},
-	
 	componentWillUnmount: function () {
 		this.allowSleep();
 		this.unwatchPosition();
-	},
-	
+	},	
 	render: function () {
 		var totalkm = 0;	
 
@@ -96,7 +96,6 @@ var CreateStep2 = React.createClass({
 			</UI.FlexLayout>
 		);
 	},
-
 	// Phonegap extension 
 	// - prevent device from sleeping
 	// - allow device to sleep
@@ -125,48 +124,30 @@ var CreateStep2 = React.createClass({
         return d;
     },	
 	tick: function() {	
-		this.setState({ 
-			duration: this.state.duration + 1
-		});
+		//This add one to duration every second
+		this.duration = this.duration + 1;
 	},	
-    //Starts actual tracking of a Run    
 	startTracking: function () {		
-		console.log("Start capturing route");
-		
 		// Set tracking to true to store the gps coordinates in route array
 		this.setState({
 			tracking: true
-		});				
-		
+		});						
 		//Start a timer if it is a time trial
 		if (this.props.type == 1){
 			this.intervalID = setInterval(this.tick, 1000);
-		}
-		
+		}		
 		//Create Start position
-		this.startPosition = new Parse.GeoPoint(this.state.location.latitude, this.state.location.longitude);
-		
+		this.startPosition = new Parse.GeoPoint(this.state.location.latitude, this.state.location.longitude);		
 	},	
-	// Stops tracking of a run
     stopTracking: function () {		
-		console.log("Stop capturing route");
-		
-		this.setState({
-			processing: true
-		});
-		
+
 		//Stop the timer if it is a time trial;
 		if (this.props.type === 1){
 			clearInterval(this.intervalID);
-		}
-		
+		}		
 		//stop position
 		this.stopPosition = new Parse.GeoPoint(this.state.location.latitude, this.state.location.longitude);
-
-		this.setState({
-			processing: false
-		});
-		
+		//Move to next page
 		setTimeout(function() {
 			this.showView('page-create-step3', 'show-from-bottom', {challenge: this.getChallenge()});
 		}.bind(this), 0);					
@@ -182,7 +163,7 @@ var CreateStep2 = React.createClass({
 				order: count,
 				latitude: this.state.location.latitude,
 				longitude: this.state.location.longitude,
-				time: this.state.duration,
+				time: this.duration,
 				km: this.totalKm
 			});
 		}
@@ -206,7 +187,7 @@ var CreateStep2 = React.createClass({
 				stopPosition: this.stopPosition,
 				route: this.route,
 				criteria: "",
-				stopTime: Number(this.state.duration),
+				stopTime: Number(this.duration),
 				stopDistance: this.totalKm,
 				checkPoints: this.checkPoints			
 			});
@@ -269,5 +250,4 @@ var CreateStep2 = React.createClass({
 		};	
 	},	
 });
-
 module.exports = CreateStep2;

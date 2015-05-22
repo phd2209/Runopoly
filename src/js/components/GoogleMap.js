@@ -8,7 +8,6 @@ var GoogleMap = React.createClass({
 		tracking: React.PropTypes.bool.isRequired,
 		checkPoint: React.PropTypes.bool.isRequired
 	},
-	
 	getDefaultProps: function () {
         return {			
             initialZoom: 15,
@@ -18,30 +17,25 @@ var GoogleMap = React.createClass({
 			checkPoints: []
         };
 	},
-	
 	getInitialState: function () {
 		return {
 			processing: true,
 		};
 	},
-	
 	componentWillMount: function () {
 		this.map = null;
 		this.coordinates = [];		
 	},
-	
 	componentWillUnMount: function () {
 		this.map = null;
 		this.coordinates = [];
-	},
-	
+	},	
 	mapLoaded: function() {
 		console.log("map loaded")
 		this.setState({ 
 			processing: false
 		});
-	},
-	
+	},	
 	componentDidMount: function () {		
 		var self = this;
 		this.locationCircle = null; 		
@@ -56,8 +50,7 @@ var GoogleMap = React.createClass({
 		google.maps.event.addListener(this.map, 'tilesloaded', function(evt) {
 			self.mapLoaded();
 		});
-	},	
-	
+	},		
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return (nextProps.latitude !== this.props.latitude || 
 		    nextProps.longitude !== this.props.longitude ||
@@ -146,7 +139,5 @@ var GoogleMap = React.createClass({
 			height: '100%'
 		};	
 	},
-	
 });
-
 module.exports = GoogleMap;

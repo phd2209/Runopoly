@@ -139,5 +139,4 @@ var CreateStep3 = React.createClass({
 		};	
 	},	
 });
-
 module.exports = CreateStep3;
