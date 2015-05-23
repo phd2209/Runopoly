@@ -6,21 +6,16 @@ var Navigation = require('touchstonejs').Navigation;
 var LabelInput = require('../components/LabelInput');
 var CheckPointItem = require('../components/CheckPointItem');
 var ChallengeMap = require('../components/ChallengeMap');
+var Tappable = require('react-tappable');
 
 var CreateStep3 = React.createClass({
 	mixins: [Navigation],	
 	propTypes: {
 		challenge: React.PropTypes.object.isRequired
-	},		
-	getDefaultProps: function () {
-        return {
-			/*prevView: 'NearbyAreaPage',*/
-		};
-    },	
+	},			
 	getInitialState: function () {
 		return {
 			processing: false,
-			error: false,
 			stopTime: 0
 		};
 	},	
@@ -46,14 +41,21 @@ var CreateStep3 = React.createClass({
 			<UI.FlexLayout className={this.props.viewClassName}>
 				<UI.Headerbar label="Save Challenge" type="runopoly">					
 				</UI.Headerbar>
-				<UI.FlexBlock scrollable>
-					<div className="panel-header text-caps">Route</div>
+				<UI.FlexBlock grow scrollable>
+					<div className="Panel">
+						<div className="item-inner">
+							<span style={this.getInfoItemStyle()}>{this.props.challenge.stopDistance} Km</span>
+							<span style={this.getInfoItemStyle()}>{this.getType(this.props.challenge.type)}</span>
+							<span style={this.getInfoItemStyle()}>{this.getDifficulty(this.props.challenge.difficulty)}</span>
+						</div>
+					</div>
 					<ChallengeMap
 						challenge={this.props.challenge} 
 					/>
-					<div className="panel-header">Total ({this.props.challenge.stopDistance} Km)</div>
-					{
-						(this.props.challenge.type === 1) ?					
+					{						
+						(this.props.challenge.type === 1) ?
+							<div>
+							<div className="panel-header">Challenge time</div>
 							<div className="panel">
 								<LabelInput
 									type="number" 
@@ -63,42 +65,30 @@ var CreateStep3 = React.createClass({
 									onChange={this.handlestopTimeChange}
 							/>						
 							</div> 
+							</div>
 						: null
 					}
 					{(this.props.challenge.type === 1) ?
 						this.getCheckPointHtml() :
 						null
 					}
-					<UI.ActionButton className="btn-runopoly" onTap={this.save} label={'Save'} />
+					<Tappable className="panel-button" style={this.getButtonStyle()} onTap={this.save}>save</Tappable>
 				</UI.FlexBlock>
 				<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.state.processing} className="Modal-loading" />
 			</UI.FlexLayout>	
 		);
 	},	
 	save: function() {
-		
-		console.log("save clicked");
-		var self =this;
-		
+
+		var self =this;		
 		this.setState({
 			processing: true
 		});
-		
-		console.log(this.props.challenge.name);
-		console.log(this.props.challenge.type);
-		console.log(this.props.challenge.difficulty);
-		console.log(this.props.challenge.startPosition);
-		console.log(this.props.challenge.stopPosition);
-		console.log(this.props.challenge.stopDistance);
-		if (this.props.challenge.type===1)
-			console.log(this.state.stopTime);
-		console.log(this.props.challenge.route);
-		console.log(this.props.challenge.checkPoints);
-			// ACL, so that only the current user can access this object			
-			//var User = Parse.Object.extend("User"); 
-			//var acl = new Parse.ACL(new User({id: this.data.user.objectId}));
-			//acl.setPublicReadAccess(true);
-			//acl.setPublicWriteAccess(true);
+		// ACL, so that only the current user can access this object			
+		//var User = Parse.Object.extend("User"); 
+		//var acl = new Parse.ACL(new User({id: this.data.user.objectId}));
+		//acl.setPublicReadAccess(true);
+		//acl.setPublicWriteAccess(true);
 			
 		ParseReact.Mutation.Create('Challenge', {
 			name: this.props.challenge.name,
@@ -114,10 +104,8 @@ var CreateStep3 = React.createClass({
 			}).dispatch().then(function() {			
 				self.setState({
 					processing: false
-				});
-				setTimeout(function() {
-					self.showView('page-home', 'fade', {});
-				}.bind(self), 0);							
+				});				
+				self.showView('page-home', 'fade', {});
 		});			
 	},
 	roundToTwo: function (num) {    
@@ -132,10 +120,47 @@ var CreateStep3 = React.createClass({
 		var index = item - 1;
 		this.props.challenge.checkPoints[index].time = Number(time) * 60;
 	},
+	getType: function (typeno) {
+		if (typeno === 1) return "Time trial";
+		return "Timeless trial";			
+	},
+	getDifficulty: function (difficultyno) {
+		if (difficultyno === 1) return "Easy";
+		else if (difficultyno === 2) return "Moderate";
+		return "Hard";				
+	},
+	getInfoItemStyle: function () {
+		return {
+		  color: '#039E79',
+          backgroundColor: '#fff',
+          padding: 5,
+          border: '1px solid transparent',
+          border: 2,
+          outline: 'none',
+          textAlign: 'center',
+          textDecoration: 'none'
+		};		
+	},	
 	getStyle: function () {
 		return {
 			width: '100%',
 			height: '100%'
+		};	
+	},	
+	getButtonStyle: function () {
+		return {
+          color: '#fff',
+          backgroundColor: '#42B49A',
+          border: '1px solid transparent',
+          border: 2,
+		  marginTop: 10,
+          outline: 'none',
+          width: '96%',
+          left: 5,
+          textAlign: 'center',
+          textDecoration: 'none',
+		  textTransform: 'uppercase',
+		  marginBottom: 10
 		};	
 	},	
 });

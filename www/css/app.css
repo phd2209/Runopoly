@@ -6206,6 +6206,7 @@ fieldset[disabled] .btn-link {
   position: relative;
   background-color: #42b49a;
   color: #ffffff;
+  min-height: 44px;
 }
 .Headerbar.runopoly:after {
   width: 100%;

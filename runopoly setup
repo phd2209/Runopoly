@@ -44,7 +44,7 @@
                 <File name="src\js\pages\Home.js" />
             </Folder>
             <Folder name="utils">
-                <File name="src\js\utils\areaService.js" />
+                <File name="src\js\utils\markerwithlabel_packed.js" />
             </Folder>
             <File name="src\js\app.js" />
         </Folder>

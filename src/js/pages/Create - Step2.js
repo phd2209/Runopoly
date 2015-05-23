@@ -32,11 +32,6 @@ var CreateStep2 = React.createClass({
 		};
 	},
 	componentWillMount: function () {
-		
-		console.log(this.props.name);
-		console.log(this.props.type);
-		console.log(this.props.difficulty);
-		
 		this.watchPosition();
 		this.startPosition = null;
 		this.stopPosition = null;
@@ -53,7 +48,7 @@ var CreateStep2 = React.createClass({
 		this.unwatchPosition();
 	},	
 	render: function () {
-		var totalkm = 0;	
+		var totalkm = 0.0;	
 
 		if (this.state.tracking) {
 			
@@ -82,15 +77,19 @@ var CreateStep2 = React.createClass({
 			<UI.FlexLayout className={this.props.viewClassName}>
 				<UI.Headerbar label="Record Route" type="runopoly">
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />				
-				</UI.Headerbar>		
-				<div style={this.getStyle()}>				
+				</UI.Headerbar>
+				<Tappable style={this.getKMStyle()}>
+					<span style={this.getKMNumberStyle()}>{totalkm}</span>
+					<span style={this.getKMUnitStyle()}>Km</span>
+				</Tappable>
+				<div style={this.getStyle()}>					
 					<GoogleMap 
 						latitude={this.state.location.latitude} 
 						longitude={this.state.location.longitude}
 						tracking={this.state.tracking}
 						checkPoint={this.state.checkPoint}
 					/>
-					<Tappable style={this.getButtonStyle()} onTap={this.state.tracking ? this.stopTracking : this.startTracking}>{this.state.tracking ? 'STOP' : 'START'}</Tappable>
+					<Tappable style={this.getButtonStyle()} onTap={this.state.tracking ? this.stopTracking : this.startTracking}>{this.state.tracking ? 'STOP RECORDING' : 'START RECORDING'}</Tappable>
 					<Tappable style={this.getCheckPointButtonStyle()} onTap={this.saveCheckPoint}>Create CheckPoint</Tappable>
 				</div>
 			</UI.FlexLayout>
@@ -98,7 +97,7 @@ var CreateStep2 = React.createClass({
 	},
 	// Phonegap extension 
 	// - prevent device from sleeping
-	// - allow device to sleep
+	// - allow device to sleep 
     keepAlive: function () {
         if (window.plugins)
             window.plugins.insomnia.keepAwake();
@@ -212,6 +211,37 @@ var CreateStep2 = React.createClass({
 			height: '100%'
 		};	
 	},
+	getKMStyle: function () {
+		return {
+		  position:'absolute',
+          top:'11%',
+          color: '#039E79',
+          backgroundColor: '#fff',
+          padding: 5,
+          border: '1px solid transparent',
+          border: 2,
+          outline: 'none',
+          width: '30%',
+          left: 5,
+          textAlign: 'center',
+          textDecoration: 'none',
+          margin: '0px auto',
+		  zIndex: 99
+		};		
+	},
+	getKMNumberStyle: function () {
+		return {
+          color: '#039E79',
+		  fontSize: 20,
+		  paddingRight: 3
+		};		
+	},
+	getKMUnitStyle: function () {
+		return {
+          color: '#ABD0CB',
+		  fontSize: 12
+		};		
+	},
 	getButtonStyle: function () {
 		
 		var color = this.state.tracking ? 'red' : 'green' ;
@@ -229,7 +259,8 @@ var CreateStep2 = React.createClass({
           left: 5,
           textAlign: 'center',
           textDecoration: 'none',
-          margin: '0px auto'
+          margin: '0px auto',
+		  textTransform: 'uppercase'
 		};	
 	},	
 	getCheckPointButtonStyle: function () {
@@ -246,7 +277,8 @@ var CreateStep2 = React.createClass({
           left: 5,
           textAlign: 'center',
           textDecoration: 'none',
-          margin: '0px auto'
+          margin: '0px auto',
+		  textTransform: 'uppercase'
 		};	
 	},	
 });
