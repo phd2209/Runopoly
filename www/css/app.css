@@ -6241,6 +6241,15 @@ fieldset[disabled] .btn-link {
 .Headerbar.runopoly .Headerbar-button {
   color: #ffffff;
 }
+.checkpoint_button.Tappable-active {
+  background-color: "#4d90fe";
+}
+.checkpoint_button[disabled],
+.checkpoint_button.disabled {
+  background-color: #aaaaaa;
+  opacity: .4;
+  pointer-events: none;
+}
 .field-label {
   color: #000000;
 }

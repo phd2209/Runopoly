@@ -72,7 +72,8 @@ var CreateStep2 = React.createClass({
 	
 		totalkm = totalkm.toFixed(2);
 		this.totalKm = Number(totalkm);
-
+		console.log("***** CheckPoint ******")
+		console.log(this.state.checkPoint);
 		return (
 			<UI.FlexLayout className={this.props.viewClassName}>
 				<UI.Headerbar label="Record Route" type="runopoly">
@@ -89,8 +90,16 @@ var CreateStep2 = React.createClass({
 						tracking={this.state.tracking}
 						checkPoint={this.state.checkPoint}
 					/>
-					<Tappable style={this.getButtonStyle()} onTap={this.state.tracking ? this.stopTracking : this.startTracking}>{this.state.tracking ? 'STOP RECORDING' : 'START RECORDING'}</Tappable>
-					<Tappable style={this.getCheckPointButtonStyle()} onTap={this.saveCheckPoint}>Create CheckPoint</Tappable>
+					<Tappable 
+						component="button"
+						style={this.getButtonStyle()} 
+						onTap={this.state.tracking ? this.stopTracking : this.startTracking}>{this.state.tracking ? 'STOP' : 'START'}</Tappable>
+					<Tappable
+						className="checkpoint_button"
+						component="button"
+						disabled={!this.state.tracking && !this.state.checkPoint}
+						style={this.getCheckPointButtonStyle()} 
+						onTap={this.saveCheckPoint}>CheckPoint</Tappable>
 				</div>
 			</UI.FlexLayout>
 		);
@@ -139,17 +148,13 @@ var CreateStep2 = React.createClass({
 		this.startPosition = new Parse.GeoPoint(this.state.location.latitude, this.state.location.longitude);		
 	},	
     stopTracking: function () {		
-
 		//Stop the timer if it is a time trial;
 		if (this.props.type === 1){
 			clearInterval(this.intervalID);
 		}		
 		//stop position
 		this.stopPosition = new Parse.GeoPoint(this.state.location.latitude, this.state.location.longitude);
-		//Move to next page
-		setTimeout(function() {
-			this.showView('page-create-step3', 'show-from-bottom', {challenge: this.getChallenge()});
-		}.bind(this), 0);					
+		this.showView('page-create-step3', 'show-from-bottom', {challenge: this.getChallenge()});
     },	
 	saveCheckPoint: function() {	
 		this.setState({

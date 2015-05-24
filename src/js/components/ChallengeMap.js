@@ -1,4 +1,5 @@
 var React = require("react");
+var UI = require('touchstonejs').UI;
 
 var ChallengeMap = React.createClass({
 	propTypes: {
@@ -11,16 +12,23 @@ var ChallengeMap = React.createClass({
 	},
 	getInitialState: function () {
 		return {
-			map: null
+			map: null,
+			processing: true
 		};
-	},
+	},	
 	componentWillMount: function () {
 		this.map = null;
 	},
 	componentWillUnMount: function () {
 		this.map = null;
 	},
+	mapLoaded: function() {
+		this.setState({ 
+			processing: false
+		});
+	},	
 	componentDidMount: function () {
+		var self = this;
 		var mapOptions = {
             center: this.mapCenterLatLng(
 				this.props.challenge.startPosition.latitude,
@@ -38,6 +46,9 @@ var ChallengeMap = React.createClass({
             mapOptions);
 		this.setState({ 
 			map: this.map
+		});
+		google.maps.event.addListener(this.map, 'tilesloaded', function(evt) {
+			self.mapLoaded();
 		});
 	},	
 	render: function () {
@@ -120,9 +131,10 @@ var ChallengeMap = React.createClass({
 				}
 			}		
 		}		
-		return (		
+		return (
 			<div style={this.getBorderStyle()}>
 				<div id='map' style={this.getStyle()}></div>
+				<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.state.processing} className="Modal-loading" />
 			</div>
 		);
 	},
@@ -167,5 +179,4 @@ var ChallengeMap = React.createClass({
 		};	
 	}
 });
-
 module.exports = ChallengeMap;

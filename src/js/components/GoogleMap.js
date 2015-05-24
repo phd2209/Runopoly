@@ -31,7 +31,6 @@ var GoogleMap = React.createClass({
 		this.coordinates = [];
 	},	
 	mapLoaded: function() {
-		console.log("map loaded")
 		this.setState({ 
 			processing: false
 		});

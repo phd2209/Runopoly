@@ -104,6 +104,21 @@
 		color: @runopoly-white;
 	}	
 }
+.checkpoint_button {
+	&.Tappable-active {
+		background-color: "#4d90fe";
+	}
+
+	// gray out the button if disabled
+	&[disabled],
+	&.disabled {
+		background-color: @runopoly-light-grey;
+		opacity: .3;
+		pointer-events: none;		
+	}
+}
+
+
 .field-label {
 	color: @runopoly-black;
 }
