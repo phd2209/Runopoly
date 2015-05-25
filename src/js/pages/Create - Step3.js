@@ -104,9 +104,10 @@ var CreateStep3 = React.createClass({
 			}).dispatch().then(function() {			
 				self.setState({
 					processing: false
-				});				
+				});
+				self.showNativeAlert('Challenge Saved', 'Info');
 				self.showView('page-home', 'fade', {});
-		});			
+		});
 	},
 	roundToTwo: function (num) {    
 		return +(Math.round(num + "e+2")  + "e-2");
@@ -148,6 +149,7 @@ var CreateStep3 = React.createClass({
 		};	
 	},	
 	getButtonStyle: function () {
+		
 		return {
           color: '#fff',
           backgroundColor: '#42B49A',
@@ -163,5 +165,12 @@ var CreateStep3 = React.createClass({
 		  marginBottom: 10
 		};	
 	},	
+	showNativeAlert: function (message, title) {
+		if (navigator.notification && navigator.notification.alert) {
+			navigator.notification.alert(message, null, title, 'OK');
+		} else {
+			alert(title ? (title + ": " + message) : message);
+		}		
+	} 
 });
 module.exports = CreateStep3;

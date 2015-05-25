@@ -52,6 +52,7 @@ var CreateStep2 = React.createClass({
 
 		if (this.state.tracking) {
 			
+			//Is this part really neccesary? Should it not log everything;
 			var lastState = null;
 			var addLocation = true;
 			if (this.route.length) {
@@ -62,6 +63,7 @@ var CreateStep2 = React.createClass({
 			if (addLocation) this.route.push(this.state.location);
 		}
 		
+		// Can an optimization be done so that we don't need to loop through all route items;
 		for (var j = 0; j < this.route.length; j++) {
 
 			if (j == (this.route.length - 1)) {
@@ -72,12 +74,10 @@ var CreateStep2 = React.createClass({
 	
 		totalkm = totalkm.toFixed(2);
 		this.totalKm = Number(totalkm);
-		console.log("***** CheckPoint ******")
-		console.log(this.state.checkPoint);
 		return (
 			<UI.FlexLayout className={this.props.viewClassName}>
 				<UI.Headerbar label="Record Route" type="runopoly">
-					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />				
+					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />
 				</UI.Headerbar>
 				<Tappable style={this.getKMStyle()}>
 					<span style={this.getKMNumberStyle()}>{totalkm}</span>

@@ -74,7 +74,7 @@ var GoogleMap = React.createClass({
 			
 			if (!this.coordinates.length)
 			{
-				var marker = this.markerWithLabel(" ", "<i class='icon ion-ios7-flag start-flag'></i>", 0, 32, 0.75);
+				var marker = this.markerWithLabel(" ", "<i class='icon ion-ios-flag start-flag'></i>", 0, 32, 0.75);
 			}
 			
 			this.coordinates.push(this.mapCenterLatLng());

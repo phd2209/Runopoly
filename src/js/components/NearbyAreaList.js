@@ -1,25 +1,25 @@
-'use strict';
 var React = require("react");
 var NearbyAreaItem = require('./NearbyAreaItem');
 
 var NearbyAreaList = React.createClass({
 
 	propTypes: {
-		areas: React.PropTypes.array.isRequired
+		challenges: React.PropTypes.array.isRequired
 	},
 
 	render: function () {
 		return (
 			<div>
 				<div className="panel panel--first avatar-list">
-					{this.props.areas.map(function(area) {
+					{this.props.challenges.map(function(challenge) {
 						return <NearbyAreaItem 
-									key={area.objectId} 
-									name={area.name}
-									imageUrl={area.imageUrl}
-									distance={area.distance}
-									difficulty={area.difficulty}
-									itemIndex={area.objectId}
+									key={challenge.objectId} 
+									name={challenge.name}
+									imageUrl={challenge.imageUrl}
+									distance={challenge.distance}
+									difficulty={challenge.difficulty}
+									type={challenge.type}
+									itemIndex={challenge.objectId}
 								/>;
 					})}
 				</div>

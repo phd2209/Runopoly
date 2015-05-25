@@ -3,11 +3,11 @@ var UI = require('touchstonejs').UI;
 
 var ChallengeMap = React.createClass({
 	propTypes: {
-		challenge: React.PropTypes.object.isRequired
+		challenge: React.PropTypes.object.isRequired		
 	},		
 	getDefaultProps: function () {
         return {			
-            initialZoom: 14,
+            initialZoom: 13,
         };
 	},
 	getInitialState: function () {
@@ -88,7 +88,7 @@ var ChallengeMap = React.createClass({
 				'#a1d99b'				
 			));
 			
-			startflag = this.markerWithLabel(" ", "<i class='icon ion-ios7-flag start-flag'></i>", 
+			startflag = this.markerWithLabel(" ", "<i class='icon ion-ios-flag start-flag'></i>", 
 				this.props.challenge.startPosition.latitude,
 				this.props.challenge.startPosition.longitude,
 				0, 32, 0.75);
@@ -100,7 +100,7 @@ var ChallengeMap = React.createClass({
 				'#7fcdbb'
 			));			
 			
-			stopflag = this.markerWithLabel(" ", "<i class='icon ion-ios7-flag stop-flag'></i>", 
+			stopflag = this.markerWithLabel(" ", "<i class='icon ion-ios-flag stop-flag'></i>", 
 				this.props.challenge.stopPosition.latitude,
 				this.props.challenge.stopPosition.longitude,
 				0, 32, 0.75);
@@ -123,7 +123,6 @@ var ChallengeMap = React.createClass({
 						0, 32, 0.75);
 					
 					var number = this.props.challenge.checkPoints[point].order;					
-					console.log(number);	
 					checkpointorder = this.markerWithLabel(" ", "<h2>"+number+"</h2>", 
 						this.props.challenge.checkPoints[point].latitude,
 						this.props.challenge.checkPoints[point].longitude,					

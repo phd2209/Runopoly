@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-"use strict";
 var React = require('react/addons');
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 var Touchstone = require('touchstonejs');
@@ -14,8 +12,9 @@ var views = {
 	'page-create-step1': require('./pages/Create - Step1'),
 	'page-create-step2': require('./pages/Create - Step2'),
 	'page-create-step3': require('./pages/Create - Step3'),
-	/*'page-running': require('./pages/RunningPage'),
-	'page-login': require('./pages/LoginWrapper'),
+	'page-run-step1': require('./pages/Run - Step1'),
+	'page-run-step2': require('./pages/Run - Step2'),
+	/*'page-login': require('./pages/LoginWrapper'),
 	'page-areaowners': require('./pages/AreaOwnersPage'),*/
 	
 	//Components
@@ -23,7 +22,9 @@ var views = {
 	'component-challenge-map': require('./components/ChallengeMap'),
 	'component-checkpoint-item': require('./components/CheckPointItem'),
 	'component-labelselect': require('./components/LabelSelect'),
-	'component-labelinput': require('./components/LabelInput')
+	'component-labelinput': require('./components/LabelInput'),
+	'component-nearby-area-list': require('./components/NearbyAreaList'),
+	'component-nearby-area-item': require('./components/NearbyAreaItem')
 };
 
 var App = React.createClass({
@@ -48,8 +49,7 @@ var App = React.createClass({
 		this.showView('page-home', 'fade');
 	},
 
-	render: function () {
-
+	render: function () { 
 		return (
 			<ReactCSSTransitionGroup transitionName={this.state.viewTransition.name} transitionEnter={this.state.viewTransition.in} transitionLeave={this.state.viewTransition.out} className="view-wrapper" component="div">
 				{this.getCurrentView()}

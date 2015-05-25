@@ -9,7 +9,7 @@ var Home = React.createClass({
 				<UI.Headerbar label="Runopoly" type="runopoly">
 				</UI.Headerbar> 
 					<ul style={this.getHomeMenuStyle()}>
-						<Link to="page-create-step1" viewTransition="show-from-right" params={{ prevView: 'page-home' }} component="div">
+						<Link to="page-run-step1" viewTransition="show-from-right" params={{ prevView: 'page-home' }} component="div">
 							<li style={this.getListStyle()}>							
 								<span style={this.getHeaderText()}>RUN</span>
 								<span style={this.getSubHeaderText()}>Run to Win Challenges</span>
