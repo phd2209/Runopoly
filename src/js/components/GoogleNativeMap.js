@@ -36,8 +36,11 @@ var GoogleNativeMap = React.createClass({
 			//	zoom: this.props.initialZoom,
 			//	disableDefaultUI: true
 			//};
-			const GORYOKAKU_JAPAN = new plugin.google.maps.LatLng(this.props.latitude,this.props.longitude);		
-			this.map = plugin.google.maps.Map.getMap(document.getElementById("map"),{
+			//const GORYOKAKU_JAPAN = new plugin.google.maps.LatLng(this.props.latitude,this.props.longitude);		
+			
+			var mapDiv = document.getElementById("map");
+			this.map = plugin.google.maps.Map.getMap(mapDiv);
+			/*this.map = plugin.google.maps.Map.getMap(document.getElementById("map"),{
 			  'backgroundColor': 'white',
 			  'mapType': plugin.google.maps.MapTypeId.HYBRID,
 			  'controls': {
@@ -58,7 +61,7 @@ var GoogleNativeMap = React.createClass({
 				'zoom': this.props.initialZoom,
 				'bearing': 50
 			  }
-			});		
+			});	*/	
 		}
 		//this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 		//google.maps.event.addListener(this.map, 'tilesloaded', function(evt) {
