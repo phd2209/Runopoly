@@ -21,7 +21,7 @@ var Home = React.createClass({
 								<span style={this.getSubHeaderText()}>Create a New Challenge</span>
 							</li>
 						</Link>
-						<Link to="page-create-step1" viewTransition="show-from-right" params={{ prevView: 'page-home' }} component="div">
+						<Link to="page-googlenative-map" viewTransition="show-from-right" params={{ prevView: 'page-home' }} component="div">
 							<li style={this.getListStyle()}>						
 								<span style={this.getHeaderText()}>CREATE GAME</span>
 								<span style={this.getSubHeaderText()}>Create a game of Challenges</span>
