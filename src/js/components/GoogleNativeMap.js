@@ -25,10 +25,13 @@ var GoogleNativeMap = React.createClass({
 		this.map = null;
 		this.coordinates = [];
 	},	
+	mapLoaded: function () {
+		console.log("map loaded");
+	},
 	componentDidMount: function () {		
 		if (plugin.google.maps)
 		{
-			//var self = this;
+			var self = this;
 			this.locationCircle = null; 		
 			
 			//var mapOptions = {
@@ -39,6 +42,7 @@ var GoogleNativeMap = React.createClass({
 			//const GORYOKAKU_JAPAN = new plugin.google.maps.LatLng(this.props.latitude,this.props.longitude);		
 			var mapDiv = document.getElementById("map");
 			this.map = plugin.google.maps.Map.getMap(mapDiv);
+			this.map.on(plugin.google.maps.event.MAP_READY, self.mapLoaded);
 			/*this.map = plugin.google.maps.Map.getMap(document.getElementById("map"),{
 			  'backgroundColor': 'white',
 			  'mapType': plugin.google.maps.MapTypeId.HYBRID,
