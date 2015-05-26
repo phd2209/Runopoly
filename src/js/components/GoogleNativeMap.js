@@ -120,7 +120,7 @@ var GoogleNativeMap = React.createClass({
 		};				
 		*/				
 		return (
-			<div id='map' style={this.getStyle()}></div>
+			<div id='map' className='gmap_div' style={this.getStyle()}></div>
 		);
 	},
 	circleOptions: function(strokeColor, strokeOpacity, strokeWeight, fillColor, fillOpacity, num) {
@@ -153,7 +153,7 @@ var GoogleNativeMap = React.createClass({
 	getStyle: function () {
 		return {
 			width: '100%',
-			height: 400
+			height: '100%'
 		};	
 	},
 });
