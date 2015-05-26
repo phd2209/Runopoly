@@ -37,7 +37,6 @@ var GoogleNativeMap = React.createClass({
 			//	disableDefaultUI: true
 			//};
 			//const GORYOKAKU_JAPAN = new plugin.google.maps.LatLng(this.props.latitude,this.props.longitude);		
-			
 			var mapDiv = document.getElementById("map");
 			this.map = plugin.google.maps.Map.getMap(mapDiv);
 			/*this.map = plugin.google.maps.Map.getMap(document.getElementById("map"),{
@@ -150,7 +149,7 @@ var GoogleNativeMap = React.createClass({
 	getStyle: function () {
 		return {
 			width: '100%',
-			height: '100%'
+			height: 400
 		};	
 	},
 });
