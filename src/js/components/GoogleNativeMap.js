@@ -27,6 +27,14 @@ var GoogleNativeMap = React.createClass({
 	},	
 	mapLoaded: function () {
 		console.log("map loaded");
+		//Add pushpin;
+		const DK = new plugin.google.maps.LatLng(this.props.latitude,this.props.longitude);
+		this.map.addMarker({
+			'position': DK,
+			'title': "Hello GoogleMap for Cordova!"
+			}, function(marker) {
+			marker.showInfoWindow();
+		});
 	},
 	componentDidMount: function () {
 		
@@ -40,7 +48,7 @@ var GoogleNativeMap = React.createClass({
 			//	zoom: this.props.initialZoom,
 			//	disableDefaultUI: true
 			//};
-			//const GORYOKAKU_JAPAN = new plugin.google.maps.LatLng(this.props.latitude,this.props.longitude);		
+			//const GORYOKAKU_JAPAN = new plugin.google.maps.LatLng(this.props.latitude,this.props.longitude);
 			var mapDiv = document.getElementById("map");
 			this.map = plugin.google.maps.Map.getMap(mapDiv);
 			this.map.on(plugin.google.maps.event.MAP_READY, self.mapLoaded);
