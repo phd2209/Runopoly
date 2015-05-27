@@ -28,6 +28,7 @@
                 <File name="src\js\components\ChallengeMap.js" />
                 <File name="src\js\components\CheckPointItem.js" />
                 <File name="src\js\components\LabelSelect.js" />
+                <File name="src\js\components\GoogleNativeMap.js" />
             </Folder>
             <Folder name="mixins">
                 <File name="src\js\mixins\geolocationMixin.js" />
