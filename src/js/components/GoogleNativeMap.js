@@ -28,8 +28,9 @@ var GoogleNativeMap = React.createClass({
 	mapLoaded: function () {
 		console.log("map loaded");
 	},
-	componentDidMount: function () {		
-		if (plugin.google.maps)
+	componentDidMount: function () {
+		
+		if (plugin)
 		{
 			var self = this;
 			this.locationCircle = null; 		
@@ -64,7 +65,7 @@ var GoogleNativeMap = React.createClass({
 				'zoom': this.props.initialZoom,
 				'bearing': 50
 			  }
-			});	*/	
+			});	*/
 		}
 		//this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 		//google.maps.event.addListener(this.map, 'tilesloaded', function(evt) {
