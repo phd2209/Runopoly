@@ -29,7 +29,7 @@ var GoogleNativeMap = React.createClass({
 		console.log("map loaded");
 	},
 	componentDidMount: function () {		
-		if (plugin)
+		if (typeof plugin !== 'undefined')
 		{
 			var self = this;
 			this.locationCircle = null; 		
@@ -122,7 +122,9 @@ var GoogleNativeMap = React.createClass({
 		};				
 		*/				
 		return (
-			<div id='map' className='gmap_div' style={this.getStyle()}></div>
+			<div id='map' className='gmap_div' style={this.getStyle()}>
+				{this.props.children}
+			</div>
 		);
 	},
 	circleOptions: function(strokeColor, strokeOpacity, strokeWeight, fillColor, fillOpacity, num) {

@@ -80,16 +80,17 @@ var CreateStep2 = React.createClass({
 				<UI.Headerbar label="Record Route" type="runopoly">
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />
 				</UI.Headerbar>
+				<Tappable style={this.getKMStyle()}>
+					<span style={this.getKMNumberStyle()}>{totalkm}</span>
+					<span style={this.getKMUnitStyle()}>Km</span>
+				</Tappable>
 				<div style={this.getStyle()}>					
 					<GoogleNativeMap 
 						latitude={this.state.location.latitude} 
 						longitude={this.state.location.longitude}
 						tracking={this.state.tracking}
-						checkPoint={this.state.checkPoint}>
-						<Tappable style={this.getKMStyle()}>
-							<span style={this.getKMNumberStyle()}>{totalkm}</span>
-							<span style={this.getKMUnitStyle()}>Km</span>
-						</Tappable>
+						checkPoint={this.state.checkPoint}
+					/>
 					<Tappable 
 						component="button"
 						style={this.getButtonStyle()} 
@@ -99,8 +100,7 @@ var CreateStep2 = React.createClass({
 						component="button"
 						disabled={!this.state.tracking && !this.state.checkPoint}
 						style={this.getCheckPointButtonStyle()} 
-						onTap={this.saveCheckPoint}>CheckPoint</Tappable>						
-					</GoogleNativeMap>
+						onTap={this.saveCheckPoint}>CheckPoint</Tappable>
 				</div>
 			</UI.FlexLayout>
 		);
