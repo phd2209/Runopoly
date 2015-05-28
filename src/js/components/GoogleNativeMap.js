@@ -17,6 +17,11 @@ var GoogleNativeMap = React.createClass({
 			checkPoints: []
         };
 	},
+	getInitialState: function () {
+		return {
+			processing: true,
+		};
+	},
 	componentWillMount: function () {
 		this.map = null;
 		this.coordinates = [];		
@@ -26,14 +31,8 @@ var GoogleNativeMap = React.createClass({
 		this.coordinates = [];
 	},	
 	mapLoaded: function () {
-		console.log("map loaded");
-		//Add pushpin;
-		const DK = new plugin.google.maps.LatLng(this.props.latitude,this.props.longitude);
-		this.map.addMarker({
-			'position': DK,
-			'title': "Hello GoogleMap for Cordova!"
-			}, function(marker) {
-			marker.showInfoWindow();
+		this.setState({ 
+			processing: false
 		});
 	},
 	componentDidMount: function () {
@@ -50,9 +49,8 @@ var GoogleNativeMap = React.createClass({
 			//};
 			//const GORYOKAKU_JAPAN = new plugin.google.maps.LatLng(this.props.latitude,this.props.longitude);
 			var mapDiv = document.getElementById("map");
-			this.map = plugin.google.maps.Map.getMap(mapDiv);
-			this.map.on(plugin.google.maps.event.MAP_READY, self.mapLoaded);
-			/*this.map = plugin.google.maps.Map.getMap(document.getElementById("map"),{
+			//this.map = plugin.google.maps.Map.getMap(mapDiv);		
+			this.map = plugin.google.maps.Map.getMap(document.getElementById("map"),{
 			  'backgroundColor': 'white',
 			  'mapType': plugin.google.maps.MapTypeId.HYBRID,
 			  'controls': {
@@ -68,12 +66,13 @@ var GoogleNativeMap = React.createClass({
 				'zoom': true
 			  },
 			  'camera': {
-				'latLng': GORYOKAKU_JAPAN,
+				'latLng': this.mapCenterLatLng(),
 				'tilt': 30,
 				'zoom': this.props.initialZoom,
 				'bearing': 50
 			  }
-			});	*/
+			});
+			this.map.on(plugin.google.maps.event.MAP_READY, self.mapLoaded);
 		}
 		//this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 		//google.maps.event.addListener(this.map, 'tilesloaded', function(evt) {
@@ -88,18 +87,33 @@ var GoogleNativeMap = React.createClass({
 			nextState.processing !== this.state.processing);
 	},
 	render: function () {
-		/*
+		var self = this;
 		if (this.map) {
 			this.map.setCenter(this.mapCenterLatLng());
 
 			if (this.locationCircle) {
-				this.locationCircle.setCenter(this.mapCenterLatLng());				
+				//this.locationCircle.setCenter(this.mapCenterLatLng());	
+				this.locationCircle.setCenter(this.mapCenterLatLng())
 			}
 			else {
-				var circleOptions = this.circleOptions('#FF0000', 0.5, 1, '#FF0000',  0.25, 50);	
-				this.locationCircle = new google.maps.Circle(circleOptions);					
+				
+				this.map.addCircle({
+					'center': this.mapCenterLatLng(),
+					'radius': 50,
+					'strokeColor' : '#FF0000',
+					'strokeWidth': 1,
+					'fillColor' : '#FF0000'
+					}, function(circle) {
+						self.locationCircle = circle;
+  
+				});
+				
+				
+				//var circleOptions = this.circleOptions('#FF0000', 0.5, 1, '#FF0000',  0.25, 50);	
+				//this.locationCircle = new google.maps.Circle(circleOptions);					
 			}
 		}
+		/*
 		if (this.props.tracking) {
 			
 			if (!this.coordinates.length)
@@ -129,7 +143,10 @@ var GoogleNativeMap = React.createClass({
 		};				
 		*/				
 		return (
-			<div id='map' className='gmap_div' style={this.getStyle()}></div>
+			<div style={this.getTransparentStyle()}>
+				<div id='map' className='gmap_div' style={this.getStyle()}></div>
+				<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.state.processing} className="Modal-loading" />
+			</div>
 		);
 	},
 	circleOptions: function(strokeColor, strokeOpacity, strokeWeight, fillColor, fillOpacity, num) {
@@ -157,8 +174,16 @@ var GoogleNativeMap = React.createClass({
 				});		
 	},
     mapCenterLatLng: function () {
-		return new google.maps.LatLng(this.props.latitude, this.props.longitude);		 
-    },	
+		//return new google.maps.LatLng(this.props.latitude, this.props.longitude);		 
+		return new plugin.google.maps.LatLng(this.props.latitude,this.props.longitude);
+	},	
+	getTransparentStyle: function() {
+		return {
+			width: '100%',
+			height: '100%',
+			backgroundColor: transparent
+		};		
+	},
 	getStyle: function () {
 		return {
 			width: '100%',
