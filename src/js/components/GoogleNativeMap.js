@@ -105,7 +105,6 @@ var GoogleNativeMap = React.createClass({
 					'fillColor' : '#FF0000'
 					}, function(circle) {
 						self.locationCircle = circle;
-  
 				});
 				
 				
@@ -181,7 +180,7 @@ var GoogleNativeMap = React.createClass({
 		return {
 			width: '100%',
 			height: '100%',
-			backgroundColor: transparent
+			backgroundColor: 'transparent'
 		};		
 	},
 	getStyle: function () {
