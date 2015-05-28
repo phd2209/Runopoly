@@ -75,52 +75,74 @@ var GoogleNativeMap = React.createClass({
 				//this.locationCircle.setCenter(this.mapCenterLatLng());	
 				this.locationCircle.setCenter(this.mapCenterLatLng())
 			}
-			else {
-				
-				this.map.addCircle({
+			else {				
+				this.locationCircle = {
 					'center': this.mapCenterLatLng(),
 					'radius': 50,
 					'strokeColor' : '#FF0000',
 					'strokeWidth': 1,
 					'fillColor' : '#FF0000'
-					}, function(circle) {
-						self.locationCircle = circle;
-				});
-				
-				
-				//var circleOptions = this.circleOptions('#FF0000', 0.5, 1, '#FF0000',  0.25, 50);	
-				//this.locationCircle = new google.maps.Circle(circleOptions);					
+				};				
+				this.map.addCircle(this.locationCircle);				
 			}
 		}
-		/*
+		
 		if (this.props.tracking) {
 			
 			if (!this.coordinates.length)
 			{
-				var marker = this.markerWithLabel(" ", "<i class='icon ion-ios-flag start-flag'></i>", 0, 32, 0.75);
+				this.map.addMarker({
+					'position': this.mapCenterLatLng(),
+					'title': 'Start',
+					'icon': 'images/ios7-flag.png'
+				});		
+				//var marker = this.markerWithLabel(" ", "<i class='icon ion-ios-flag start-flag'></i>", 0, 32, 0.75);
 			}
 			
 			this.coordinates.push(this.mapCenterLatLng());
-	
-			var route = new google.maps.Polyline({
-				path: this.coordinates,
-				geodesic: true,
-				strokeColor: '#FF0000',
-				strokeOpacity: 1,
-				strokeWeight: 1.2
+			
+			this.map.addPolyline({
+				points: this.coordinates,
+				'color' : '#FF0000',
+				'width': 1.2,
+				'geodesic': true
 			});
+						
+			//var route = new google.maps.Polyline({
+			//	path: this.coordinates,
+			//	geodesic: true,
+			//	strokeColor: '#FF0000',
+			//	strokeOpacity: 1,
+			//	strokeWeight: 1.2
+			//});
 	
-			route.setMap(this.map);
+			//route.setMap(this.map);
 	
 			if (this.props.checkPoint)
 			{
-				var checkPointOptions = this.circleOptions('#000000', 0.5, 1.2, '#000000',  0.25, 50);
-				var markerFlag = this.markerWithLabel(" ", "<i class='icon ion-flag checkpoint-flag'></i>", 0, 32, 0.75);
-				markerFlag.setMap( this.map );
-				var checkpoint = new google.maps.Circle(checkPointOptions);							
+				//var checkPointOptions = this.circleOptions('#000000', 0.5, 1.2, '#000000',  0.25, 50);
+				
+				var checkPointOptions = {
+					'center': this.mapCenterLatLng(),
+					'radius': 50,
+					'strokeColor' : '#000000',
+					'strokeWidth': 1.2,
+					'fillColor' : '#000000'
+				};	
+				
+				this.map.addMarker({
+					'position': this.mapCenterLatLng(),
+					'title': ' ',
+					'icon': 'images/flag.png'
+				});	
+				
+				//var markerFlag = this.markerWithLabel(" ", "<i class='icon ion-flag checkpoint-flag'></i>", 0, 32, 0.75);
+				//markerFlag.setMap( this.map );
+				this.map.addCircle(checkPointOptions);
+				//var checkpoint = new google.maps.Circle(checkPointOptions);							
 			}
 		};				
-		*/				
+					
 		return (
 			<div id='map' className='gmap_div' style={this.getStyle()}>
 				{this.props.children}
