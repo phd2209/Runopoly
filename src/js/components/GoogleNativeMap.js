@@ -71,8 +71,7 @@ var GoogleNativeMap = React.createClass({
 		if (this.map) {
 			this.map.setCenter(this.mapCenterLatLng());
 
-			if (this.locationCircle) {
-				//this.locationCircle.setCenter(this.mapCenterLatLng());	
+			if (this.locationCircle) {	
 				this.locationCircle.setCenter(this.mapCenterLatLng())
 			}
 			else {				
@@ -89,7 +88,7 @@ var GoogleNativeMap = React.createClass({
 		
 		if (this.props.tracking) {
 			
-			/*if (!this.coordinates.length)
+			if (!this.coordinates.length)
 			{
 				this.map.addMarker({
 					'position': this.mapCenterLatLng(),
@@ -97,8 +96,8 @@ var GoogleNativeMap = React.createClass({
 					'icon': 'images/ios7-flag.png'
 				});		
 				//var marker = this.markerWithLabel(" ", "<i class='icon ion-ios-flag start-flag'></i>", 0, 32, 0.75);
-			}*/
-			
+			}
+			/*
 			this.coordinates.push(this.mapCenterLatLng());
 			
 			this.map.addPolyline({

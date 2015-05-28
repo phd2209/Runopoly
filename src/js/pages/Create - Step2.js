@@ -90,16 +90,16 @@ var CreateStep2 = React.createClass({
 							<span style={this.getKMNumberStyle()}>{totalkm}</span>
 							<span style={this.getKMUnitStyle()}>Km</span>
 						</Tappable>
-					<Tappable 
-						component="button"
-						style={this.getButtonStyle()} 
-						onTap={this.state.tracking ? this.stopTracking : this.startTracking}>{this.state.tracking ? 'STOP' : 'START'}</Tappable>
-					<Tappable
-						className="checkpoint_button"
-						component="button"
-						disabled={!this.state.tracking && !this.state.checkPoint}
-						style={this.getCheckPointButtonStyle()} 
-						onTap={this.saveCheckPoint}>CheckPoint</Tappable>						
+						<Tappable 
+							component="button"
+							style={this.getButtonStyle()} 
+							onTap={this.state.tracking ? this.stopTracking : this.startTracking}>{this.state.tracking ? 'STOP' : 'START'}</Tappable>
+						<Tappable
+							className="checkpoint_button"
+							component="button"
+							disabled={!this.state.tracking && !this.state.checkPoint}
+							style={this.getCheckPointButtonStyle()} 
+							onTap={this.saveCheckPoint}>CheckPoint</Tappable>						
 					</GoogleNativeMap>
 				</div>
 			</UI.FlexLayout>
