@@ -2,7 +2,8 @@ var React = require("react");
 var Tappable = require('react-tappable');
 var Parse = require('parse').Parse;
 var UI = require('touchstonejs').UI;
-var GoogleMap = require('../components/GoogleMap');
+//var GoogleMap = require('../components/GoogleMap');
+var GoogleNativeMap = require('../components/GoogleNativeMap');
 var Navigation = require('touchstonejs').Navigation;
 var geolocationMixin = require('../mixins/geoLocationMixin');
 var _ = require('underscore');
@@ -84,7 +85,7 @@ var CreateStep2 = React.createClass({
 					<span style={this.getKMUnitStyle()}>Km</span>
 				</Tappable>
 				<div style={this.getStyle()}>					
-					<GoogleMap 
+					<GoogleNativeMap 
 						latitude={this.state.location.latitude} 
 						longitude={this.state.location.longitude}
 						tracking={this.state.tracking}

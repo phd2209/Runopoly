@@ -17,11 +17,6 @@ var GoogleNativeMap = React.createClass({
 			checkPoints: []
         };
 	},
-	getInitialState: function () {
-		return {
-			processing: true,
-		};
-	},
 	componentWillMount: function () {
 		this.map = null;
 		this.coordinates = [];		
@@ -31,25 +26,14 @@ var GoogleNativeMap = React.createClass({
 		this.coordinates = [];
 	},	
 	mapLoaded: function () {
-		this.setState({ 
-			processing: false
-		});
+		console.log("map loaded");
 	},
-	componentDidMount: function () {
-		
+	componentDidMount: function () {		
 		if (plugin)
 		{
 			var self = this;
 			this.locationCircle = null; 		
-			
-			//var mapOptions = {
-			//	center: this.mapCenterLatLng(),
-			//	zoom: this.props.initialZoom,
-			//	disableDefaultUI: true
-			//};
-			//const GORYOKAKU_JAPAN = new plugin.google.maps.LatLng(this.props.latitude,this.props.longitude);
 			var mapDiv = document.getElementById("map");
-			//this.map = plugin.google.maps.Map.getMap(mapDiv);		
 			this.map = plugin.google.maps.Map.getMap(document.getElementById("map"),{
 			  'backgroundColor': 'white',
 			  'mapType': plugin.google.maps.MapTypeId.HYBRID,
@@ -61,24 +45,20 @@ var GoogleNativeMap = React.createClass({
 			  },
 			  'gestures': {
 				'scroll': true,
-				'tilt': true,
-				'rotate': true,
+				'tilt': false,
+				'rotate': false,
 				'zoom': true
 			  },
 			  'camera': {
 				'latLng': this.mapCenterLatLng(),
-				'tilt': 30,
+				'tilt': 0,
 				'zoom': this.props.initialZoom,
 				'bearing': 50
 			  }
 			});
 			this.map.on(plugin.google.maps.event.MAP_READY, self.mapLoaded);
 		}
-		//this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-		//google.maps.event.addListener(this.map, 'tilesloaded', function(evt) {
-		//	self.mapLoaded();
-		//});
-	},		
+	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return (nextProps.latitude !== this.props.latitude || 
 		    nextProps.longitude !== this.props.longitude ||
@@ -142,10 +122,7 @@ var GoogleNativeMap = React.createClass({
 		};				
 		*/				
 		return (
-			<div style={this.getTransparentStyle()}>
-				<div id='map' className='gmap_div' style={this.getStyle()}></div>
-				<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.state.processing} className="Modal-loading" />
-			</div>
+			<div id='map' className='gmap_div' style={this.getStyle()}></div>
 		);
 	},
 	circleOptions: function(strokeColor, strokeOpacity, strokeWeight, fillColor, fillOpacity, num) {

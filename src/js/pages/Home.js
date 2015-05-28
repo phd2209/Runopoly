@@ -21,12 +21,6 @@ var Home = React.createClass({
 								<span style={this.getSubHeaderText()}>Create a New Challenge</span>
 							</li>
 						</Link>
-						<Link to="page-googlenative-map" viewTransition="show-from-right" params={{ prevView: 'page-home' }} component="div">
-							<li style={this.getListStyle()}>						
-								<span style={this.getHeaderText()}>CREATE GAME</span>
-								<span style={this.getSubHeaderText()}>Create a game of Challenges</span>
-							</li>
-						</Link>
 					</ul>				
 			</UI.FlexLayout>	
 		);
@@ -45,7 +39,7 @@ var Home = React.createClass({
 		};			
 	},
 	getListStyle: function () {
-		var height = (window.innerHeight-47) / 3;
+		var height = (window.innerHeight-47) / 2;
 		return {
 			height: height,
 			width: '100%',
@@ -80,5 +74,4 @@ var Home = React.createClass({
 		};
 	}
 });
-
 module.exports = Home;
