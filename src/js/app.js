@@ -18,8 +18,8 @@ var views = {
 	'page-areaowners': require('./components/GoogleNativeMap'),*/
 	
 	//Components
-	'component-map': require('./components/GoogleMap'),
-	'component-challenge-map': require('./components/ChallengeMap'),
+	'component-map': require('./components/BingMap'),
+	'component-challenge-map': require('./components/ChallengeBingMap'),
 	'component-checkpoint-item': require('./components/CheckPointItem'),
 	'component-labelselect': require('./components/LabelSelect'),
 	'component-labelinput': require('./components/LabelInput'),

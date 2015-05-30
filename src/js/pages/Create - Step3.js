@@ -5,7 +5,8 @@ var UI = require('touchstonejs').UI;
 var Navigation = require('touchstonejs').Navigation;
 var LabelInput = require('../components/LabelInput');
 var CheckPointItem = require('../components/CheckPointItem');
-var ChallengeMap = require('../components/ChallengeMap');
+//var ChallengeMap = require('../components/ChallengeMap');
+var ChallengeMap = require('../components/ChallengeBingMap');
 var Tappable = require('react-tappable');
 
 var CreateStep3 = React.createClass({

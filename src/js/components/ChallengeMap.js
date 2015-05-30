@@ -174,7 +174,7 @@ var ChallengeMap = React.createClass({
 	getStyle: function () {
 		return {
 			width: '100%',
-			height: '300'
+			height: 300
 		};	
 	}
 });

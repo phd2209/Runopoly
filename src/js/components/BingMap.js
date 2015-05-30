@@ -52,7 +52,8 @@ var BingMap = React.createClass({
 			mapTypeId: Microsoft.Maps.MapTypeId.road,
 			center: this.mapCenterLatLng(),
 			zoom: this.props.initialZoom,
-			disableKeyboardInput: true
+			disableKeyboardInput: true,
+			showDashboard: false
 		};
 		this.map = new Microsoft.Maps.Map(document.getElementById("map"), mapOptions);
 		this.attachmapviewchangeend = Microsoft.Maps.Events.addHandler(this.map, 'viewchangeend', self.mapLoaded);

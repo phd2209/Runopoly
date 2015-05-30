@@ -29,7 +29,6 @@ var CreateStep2 = React.createClass({
 		return {
 			tracking: false,
 			location: {latitude: 0, longitude: 0},
-			processing: false,
 			checkPoint: false
 		};
 	},
@@ -216,8 +215,8 @@ var CreateStep2 = React.createClass({
 	getStyle: function () {
 		return {
 			width: '100%',
-			height: '100%',
-			backgroundColor: 'transparent'
+			height: '100%'
+			/*backgroundColor: 'transparent'*/
 			
 		};	
 	},
