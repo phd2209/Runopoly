@@ -55,7 +55,7 @@ var ChallengeMap = React.createClass({
 		
 		if (this.state.map) {
 			
-			this.map.setCenter(this.mapCenterLatLng(this.props.challenge.startPosition.latitude,
+			this.state.map.setCenter(this.mapCenterLatLng(this.props.challenge.startPosition.latitude,
 				this.props.challenge.startPosition.longitude));				
 
 			var coordinates = [];

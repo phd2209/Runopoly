@@ -15,11 +15,11 @@ var CreateStep3 = React.createClass({
 	},			
 	getInitialState: function () {
 		return {
-			processing: false,
 			stopTime: 0
 		};
 	},	
-	componentWillMount: function () {
+	componentDidMount: function () {
+		console.log("componentDidMount");
 		this.setState({			
 			stopTime: this.roundToTwo(this.props.challenge.stopTime)
 		});	
@@ -74,12 +74,11 @@ var CreateStep3 = React.createClass({
 					}
 					<Tappable className="panel-button" style={this.getButtonStyle()} onTap={this.save}>save</Tappable>
 				</UI.FlexBlock>
-				<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.state.processing} className="Modal-loading" />
 			</UI.FlexLayout>	
 		);
 	},	
 	save: function() {
-
+		console.log("saving");
 		var self =this;		
 		this.setState({
 			processing: true
@@ -113,6 +112,7 @@ var CreateStep3 = React.createClass({
 		return +(Math.round(num + "e+2")  + "e-2");
 	},	
 	handlestopTimeChange: function(event) {	
+		console.log("handlestopTimeChange");
 		this.setState({			
 			stopTime: Number(event.target.value) * 60
 		});

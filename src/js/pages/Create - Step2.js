@@ -2,8 +2,9 @@ var React = require("react");
 var Tappable = require('react-tappable');
 var Parse = require('parse').Parse;
 var UI = require('touchstonejs').UI;
+var BingMap = require('../components/BingMap');
 //var GoogleMap = require('../components/GoogleMap');
-var GoogleNativeMap = require('../components/GoogleNativeMap');
+//var GoogleNativeMap = require('../components/GoogleNativeMap');
 var Navigation = require('touchstonejs').Navigation;
 var geolocationMixin = require('../mixins/geoLocationMixin');
 var _ = require('underscore');
@@ -81,15 +82,15 @@ var CreateStep2 = React.createClass({
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />
 				</UI.Headerbar>
 				<div style={this.getStyle()}>
-					<GoogleNativeMap 
-						latitude={this.state.location.latitude} 
-						longitude={this.state.location.longitude}
-						tracking={this.state.tracking}
-						checkPoint={this.state.checkPoint}>									
 					<Tappable style={this.getKMStyle()}>
 						<span style={this.getKMNumberStyle()}>{totalkm}</span>
 						<span style={this.getKMUnitStyle()}>Km</span>
-					</Tappable>							 
+					</Tappable>
+					<BingMap 
+						latitude={this.state.location.latitude} 
+						longitude={this.state.location.longitude}
+						tracking={this.state.tracking}
+						checkPoint={this.state.checkPoint} />																 
 					<Tappable 
 						component="button"
 						style={this.getButtonStyle()} 
@@ -102,7 +103,6 @@ var CreateStep2 = React.createClass({
 						style={this.getCheckPointButtonStyle()} 
 						onTap={this.saveCheckPoint}>CheckPoint
 					</Tappable>
-					</GoogleNativeMap>
 				</div>
 			</UI.FlexLayout>
 		);
@@ -157,7 +157,7 @@ var CreateStep2 = React.createClass({
 		}		
 		//stop position
 		this.stopPosition = new Parse.GeoPoint(this.state.location.latitude, this.state.location.longitude);
-		this.showView('page-create-step3', 'show-from-bottom', {challenge: this.getChallenge()});
+		this.showView('page-create-step3', 'fade', {challenge: this.getChallenge()});
     },	
 	saveCheckPoint: function() {	
 		this.setState({
