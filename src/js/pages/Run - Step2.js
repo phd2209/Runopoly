@@ -3,7 +3,7 @@ var Parse = require('parse').Parse;
 var ParseReact = require('parse-react');
 var UI = require('touchstonejs').UI;
 var Navigation = require('touchstonejs').Navigation;
-var ChallengeMap = require('../components/ChallengeMap');
+var ChallengeMap = require('../components/ChallengeBingMap');
 
 var RunStep2 = React.createClass({
 	mixins: [Navigation, ParseReact.Mixin],	

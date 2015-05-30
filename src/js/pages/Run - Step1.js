@@ -54,9 +54,11 @@ var RunStep1 = React.createClass({
 		var result = [];
 		if (this.state.location == null || this.state.location == undefined) return result;
 		_.each(challenges, function (val) {
-			var center = new google.maps.LatLng(val.startPosition.latitude, val.startPosition.longitude);
-			var mypos = new google.maps.LatLng(self.state.location.latitude, self.state.location.longitude);
-			var distance = Number((google.maps.geometry.spherical.computeDistanceBetween(mypos, center) / 1000).toFixed(2));
+			//var center = new google.maps.LatLng(val.startPosition.latitude, val.startPosition.longitude);
+			//var mypos = new google.maps.LatLng(self.state.location.latitude, self.state.location.longitude);
+			//var distance = Number((google.maps.geometry.spherical.computeDistanceBetween(mypos, center) / 1000).toFixed(2));
+			var distance = Number(self.gps_distance(val.startPosition.latitude, val.startPosition.longitude,
+				self.state.location.latitude, self.state.location.longitude).toFixed(2));
 			var imageUrl = self.renderImagePath(val);
 			val.distance = distance;
 			val.imageUrl = imageUrl;
@@ -65,6 +67,22 @@ var RunStep1 = React.createClass({
 		});
 		return _.sortBy(result, function (num) { return num.distance; });
 	},	
+	// Calculate distance of route
+	// and duration
+    gps_distance: function (lat1, lon1, lat2, lon2) {
+        // http://www.movable-type.co.uk/scripts/latlong.html
+        var R = 6371; // km
+        var dLat = (lat2 - lat1) * (Math.PI / 180);
+        var dLon = (lon2 - lon1) * (Math.PI / 180);
+        var lat1 = lat1 * (Math.PI / 180);
+        var lat2 = lat2 * (Math.PI / 180);
+
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = R * c;
+        return d;
+    },		
 	renderImagePath: function (challenge) {		
 		//var path = "", initial = "", len = challenge.route.length, imageURL="", zoom=15;
 		//_.each(challenge.route, function (value, key) {
