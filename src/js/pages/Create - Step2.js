@@ -80,16 +80,16 @@ var CreateStep2 = React.createClass({
 				<UI.Headerbar label={this.props.name} type="runopoly">
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />
 				</UI.Headerbar>
-				<div style={this.getStyle()}>					
-					<Tappable style={this.getKMStyle()}>
-						<span style={this.getKMNumberStyle()}>{totalkm}</span>
-						<span style={this.getKMUnitStyle()}>Km</span>
-					</Tappable>		
+				<div style={this.getStyle()}>
 					<GoogleNativeMap 
 						latitude={this.state.location.latitude} 
 						longitude={this.state.location.longitude}
 						tracking={this.state.tracking}
-						checkPoint={this.state.checkPoint} />
+						checkPoint={this.state.checkPoint}>									
+					<Tappable style={this.getKMStyle()}>
+						<span style={this.getKMNumberStyle()}>{totalkm}</span>
+						<span style={this.getKMUnitStyle()}>Km</span>
+					</Tappable>							 
 					<Tappable 
 						component="button"
 						style={this.getButtonStyle()} 
@@ -101,7 +101,8 @@ var CreateStep2 = React.createClass({
 						disabled={!this.state.tracking && !this.state.checkPoint}
 						style={this.getCheckPointButtonStyle()} 
 						onTap={this.saveCheckPoint}>CheckPoint
-					</Tappable>						
+					</Tappable>
+					</GoogleNativeMap>
 				</div>
 			</UI.FlexLayout>
 		);
@@ -215,7 +216,9 @@ var CreateStep2 = React.createClass({
 	getStyle: function () {
 		return {
 			width: '100%',
-			height: '100%'
+			height: '100%',
+			backgroundColor: 'transparent'
+			
 		};	
 	},
 	getKMStyle: function () {
@@ -232,8 +235,7 @@ var CreateStep2 = React.createClass({
           left: 5,
           textAlign: 'center',
           textDecoration: 'none',
-          margin: '0px auto',
-		  zIndex: 99
+          margin: '0px auto'
 		};		
 	},
 	getKMNumberStyle: function () {
@@ -267,8 +269,7 @@ var CreateStep2 = React.createClass({
           textAlign: 'center',
           textDecoration: 'none',
           margin: '0px auto',
-		  textTransform: 'uppercase',
-		  zIndex: 99
+		  textTransform: 'uppercase'
 		};	
 	},	
 	getCheckPointButtonStyle: function () {
@@ -286,8 +287,7 @@ var CreateStep2 = React.createClass({
           textAlign: 'center',
           textDecoration: 'none',
           margin: '0px auto',
-		  textTransform: 'uppercase',
-		  zIndex: 99
+		  textTransform: 'uppercase'
 		};	
 	},	
 });
