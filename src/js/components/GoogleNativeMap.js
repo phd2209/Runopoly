@@ -53,7 +53,6 @@ var GoogleNativeMap = React.createClass({
 				'bearing': 50
 			  }
 			});
-			this.map.setClickable( false );
 		}
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
