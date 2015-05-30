@@ -53,5 +53,9 @@
         <File name="src\index.html" />
         <File name="gulpfile.js" />
         <File name="package.json" />
+        <Folder name="images">
+            <File name="src\images\flag.png" />
+            <File name="src\images\ios7-flag.png" />
+        </Folder>
     </Project>
 </NotepadPlus>

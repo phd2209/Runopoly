@@ -266,7 +266,8 @@ var CreateStep2 = React.createClass({
           textAlign: 'center',
           textDecoration: 'none',
           margin: '0px auto',
-		  textTransform: 'uppercase'
+		  textTransform: 'uppercase',
+		  zIndex: 99
 		};	
 	},	
 	getCheckPointButtonStyle: function () {
@@ -284,7 +285,8 @@ var CreateStep2 = React.createClass({
           textAlign: 'center',
           textDecoration: 'none',
           margin: '0px auto',
-		  textTransform: 'uppercase'
+		  textTransform: 'uppercase',
+		  zIndex: 99
 		};	
 	},	
 });

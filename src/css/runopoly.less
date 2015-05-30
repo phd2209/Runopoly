@@ -115,8 +115,13 @@
 	&[disabled],
 	&.disabled {
 		background-color: @runopoly-light-grey;
-		opacity: .3;
+		opacity: .6;
 		pointer-events: none;		
+	}
+		
+	&[active],
+	&.active {
+		background-color: @runopoly-lightest-grey;		
 	}
 }
 

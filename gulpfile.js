@@ -10,7 +10,8 @@ var gulp = require('gulp'),
 	envify = require('envify/custom'),
 	uglify = require('gulp-uglify'),
 	buffer = require('vinyl-buffer'),
-	source = require('vinyl-source-stream');
+	source = require('vinyl-source-stream'),
+	shell = require('gulp-shell');
 	
 var paths = {
     css: ['src/css/app.less'],
@@ -76,12 +77,20 @@ gulp.task('browserify', function () {
 	.pipe(uglify())
     .pipe(gulp.dest('www/js'));
 });
-
+/*
+gulp.task('deploy', shell.task([	
+	'git push origin master',
+	'git remote remove origin',
+	'git remote add origin https://phd2209:polit2209@github.com/phd2209/runopoly.git',
+	'git subtree push --prefix www origin gh-pages' 
+]));
+*/
 gulp.task('watch', ['browser-sync'], function () {
     gulp.watch(paths.css, ['css', reload]);
     gulp.watch(paths.js, ['browserify', reload]);
     gulp.watch(paths.html, ['html', reload]);
 	gulp.watch(paths.xml, ['xml', reload]);
+	//gulp.watch([paths.css, paths.js, paths.html, paths.xml], ['deploy']);
 });
 
 gulp.task('default', ['watch', 'html', 'css', 'browserify', 'xml']);
