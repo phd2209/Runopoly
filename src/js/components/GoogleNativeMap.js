@@ -85,16 +85,16 @@ var GoogleNativeMap = React.createClass({
 		
 		if (this.props.tracking) {
 			
-			/*if (!this.coordinates.length)
+			if (!this.coordinates.length)
 			{
 				this.map.addMarker({
 					'position': this.mapCenterLatLng(),
-					'title': 'Start',
-					'icon': 'images/ios7-flag.png'
+					'title': 'Start' /*,
+					'icon': 'images/ios7-flag.png'*/
 				});		
 				//var marker = this.markerWithLabel(" ", "<i class='icon ion-ios-flag start-flag'></i>", 0, 32, 0.75);
 			}
-			*/
+			
 			this.coordinates.push(this.mapCenterLatLng());
 			
 			this.map.addPolyline({
@@ -125,13 +125,13 @@ var GoogleNativeMap = React.createClass({
 					'strokeWidth': 1.2,
 					'fillColor' : '#000000'
 				};	
-				/*
+				
 				this.map.addMarker({
 					'position': this.mapCenterLatLng(),
-					'title': ' ',
-					'icon': 'images/flag.png'
+					'title': 'checkPoint' /*,
+					'icon': 'images/flag.png'*/
 				});	
-				*/
+				
 				//var markerFlag = this.markerWithLabel(" ", "<i class='icon ion-flag checkpoint-flag'></i>", 0, 32, 0.75);
 				//markerFlag.setMap( this.map );
 				this.map.addCircle(checkPointOptions);

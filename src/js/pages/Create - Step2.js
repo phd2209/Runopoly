@@ -77,30 +77,31 @@ var CreateStep2 = React.createClass({
 		this.totalKm = Number(totalkm);
 		return (
 			<UI.FlexLayout className={this.props.viewClassName}>
-				<UI.Headerbar label="Record Route" type="runopoly">
+				<UI.Headerbar label={this.props.name} type="runopoly">
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />
 				</UI.Headerbar>
 				<div style={this.getStyle()}>					
+					<Tappable style={this.getKMStyle()}>
+						<span style={this.getKMNumberStyle()}>{totalkm}</span>
+						<span style={this.getKMUnitStyle()}>Km</span>
+					</Tappable>		
 					<GoogleNativeMap 
 						latitude={this.state.location.latitude} 
 						longitude={this.state.location.longitude}
 						tracking={this.state.tracking}
-						checkPoint={this.state.checkPoint}>
-						<Tappable style={this.getKMStyle()}>
-							<span style={this.getKMNumberStyle()}>{totalkm}</span>
-							<span style={this.getKMUnitStyle()}>Km</span>
-						</Tappable>
-						<Tappable 
-							component="button"
-							style={this.getButtonStyle()} 
-							onTap={this.state.tracking ? this.stopTracking : this.startTracking}>{this.state.tracking ? 'STOP' : 'START'}</Tappable>
-						<Tappable
-							className="checkpoint_button"
-							component="button"
-							disabled={!this.state.tracking && !this.state.checkPoint}
-							style={this.getCheckPointButtonStyle()} 
-							onTap={this.saveCheckPoint}>CheckPoint</Tappable>						
-					</GoogleNativeMap>
+						checkPoint={this.state.checkPoint} />
+					<Tappable 
+						component="button"
+						style={this.getButtonStyle()} 
+						onTap={this.state.tracking ? this.stopTracking : this.startTracking}>{this.state.tracking ? 'STOP' : 'START'}
+					</Tappable>
+					<Tappable
+						className="checkpoint_button"
+						component="button"
+						disabled={!this.state.tracking && !this.state.checkPoint}
+						style={this.getCheckPointButtonStyle()} 
+						onTap={this.saveCheckPoint}>CheckPoint
+					</Tappable>						
 				</div>
 			</UI.FlexLayout>
 		);
