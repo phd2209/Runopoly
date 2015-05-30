@@ -50,12 +50,12 @@ var CreateStep1 = React.createClass({
 						{ label: 'Hard',       value: 3 }
 					]} />
 				</div>
-				<Link to="page-create-step2" viewTransition="show-from-bottom" params={{prevView: 'page-create-step1', 
+				<Link to="page-create-step2" viewTransition="fade" params={{prevView: 'page-create-step1', 
 					name: this.state.name.trim(), 
 					type: Number(this.state.type), 
 					difficulty: Number(this.state.difficulty)}} 
 					component="div">						
-					<span style={this.getButtonStyle()}>NEXT</span>
+					<span className='checkpoint_button' style={this.getButtonStyle()}>NEXT</span>
 				</Link>
 				</UI.FlexBlock>
 			</UI.FlexLayout>	

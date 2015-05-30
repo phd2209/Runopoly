@@ -25,9 +25,6 @@ var GoogleNativeMap = React.createClass({
 		this.map = null;
 		this.coordinates = [];
 	},	
-	mapLoaded: function () {
-		console.log("map loaded");
-	},
 	componentDidMount: function () {		
 		if (typeof plugin !== 'undefined')
 		{
@@ -56,7 +53,7 @@ var GoogleNativeMap = React.createClass({
 				'bearing': 50
 			  }
 			});
-			this.map.on(plugin.google.maps.event.MAP_READY, self.mapLoaded);
+			this.map.setClickable( false );
 		}
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
