@@ -6710,8 +6710,12 @@ fieldset[disabled] .btn-link {
 .checkpoint_button[disabled],
 .checkpoint_button.disabled {
   background-color: #aaaaaa;
-  opacity: .3;
+  opacity: .6;
   pointer-events: none;
+}
+.checkpoint_button[active],
+.checkpoint_button.active {
+  background-color: #dfdfdf;
 }
 .field-label {
   color: #000000;
