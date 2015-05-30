@@ -6609,11 +6609,15 @@ fieldset[disabled] .btn-link {
 #main {
   width: 100%;
   height: 100%;
-  background-color: transparent;
+  /*
+	background-color: transparent;
+	*/
 }
 .view-wrapper {
   height: 100%;
-  background-color: transparent;
+  /*
+	background-color: transparent;
+	*/
 }
 .start-flag {
   font-size: 32px;
