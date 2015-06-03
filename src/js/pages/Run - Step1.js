@@ -54,9 +54,6 @@ var RunStep1 = React.createClass({
 		var result = [];
 		if (this.state.location == null || this.state.location == undefined) return result;
 		_.each(challenges, function (val) {
-			//var center = new google.maps.LatLng(val.startPosition.latitude, val.startPosition.longitude);
-			//var mypos = new google.maps.LatLng(self.state.location.latitude, self.state.location.longitude);
-			//var distance = Number((google.maps.geometry.spherical.computeDistanceBetween(mypos, center) / 1000).toFixed(2));
 			var distance = Number(self.gps_distance(val.startPosition.latitude, val.startPosition.longitude,
 				self.state.location.latitude, self.state.location.longitude).toFixed(2));
 			var imageUrl = self.renderImagePath(val);
@@ -84,14 +81,15 @@ var RunStep1 = React.createClass({
         return d;
     },		
 	renderImagePath: function (challenge) {		
-		//var path = "", initial = "", len = challenge.route.length, imageURL="", zoom=15;
-		//_.each(challenge.route, function (value, key) {
-		//	if (key === 0) initial = "|" + value.latitude + "," + value.longitude;
-		//	if (key < len - 1) path =  path + "|" + value.latitude + "," + value.longitude;
-		//	else path =  path + "|" + value.latitude + "," + value.longitude + initial;
-		//});				
-		//imageURL = "https://maps.googleapis.com/maps/api/staticmap?size=65x65&path=color:0xff0000ff|weight:1"+ path + "&zoom=" + zoom;
-		var imageURL = "test";
+		//var imageURL = "http://dev.virtualearth.net/REST/v1/Imagery/Map/Road/47.619048,-122.35384/15?mapSize=65,65&pp=47.620495,-122.34931;21;AA&pp=47.619385,-122.351485;;AB&pp=47.616295,-122.3556;22&mapMetadata=1&o=xml&key=AuAHBbCwL3pG2rjo0Pb_O4wjIKHzdKQLIUGMndhAaXZUv9d7Oa_JyamaDkNrnuQd";
+		var path = "", initial = "", len = challenge.route.length, imageURL="", zoom=15;
+		_.each(challenge.route, function (value, key) {
+			if (key === 0) initial = "|" + value.latitude + "," + value.longitude;
+			if (key < len - 1) path =  path + "|" + value.latitude + "," + value.longitude;
+			else path =  path + "|" + value.latitude + "," + value.longitude + initial;
+		});				
+		imageURL = "https://maps.googleapis.com/maps/api/staticmap?size=65x65&path=color:0xff0000ff|weight:1"+ path + "&zoom=" + zoom;
+		//var imageURL = "test";
 		return imageURL;
 	},	
 });

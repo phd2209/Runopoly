@@ -21,12 +21,10 @@ module.exports = React.createClass({
 			readonly: false,
 			inputRef: 'input'
 		};
-	},
-	
+	},	
 	getValue: function () {
 		return this.refs.input.getDOMNode().value;
-	},
-	
+	},	
 	render: function() {
 		var className = classnames(this.props.className, {
 			'list-item': true,

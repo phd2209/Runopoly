@@ -49,7 +49,7 @@ var CreateStep1 = React.createClass({
 						{ label: 'Moderate',   value: 2 },
 						{ label: 'Hard',       value: 3 }
 					]} />
-				</div>
+				</div>				
 				<Link to="page-create-step2" viewTransition="fade" params={{prevView: 'page-create-step1', 
 					name: this.state.name.trim(), 
 					type: Number(this.state.type), 

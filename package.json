@@ -13,11 +13,10 @@
     "react-tappable": "~0.4.0",
     "jquery": "~2.1.3",
     "underscore": "~1.8.3",
-    "touchstonejs": "~0.1.2",
-    "classnames": "~1.2.0",
+	"touchstonejs": "~0.1.2",
+	"classnames": "~1.2.0",
     "parse-react": "~0.2.3",
-    "parse": "~1.4.2",
-    "geolocation-marker": "~1.1.3"
+    "parse": "~1.4.2"
   },
   "devDependencies": {
     "gulp": "~3.8.11",
@@ -34,3 +33,4 @@
     "gulp-shell": "~0.4.1"
   }
 }
+

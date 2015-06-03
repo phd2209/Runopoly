@@ -3,7 +3,7 @@ var UI = require('touchstonejs').UI;
 
 var ChallengeBingMap = React.createClass({
 	propTypes: {
-		challenge: React.PropTypes.object.isRequired		
+		challenge: React.PropTypes.object.isRequired
 	},	
 	getDefaultProps: function () {
         return {			
@@ -101,8 +101,6 @@ var ChallengeBingMap = React.createClass({
 				this.props.challenge.stopPosition.longitude), pushpinOptions);
 			this.state.map.entities.push(stopflag);
 			
-			//You are here!!!!!!
-			
 			if (this.props.challenge.checkPoints)
 			{
 				for (var point in this.props.challenge.checkPoints)
@@ -118,17 +116,15 @@ var ChallengeBingMap = React.createClass({
 					chekpointflag = new Microsoft.Maps.Pushpin(this.mapCenterLatLng(this.props.challenge.checkPoints[point].latitude,
 					this.props.challenge.checkPoints[point].longitude), pushpinOptions);
 					this.state.map.entities.push(chekpointflag);						
-					/*					
-					var number = this.props.challenge.checkPoints[point].order;					
-					checkpointorder = this.markerWithLabel(" ", "<h2>"+number+"</h2>", 
-						this.props.challenge.checkPoints[point].latitude,
-						this.props.challenge.checkPoints[point].longitude,					
-						-5, 15, 0.75);					
-					*/
+										
+					var number = this.props.challenge.checkPoints[point].order;
+					var pushpinOptions = {width: 0, height: 16, htmlContent: "<h3>"+number+"</h3>"};					
+					var chekpointnumber = new Microsoft.Maps.Pushpin(this.mapCenterLatLng(this.props.challenge.checkPoints[point].latitude,
+						this.props.challenge.checkPoints[point].longitude), pushpinOptions);
+					this.state.map.entities.push(chekpointnumber);						
 				}
-			}			
+			}
 		};				
-		
 		return (
 			<div style={this.getBorderStyle()}> 
 			<div id='map' style={this.getStyle()}></div>

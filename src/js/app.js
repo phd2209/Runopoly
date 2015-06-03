@@ -14,12 +14,11 @@ var views = {
 	'page-create-step3': require('./pages/Create - Step3'),
 	'page-run-step1': require('./pages/Run - Step1'),
 	'page-run-step2': require('./pages/Run - Step2'),
-	/*'page-googlenative-map': require('./components/GoogleNativeMap'),
-	'page-areaowners': require('./components/GoogleNativeMap'),*/
+	'page-run-step3': require('./pages/Run - Step3'),
 	
 	//Components
-	'component-map': require('./components/BingMap'),
-	'component-challenge-map': require('./components/ChallengeBingMap'),
+	'component-map': require('./components/GoogleMap'),
+	'component-challenge-map': require('./components/ChallengeMap'),
 	'component-checkpoint-item': require('./components/CheckPointItem'),
 	'component-labelselect': require('./components/LabelSelect'),
 	'component-labelinput': require('./components/LabelInput'),

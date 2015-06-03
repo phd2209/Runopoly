@@ -3,11 +3,14 @@ var UI = require('touchstonejs').UI;
 
 var ChallengeMap = React.createClass({
 	propTypes: {
-		challenge: React.PropTypes.object.isRequired		
+		challenge: React.PropTypes.object.isRequired,
+		height: React.PropTypes.number,
+		location: React.PropTypes.object
 	},		
 	getDefaultProps: function () {
         return {			
             initialZoom: 13,
+			height: 300
         };
 	},
 	getInitialState: function () {
@@ -128,7 +131,7 @@ var ChallengeMap = React.createClass({
 						this.props.challenge.checkPoints[point].longitude,					
 						-5, 15, 0.75);					
 				}
-			}		
+			}
 		}		
 		return (
 			<div style={this.getBorderStyle()}>
@@ -174,7 +177,7 @@ var ChallengeMap = React.createClass({
 	getStyle: function () {
 		return {
 			width: '100%',
-			height: 300
+			height: this.props.height
 		};	
 	}
 });
