@@ -37791,7 +37791,7 @@ var RunStep2 = React.createClass({displayName: "RunStep2",
 					React.createElement("span", {style: this.getInfoItemStyle()}, distanceToPoint, " Meters"), 
 					React.createElement(Tappable, {disable: inStart, onTap: this.startChallenge, className: "panel-button", component: "button"}, 
 						inStart ?
-							"You are Ready Start" : 
+							"You are Ready to Start" : 
 							"You are not quite there"
 						
 					)
