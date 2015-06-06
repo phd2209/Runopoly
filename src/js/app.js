@@ -66,7 +66,7 @@ function onDeviceReady() {
 		StatusBar.show();
 		StatusBar.styleDefault();
 		StatusBar.overlaysWebView(false);
-        StatusBar.backgroundColorByHexString('#42B49A');
+        StatusBar.backgroundColorByHexString('#FFFFFF');
 	}
 	startApp();
 }
