@@ -1,29 +1,40 @@
-var React = require("react");
+var React = require('react');
 var UI = require('touchstonejs').UI;
+var View = require('../components/View');
 var Link = require('touchstonejs').Link;
 
 var Home = React.createClass({
+	displayName: 'HomePage',
 	render: function () {
 		return (
-			<UI.FlexLayout className={this.props.viewClassName}>
+			<View>
 				<UI.Headerbar label="Runopoly" type="runopoly">
 				</UI.Headerbar> 
-					<ul style={this.getHomeMenuStyle()}>
-						<Link to="page-run-step1" viewTransition="show-from-right" params={{ prevView: 'page-home' }} component="div">
-							<li style={this.getListRunStyle()}>							
-								<span style={this.getHeaderRunText()}>RUN</span>
-								<span style={this.getSubHeaderRunText()}>Run to Win Challenges</span>
-							</li>
-						</Link>
-						<Link to="page-create-step1" viewTransition="show-from-right" params={{ prevView: 'page-home' }} component="div">
-							<li style={this.getListChallengeStyle()}>						
-								<span style={this.getHeaderChallengeText()}>CREATE CHALLENGE</span>
-								<span style={this.getSubHeaderChallengeText()}>Create a New Challenge</span>
-							</li>
-						</Link>
-					</ul>				
-			</UI.FlexLayout>	
+				<ul style={this.getHomeMenuStyle()}>
+					<Link to="page-run-step1" viewTransition="show-from-right" params={{ prevView: 'page-home' }} component="div">
+						<li style={this.getListRunStyle()}>							
+							<span style={this.getHeaderRunText()}>RUN</span>
+							<span style={this.getSubHeaderText()}>Run to Win Challenges</span>
+						</li>
+					</Link>
+					<Link to="page-run-step1" viewTransition="show-from-right" params={{ prevView: 'page-home' }} component="div">
+						<li style={this.getListScoreStyle()}>							
+							<span style={this.getHeaderScoreText()}>SCORE</span>
+							<span style={this.getSubHeaderText()}>Your Runopoly Score</span>
+						</li>
+					</Link>
+					<Link to="page-create-step1" viewTransition="show-from-right" params={{ prevView: 'page-home' }} component="div">
+						<li style={this.getListChallengeStyle()}>						
+							<span style={this.getHeaderChallengeText()}>CREATE CHALLENGE</span>
+							<span style={this.getSubHeaderText()}>Create a New Challenge</span>
+						</li>
+					</Link>
+				</ul>
+			</View>	
 		);
+	},
+	getHeight: function () {
+		return (window.innerHeight-44) / 3;
 	},
 	getHomeMenuStyle: function () {
 		return {
@@ -38,26 +49,25 @@ var Home = React.createClass({
 			textAlign: 'center'
 		};			
 	},
-	getListRunStyle: function () {
-		var height = (window.innerHeight-67) / 2;
+	getListRunStyle: function () {		
 		return {
-			height: height,
+			height: this.getHeight(),
 			width: '100%',
-			background: '#ffffff',
-			borderBottomWidth: 1,
-			borderColor: '#dfdfdf',
-			borderStyle: 'solid'
+			background: '#ffffff'
 		};			
 	},
-	getListChallengeStyle: function () {
-		var height = (window.innerHeight-67) / 2;
+	getListScoreStyle: function () {		
 		return {
-			height: height,
+			height: this.getHeight(),
+			width: '100%',
+			background: '#42B49A',
+		};			
+	},
+	getListChallengeStyle: function () {		
+		return {
+			height: this.getHeight(),
 			width: '100%',
 			background: '#039E79',
-			borderBottomWidth: 1,
-			borderColor: '#dfdfdf',
-			borderStyle: 'solid'
 		};			
 	},
 	getHeaderRunText: function () {
@@ -69,6 +79,20 @@ var Home = React.createClass({
 			textTransform: 'uppercase',
 			zIndex: 20,
 			color: '#039E79',
+			display: 'block',
+			top: '30%',
+			padding: 0
+		};			
+	},
+	getHeaderScoreText: function () {
+		return {
+			position: 'relative',
+			fontSize: 'inherit',
+			width: '100%',			
+			margin: '0 0 96px 0',
+			textTransform: 'uppercase',
+			zIndex: 20,
+			color: '#ffffff',
 			display: 'block',
 			top: '30%',
 			padding: 0
@@ -88,16 +112,7 @@ var Home = React.createClass({
 			padding: 0
 		};			
 	},
-	getSubHeaderRunText: function () {
-		return {
-			fontSize: 12,
-			textTransform: 'initial',
-			display: 'block',
-			color: '#43494B',
-			width: '100%'			
-		};
-	},
-	getSubHeaderChallengeText: function () {
+	getSubHeaderText: function () {
 		return {
 			fontSize: 12,
 			textTransform: 'initial',

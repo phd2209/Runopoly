@@ -2,7 +2,6 @@ var React = require('react/addons');
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 var Touchstone = require('touchstonejs');
 var Parse = require('parse').Parse;
-
 // Initialize parse
 Parse.initialize('pClUhwHZ3hntw3Nyn3YAdipsFXWsgIgOM05ZJzKy', 'B3wiPTnwBfyNXPJxpm88K86Rd6qYGe8blvVXxi1i');
 
@@ -23,7 +22,7 @@ var views = {
 	'component-labelselect': require('./components/LabelSelect'),
 	'component-labelinput': require('./components/LabelInput'),
 	'component-nearby-area-list': require('./components/NearbyAreaList'),
-	'component-nearby-area-item': require('./components/NearbyAreaItem')
+	'component-nearby-area-item': require('./components/NearbyAreaItem')	
 };
 
 var App = React.createClass({
@@ -50,9 +49,9 @@ var App = React.createClass({
 
 	render: function () { 
 		return (
-			<ReactCSSTransitionGroup transitionName={this.state.viewTransition.name} transitionEnter={this.state.viewTransition.in} transitionLeave={this.state.viewTransition.out} className="view-wrapper" component="div">
+			<ReactCSSTransitionGroup transitionName={this.state.viewTransition.name} transitionEnter={this.state.viewTransition.in} transitionLeave={this.state.viewTransition.out} className="view-wrapper" component="div">		
 				{this.getCurrentView()}
-			</ReactCSSTransitionGroup>
+			</ReactCSSTransitionGroup>		
 		);
 	},
 });
