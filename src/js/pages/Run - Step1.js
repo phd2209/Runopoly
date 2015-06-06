@@ -36,17 +36,17 @@ var RunStep1 = React.createClass({
 	},
 	render: function () {
 		var nearestChallenges = this.sortChallenges(this.data.challenge);
-		
+		/*<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length} className="Modal-loading" />*/
 		return (
-			<UI.FlexLayout className={this.props.viewClassName}>
+			<UI.View className={this.props.viewClassName}>
 				<UI.Headerbar label="NEARBY" type="runopoly">
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />
 				</UI.Headerbar> 
-				<UI.FlexBlock scrollable>
+				<UI.ViewContent scrollable>
 					<NearbyAreaList challenges={nearestChallenges} />
-				</UI.FlexBlock>
-				<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length} className="Modal-loading" />
-			</UI.FlexLayout>
+				</UI.ViewContent>
+				
+			</UI.View>
 		);
 	},		
 	sortChallenges: function(challenges) {	
@@ -88,8 +88,8 @@ var RunStep1 = React.createClass({
 			if (key < len - 1) path =  path + "|" + value.latitude + "," + value.longitude;
 			else path =  path + "|" + value.latitude + "," + value.longitude + initial;
 		});				
-		imageURL = "https://maps.googleapis.com/maps/api/staticmap?size=65x65&path=color:0xff0000ff|weight:1"+ path + "&zoom=" + zoom;
-		//var imageURL = "test";
+		//imageURL = "https://maps.googleapis.com/maps/api/staticmap?size=65x65&path=color:0xff0000ff|weight:1"+ path + "&zoom=" + zoom;
+		var imageURL = "test";
 		return imageURL;
 	},	
 });

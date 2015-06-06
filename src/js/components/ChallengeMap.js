@@ -133,10 +133,10 @@ var ChallengeMap = React.createClass({
 				}
 			}
 		}		
+		/*<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.state.processing} className="Modal-loading" />*/
 		return (
 			<div style={this.getBorderStyle()}>
-				<div id='map' style={this.getStyle()}></div>
-				<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.state.processing} className="Modal-loading" />
+				<div id='map' style={this.getStyle()}></div>				
 			</div>
 		);
 	},

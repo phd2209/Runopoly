@@ -6,8 +6,8 @@ var Navigation = require('touchstonejs').Navigation;
 var LabelInput = require('../components/LabelInput');
 var CheckPointItem = require('../components/CheckPointItem');
 var ChallengeMap = require('../components/ChallengeMap');
-//var ChallengeMap = require('../components/ChallengeBingMap');
 var Tappable = require('react-tappable');
+var View = require('../components/View');
 
 var CreateStep3 = React.createClass({
 	mixins: [Navigation],	
@@ -20,7 +20,6 @@ var CreateStep3 = React.createClass({
 		};
 	},	
 	componentDidMount: function () {
-		console.log("componentDidMount");
 		this.setState({			
 			stopTime: this.roundToTwo(this.props.challenge.stopTime)
 		});	
@@ -39,10 +38,10 @@ var CreateStep3 = React.createClass({
 	},
 	render: function () {
 		return (
-			<UI.FlexLayout className={this.props.viewClassName}>
+			<View className={this.props.viewClassName}>
 				<UI.Headerbar label="Save Challenge" type="runopoly">					
 				</UI.Headerbar>
-				<UI.FlexBlock grow scrollable>
+				<UI.ViewContent grow scrollable>
 					<div className="Panel">
 						<div className="item-inner">
 							<span style={this.getInfoItemStyle()}>{this.props.challenge.stopDistance} Km</span>
@@ -74,8 +73,8 @@ var CreateStep3 = React.createClass({
 						null
 					}
 					<Tappable className="panel-button" style={this.getButtonStyle()} onTap={this.save}>save</Tappable>
-				</UI.FlexBlock>
-			</UI.FlexLayout>	
+				</UI.ViewContent>
+			</View>	
 		);
 	},	
 	save: function() {

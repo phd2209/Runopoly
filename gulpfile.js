@@ -11,7 +11,8 @@ var gulp = require('gulp'),
 	uglify = require('gulp-uglify'),
 	buffer = require('vinyl-buffer'),
 	source = require('vinyl-source-stream'),
-	shell = require('gulp-shell');
+	shell = require('gulp-shell'),
+	babel = require("gulp-babel");
 	
 var paths = {
     css: ['src/css/app.less'],
@@ -72,7 +73,8 @@ gulp.task('browserify', function () {
 		NODE_ENV: 'production'
 	}))*/
     .bundle()
-    .pipe(source('bundle.js'))
+	.pipe(source('bundle.js'))
+	/*.pipe(babel())*/
 	/*.pipe(buffer())
 	.pipe(uglify())*/
     .pipe(gulp.dest('www/js'));

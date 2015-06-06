@@ -7,6 +7,7 @@ var ChallengeMap = require('../components/ChallengeMap');
 var geolocationMixin = require('../mixins/geoLocationMixin');
 var Link = require('touchstonejs').Link;
 var Tappable = require('react-tappable');
+var View = require('../components/View');
 
 var RunStep2 = React.createClass({
 	mixins: [geolocationMixin, Navigation, ParseReact.Mixin],	
@@ -60,13 +61,13 @@ var RunStep2 = React.createClass({
 				inStart = true;
 			}				
 		}
-		
+		/*				<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length} className="Modal-loading" />*/
 		return (
-			<UI.FlexLayout className={this.props.viewClassName}>
+			<View className={this.props.viewClassName}>
 				<UI.Headerbar label="CHALLENGE" type="runopoly">
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />			
 				</UI.Headerbar>
-				<UI.FlexBlock>
+				<UI.ViewContent>
 					<div className="Panel">
 						{this.data.challenge[0] ?
 							<div className="item-inner">							 
@@ -91,9 +92,8 @@ var RunStep2 = React.createClass({
 							"You are not quite there"
 						}
 					</Tappable>
-				</UI.FlexBlock>
-				<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length} className="Modal-loading" />
-			</UI.FlexLayout>	
+				</UI.ViewContent>
+			</View>	
 		);
 	},
 	startChallenge: function () {

@@ -2,9 +2,8 @@ var React = require("react");
 var Tappable = require('react-tappable');
 var Parse = require('parse').Parse;
 var UI = require('touchstonejs').UI;
-//var BingMap = require('../components/BingMap');
 var GoogleMap = require('../components/GoogleMap');
-//var GoogleNativeMap = require('../components/GoogleNativeMap');
+var View = require('../components/View');
 var Navigation = require('touchstonejs').Navigation;
 var geolocationMixin = require('../mixins/geoLocationMixin');
 var _ = require('underscore');
@@ -50,9 +49,8 @@ var CreateStep2 = React.createClass({
 	},	
 	render: function () {
 		var totalkm = 0.0;	
-
+		
 		if (this.state.tracking) {
-			
 			//Is this part really neccesary? Should it not log everything;
 			var lastState = null;
 			var addLocation = true;
@@ -75,8 +73,9 @@ var CreateStep2 = React.createClass({
 	
 		totalkm = totalkm.toFixed(2);
 		this.totalKm = Number(totalkm);
+
 		return (
-			<UI.FlexLayout className={this.props.viewClassName}>
+			<View>
 				<UI.Headerbar label={this.props.name} type="runopoly">
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />
 				</UI.Headerbar>
@@ -103,7 +102,7 @@ var CreateStep2 = React.createClass({
 						onTap={this.saveCheckPoint}>CheckPoint
 					</Tappable>
 				</div>
-			</UI.FlexLayout>
+			</View>
 		);
 	},
 	// Phonegap extension 
@@ -141,7 +140,7 @@ var CreateStep2 = React.createClass({
 		// Set tracking to true to store the gps coordinates in route array
 		this.setState({
 			tracking: true
-		});						
+		});				
 		//Start a timer if it is a time trial
 		if (this.props.type == 1){
 			this.intervalID = setInterval(this.tick, 1000);
@@ -234,20 +233,23 @@ var CreateStep2 = React.createClass({
           left: 5,
           textAlign: 'center',
           textDecoration: 'none',
-          margin: '0px auto'
+          margin: '0px auto',
+		  zIndex: 999
 		};		
 	},
 	getKMNumberStyle: function () {
 		return {
           color: '#039E79',
 		  fontSize: 20,
-		  paddingRight: 3
+		  paddingRight: 3,
+		  zIndex: 999
 		};		
 	},
 	getKMUnitStyle: function () {
 		return {
           color: '#ABD0CB',
-		  fontSize: 12
+		  fontSize: 12,
+		  zIndex: 999
 		};		
 	},
 	getButtonStyle: function () {

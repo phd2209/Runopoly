@@ -49,7 +49,8 @@ var GoogleMap = React.createClass({
 		google.maps.event.addListener(this.map, 'tilesloaded', function(evt) {
 			self.mapLoaded();
 		});
-	},		
+	},	
+	
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return (nextProps.latitude !== this.props.latitude || 
 		    nextProps.longitude !== this.props.longitude ||
@@ -57,6 +58,7 @@ var GoogleMap = React.createClass({
 			nextProps.tracking !== this.props.tracking ||
 			nextState.processing !== this.state.processing);
 	},
+	
 	render: function () {
 		
 		if (this.map) {
@@ -97,11 +99,15 @@ var GoogleMap = React.createClass({
 				var checkpoint = new google.maps.Circle(checkPointOptions);							
 			}
 		};				
-							
+		/*<UI.Modal showModal={this.state.processing} header="Loading" iconKey="ion-load-c" iconType="default" loading={this.state.processing} className="Modal-loading" />
+						<UI.Popup visible={this.state.processing}>
+					<UI.PopupIcon name="ion-load-c" type="default" spinning={this.state.processing} />
+					<strong>Loading</strong>
+				</UI.Popup>
+		*/
 		return (
 			<div style={this.getStyle()}> 
-			<div id='map' style={this.getStyle()}></div>
-			<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.state.processing} className="Modal-loading" />
+				<div id='map' style={this.getStyle()}></div>				
 			</div>
 		);
 	},

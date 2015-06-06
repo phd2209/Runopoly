@@ -24,15 +24,19 @@
 #main {
 	width: 100%;
 	height: 100%;
-	/*
-	background-color: transparent;
-	*/
 }
 .view-wrapper {
 	height: 100%;
-	/*
-	background-color: transparent;
-	*/
+}
+
+.view {
+	background-color: @runopoly-lightest-grey;
+	-webkit-justify-content: flex-start;
+}
+
+
+.switch {
+	margin: -17px 130px;
 }
 
 .start-flag {		
@@ -83,9 +87,6 @@
 	color: @runopoly-dark-grey;
 	margin-top: 5px;
 }
-.FlexLayout.view {
-	background-color: @runopoly-lightest-grey;
-}
 .btn-runopoly {
 	background-color: @runopoly-light-green;
 	color: @runopoly-white;
@@ -97,13 +98,13 @@
 
 .Headerbar.runopoly {
 	.retina-1px-border-bottom( @runopoly-border-green );
-	background-color: @runopoly-light-green;
-	color: @runopoly-white;
+	background-color: @runopoly-white;
+	color:  @runopoly-dark-green;
 	min-height: 44px;
 	&:after {
 		width: 100%;
 		height: 1px;
-		background-color: @runopoly-border-green;
+		background-color: @runopoly-white;
 		bottom: -1px;
 		content: " ";
 		left: 0;
@@ -111,7 +112,7 @@
 	}		
 	
 	.Headerbar-button {
-		color: @runopoly-white;
+		color: @runopoly-dark-green;
 	}	
 }
 .checkpoint_button {
