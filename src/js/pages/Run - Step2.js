@@ -29,14 +29,14 @@ var RunStep2 = React.createClass({
 		};
 	},
 	componentWillMount: function () {
-		this.watchPosition();
+		this.getPosition();
 	},
 	componentDidMount: function () {
-		this.keepAlive();
+		//this.keepAlive();
 	},
 	componentWillUnmount: function () {
-		this.allowSleep();
-		this.unwatchPosition();
+		//this.allowSleep();
+		//this.unwatchPosition();
 	},	
 	observe: function() {
 		return {
