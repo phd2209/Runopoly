@@ -61,13 +61,25 @@ var RunStep2 = React.createClass({
 				inStart = true;
 			}				
 		}
-		/*				<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length} className="Modal-loading" />*/
+		/*				<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length} className="Modal-loading" />
+		
+		
+					
+					<Tappable disable={inStart} onTap={this.startChallenge} className="panel-button" component="button">
+						{inStart ?
+							"You are Ready to Start" : 
+							"You are not quite there"
+						}
+					</Tappable>
+
+		
+		*/
 		return (
-			<View className={this.props.viewClassName}>
+			<View>
 				<UI.Headerbar label="CHALLENGE" type="runopoly">
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />			
 				</UI.Headerbar>
-				<UI.ViewContent>
+				<UI.ViewContent scrollable>
 					<div className="Panel">
 						{this.data.challenge[0] ?
 							<div className="item-inner">							 
@@ -76,6 +88,11 @@ var RunStep2 = React.createClass({
 								<span style={this.getInfoItemStyle()}>{this.getDifficulty(this.data.challenge[0].difficulty)}</span>								
 							</div>
 							: null 
+						}
+						{this.data.challenge[0] ?
+						<UI.Textarea className="challenge-info" value={this.data.challenge[0].criteria} readonly />	
+						:
+						null
 						}
 					</div>
 					{this.data.challenge[0] ? 
@@ -86,12 +103,13 @@ var RunStep2 = React.createClass({
 					/>
 					: null}
 					<span style={this.getInfoItemStyle()}>{distanceToPoint} Meters</span>
-					<Tappable disable={inStart} onTap={this.startChallenge} className="panel-button" component="button">
-						{inStart ?
-							"You are Ready to Start" : 
-							"You are not quite there"
-						}
-					</Tappable>
+					
+					<Link to="page-run-step3" viewTransition="fade" params={{prevView: 'page-run-step2', 
+						challenge: this.data.challenge[0]}} 
+						component="div"
+						className="panel-button">						
+						<span className='checkpoint_button' style={this.getButtonStyle()}>ACCEPT</span>
+					</Link>					
 				</UI.ViewContent>
 			</View>	
 		);
@@ -209,22 +227,23 @@ var RunStep2 = React.createClass({
 		};		
 	},
 	getButtonStyle: function () {
+		
 		return {
-		  position:'absolute',
-          bottom:'2%',
-          color: '#fff',
-          backgroundColor: '#42B49A',
-          padding: 11,
+          color: '#42B49A',
+          backgroundColor: '#fff',
           border: '1px solid transparent',
           border: 2,
+		  marginTop: 10,
           outline: 'none',
           width: '96%',
           left: 5,
           textAlign: 'center',
+		  fontWeight: 'bold',
           textDecoration: 'none',
-          margin: '0px auto'
+		  textTransform: 'uppercase',
+		  marginBottom: 10
 		};	
-	},
+	},	
 	getStyle: function () {
 		return {
 			width: '100%',

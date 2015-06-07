@@ -17,7 +17,7 @@ var Home = React.createClass({
 							<span style={this.getSubHeaderText()}>Run to Win Challenges</span>
 						</li>
 					</Link>
-					<Link to="page-run-step1" viewTransition="show-from-right" params={{ prevView: 'page-home' }} component="div">
+					<Link to="score-step1" viewTransition="show-from-right" params={{ prevView: 'page-home' }} component="div">
 						<li style={this.getListScoreStyle()}>							
 							<span style={this.getHeaderScoreText()}>SCORE</span>
 							<span style={this.getSubHeaderText()}>Your Runopoly Score</span>

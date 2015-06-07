@@ -5,7 +5,8 @@ var ChallengeMap = React.createClass({
 	propTypes: {
 		challenge: React.PropTypes.object.isRequired,
 		height: React.PropTypes.number,
-		location: React.PropTypes.object
+		location: React.PropTypes.object,
+		initialZoom: React.PropTypes.number
 	},		
 	getDefaultProps: function () {
         return {			

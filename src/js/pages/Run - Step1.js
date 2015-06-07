@@ -4,6 +4,7 @@ var ParseReact = require('parse-react');
 var NearbyAreaList = require('../components/nearbyAreaList');
 var _ = require('underscore');
 var UI = require('touchstonejs').UI;
+var View = require('../components/View');
 var Navigation = require('touchstonejs').Navigation;
 var geolocationMixin = require('../mixins/geoLocationMixin');
 
@@ -17,11 +18,20 @@ var RunStep1 = React.createClass({
 			prevView: 'page-home', 
 		};
     },
-	observe: function(props, state) {
-		return {
-			challenge: (new Parse.Query('Challenge')) /*,
-			user: ParseReact.currentUser*/
-		};
+	observe: function(props, state) {		
+		console.log(state);
+		if (state.location)
+		{		
+			var userGeoPoint = new Parse.GeoPoint({latitude: state.location.latitude, longitude: state.location.longitude});		
+			console.log(userGeoPoint);
+			return {
+				challenge: (new Parse.Query('Challenge')
+						.near('startPosition', userGeoPoint)
+						.limit(5)			
+				) /*,									
+				user: ParseReact.currentUser*/
+			};
+		}
 	},	
 	getInitialState: function () {
 		return {
@@ -38,7 +48,7 @@ var RunStep1 = React.createClass({
 		var nearestChallenges = this.sortChallenges(this.data.challenge);
 		/*<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length} className="Modal-loading" />*/
 		return (
-			<UI.View className={this.props.viewClassName}>
+			<View>
 				<UI.Headerbar label="NEARBY" type="runopoly">
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />
 				</UI.Headerbar> 
@@ -46,7 +56,7 @@ var RunStep1 = React.createClass({
 					<NearbyAreaList challenges={nearestChallenges} />
 				</UI.ViewContent>
 				
-			</UI.View>
+			</View>
 		);
 	},		
 	sortChallenges: function(challenges) {	

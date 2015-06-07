@@ -14,7 +14,8 @@ var CreateStep2 = React.createClass({
 		prevView: React.PropTypes.string.isRequired,
 		name: React.PropTypes.string.isRequired,
 		type: React.PropTypes.number.isRequired,
-		difficulty: React.PropTypes.number.isRequired
+		difficulty: React.PropTypes.number.isRequired,
+		automatic: React.PropTypes.bool.isRequired
 	},
 	getDefaultProps: function () {
         return {
@@ -47,6 +48,13 @@ var CreateStep2 = React.createClass({
 		this.allowSleep();
 		this.unwatchPosition();
 	},	
+	componentDidUpdate: function () {
+		if (this.props.automatic) {
+		  if (this.checkPoints.length + 1 - this.totalKm <= 0.02) {
+			  this.saveCheckPoint();
+		  }
+		};	
+	},
 	render: function () {
 		var totalkm = 0.0;	
 		
@@ -55,25 +63,27 @@ var CreateStep2 = React.createClass({
 			var lastState = null;
 			var addLocation = true;
 			if (this.route.length) {
+				
+				//Can an optimazation be done so we dont need to user _last?;
 				var lastState = _.last(this.route);
 				addLocation = this.state.location.latitude != lastState.latitude ||
 							  this.state.location.longitude != lastState.longitude;
 			}				
 			if (addLocation) this.route.push(this.state.location);
-		}
+				
+			// Can an optimization be done so that we don't need to loop through all route items?;
+			for (var j = 0; j < this.route.length; j++) {
+
+				if (j == (this.route.length - 1)) {
+					break;
+				}			
+				totalkm += this.gps_distance(this.route[j].latitude, this.route[j].longitude, this.route[j + 1].latitude, this.route[j + 1].longitude);												
+			}
 		
-		// Can an optimization be done so that we don't need to loop through all route items;
-		for (var j = 0; j < this.route.length; j++) {
-
-			if (j == (this.route.length - 1)) {
-				break;
-			}			
-			totalkm += this.gps_distance(this.route[j].latitude, this.route[j].longitude, this.route[j + 1].latitude, this.route[j + 1].longitude);												
+			totalkm = totalkm.toFixed(2);
+			this.totalKm = Number(totalkm);
+			
 		}
-	
-		totalkm = totalkm.toFixed(2);
-		this.totalKm = Number(totalkm);
-
 		return (
 			<View>
 				<UI.Headerbar label={this.props.name} type="runopoly">
@@ -94,13 +104,16 @@ var CreateStep2 = React.createClass({
 						style={this.getButtonStyle()} 
 						onTap={this.state.tracking ? this.stopTracking : this.startTracking}>{this.state.tracking ? 'STOP' : 'START'}
 					</Tappable>
-					<Tappable
-						className="checkpoint_button"
-						component="button"
-						disabled={!this.state.tracking && !this.state.checkPoint}
-						style={this.getCheckPointButtonStyle()} 
-						onTap={this.saveCheckPoint}>CheckPoint
-					</Tappable>
+					{!this.props.automatic ?
+						<Tappable
+							className="checkpoint_button"
+							component="button"
+							disabled={!this.state.tracking && !this.state.checkPoint}
+							style={this.getCheckPointButtonStyle()} 
+							onTap={this.saveCheckPoint}>CheckPoint
+						</Tappable> :
+						null
+					}
 				</div>
 			</View>
 		);

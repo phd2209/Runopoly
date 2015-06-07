@@ -14,6 +14,7 @@ var views = {
 	'page-run-step1': require('./pages/Run - Step1'),
 	'page-run-step2': require('./pages/Run - Step2'),
 	'page-run-step3': require('./pages/Run - Step3'),
+	'score-step1': require('./pages/Score - Step1'),
 	
 	//Components
 	'component-map': require('./components/GoogleMap'),
