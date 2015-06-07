@@ -12,14 +12,13 @@ var RunStep1 = React.createClass({
 	mixins: [geolocationMixin, Navigation, ParseReact.Mixin],
 	getDefaultProps: function () {
         return {
-			maximumAge: 3000,
+			maximumAge: 0,
 			timeout: 10000,
 			enableHighAccuracy: true,
 			prevView: 'page-home', 
 		};
     },
 	observe: function(props, state) {		
-		console.log(state);
 		if (state.location)
 		{		
 			var userGeoPoint = new Parse.GeoPoint({latitude: state.location.latitude, longitude: state.location.longitude});		
@@ -39,11 +38,8 @@ var RunStep1 = React.createClass({
 		};
 	},
 	componentWillMount: function () {
-		this.watchPosition();
+		this.getPosition();
 	},	
-	componentWillUnmount: function () {
-		this.unwatchPosition();
-	},
 	render: function () {
 		var nearestChallenges = this.sortChallenges(this.data.challenge);
 		/*<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length} className="Modal-loading" />*/

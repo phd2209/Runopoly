@@ -8,8 +8,7 @@ var geolocationMixin = {
 			timeout: this.props.timeout,
 			enableHighAccuracy: this.props.enableHighAccuracy
 		};
-        this.watch_id = navigator.geolocation.getCurrentPosition(this.onSuccess, this.onError, options);
-		console.log("Starting GPS: " + this.watch_id);		
+        navigator.geolocation.getCurrentPosition(this.onSuccess, this.onError, options);
 	},
 
 	watchPosition: function () {

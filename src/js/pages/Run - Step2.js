@@ -17,7 +17,7 @@ var RunStep2 = React.createClass({
 	getDefaultProps: function () {
         return {
 			prevView: 'page-run-step1',
-			maximumAge: 3000,
+			maximumAge: 0,
 			timeout: 10000,
 			enableHighAccuracy: true
 		};
@@ -62,8 +62,6 @@ var RunStep2 = React.createClass({
 			}				
 		}
 		/*				<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length} className="Modal-loading" />
-		
-		
 					
 					<Tappable disable={inStart} onTap={this.startChallenge} className="panel-button" component="button">
 						{inStart ?
@@ -71,8 +69,6 @@ var RunStep2 = React.createClass({
 							"You are not quite there"
 						}
 					</Tappable>
-
-		
 		*/
 		return (
 			<View>
