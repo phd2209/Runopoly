@@ -4,14 +4,18 @@ var UI = require('touchstonejs').UI;
 var ChallengeMap = React.createClass({
 	propTypes: {
 		challenge: React.PropTypes.object.isRequired,
-		height: React.PropTypes.number,
+		height: React.PropTypes.string,
 		location: React.PropTypes.object,
-		initialZoom: React.PropTypes.number
+		initialZoom: React.PropTypes.number,
+		position: React.PropTypes.string,
+		challengeStarted: React.PropTypes.bool
 	},		
 	getDefaultProps: function () {
         return {			
             initialZoom: 13,
-			height: 300
+			height: 300,
+			position: "relative",
+			challengeStarted: false
         };
 	},
 	getInitialState: function () {
@@ -32,6 +36,7 @@ var ChallengeMap = React.createClass({
 		});
 	},	
 	componentDidMount: function () {
+		this.userMarker = null;
 		var self = this;
 		var mapOptions = {
             center: this.mapCenterLatLng(
@@ -58,10 +63,17 @@ var ChallengeMap = React.createClass({
 	render: function () {
 		
 		if (this.state.map) {
-			
-			this.state.map.setCenter(this.mapCenterLatLng(this.props.challenge.startPosition.latitude,
-				this.props.challenge.startPosition.longitude));				
 
+			if (!this.props.challengeStarted)
+			{
+				this.state.map.setCenter(this.mapCenterLatLng(this.props.challenge.startPosition.latitude,
+					this.props.challenge.startPosition.longitude));				
+			}
+			else {
+				this.state.map.setCenter(this.mapCenterLatLng(this.props.location.latitude,
+					this.props.location.longitude));								
+				
+			}
 			var coordinates = [];
 			for (var point in this.props.challenge.route) {
 				coordinates.push(this.mapCenterLatLng(this.props.challenge.route[point].latitude, this.props.challenge.route[point].longitude));
@@ -133,6 +145,15 @@ var ChallengeMap = React.createClass({
 						-5, 15, 0.75);					
 				}
 			}
+			if (this.props.location)
+			{
+				if (this.userMarker != null)
+					this.userMarker.setMap(null)
+				this.userMarker = this.markerWithLabel(" ", "<i class='icon ion-man user-location'></i>", 
+				this.props.location.latitude,
+				this.props.location.longitude,
+				0, 32, 0.75);					
+			}
 		}		
 		/*<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.state.processing} className="Modal-loading" />*/
 		return (
@@ -150,7 +171,7 @@ var ChallengeMap = React.createClass({
 				fillOpacity: 0.25,
 				map: this.state.map,
 				center: this.mapCenterLatLng(latitude, longitude),
-			    radius: Math.sqrt(1) * 75
+			    radius: Math.sqrt(1) * 25
 			};		
 	},
 	markerWithLabel: function(icon, labelContent, latitude, longitude, x, y, opacity) {
@@ -178,7 +199,8 @@ var ChallengeMap = React.createClass({
 	getStyle: function () {
 		return {
 			width: '100%',
-			height: this.props.height
+			height: this.props.height,
+			position: this.props.position
 		};	
 	}
 });

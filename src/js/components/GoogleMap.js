@@ -68,7 +68,7 @@ var GoogleMap = React.createClass({
 				this.locationCircle.setCenter(this.mapCenterLatLng());				
 			}
 			else {
-				var circleOptions = this.circleOptions('#FF0000', 0.5, 1, '#FF0000',  0.25, 50);	
+				var circleOptions = this.circleOptions('#FF0000', 0.5, 1, '#FF0000',  0.25, 25);	
 				this.locationCircle = new google.maps.Circle(circleOptions);					
 			}
 		}
@@ -93,7 +93,7 @@ var GoogleMap = React.createClass({
 	
 			if (this.props.checkPoint)
 			{
-				var checkPointOptions = this.circleOptions('#000000', 0.5, 1.2, '#000000',  0.25, 50);
+				var checkPointOptions = this.circleOptions('#000000', 0.5, 1.2, '#000000',  0.25, 25);
 				var markerFlag = this.markerWithLabel(" ", "<i class='icon ion-flag checkpoint-flag'></i>", 0, 32, 0.75);
 				markerFlag.setMap( this.map );
 				var checkpoint = new google.maps.Circle(checkPointOptions);							

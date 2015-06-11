@@ -26,16 +26,18 @@ var RunningPage = React.createClass({
     },
 	getInitialState: function () {
 		return {
-			tracking: false,
-			location: {latitude: 0, longitude: 0},
-			duration: 0,
-			processing: false
+			ChallengeStarted: false,
+			location: null,
+			processing: false,
+			duration: 0
 		};
 	},
 	componentWillMount: function () {
 		this.watchPosition();
 		this.totalKm = 0;
-		this.duration = 0;
+		this.route = [];
+		this.checkPointsPassed = [];
+		this.checkPointOrder = 0;
 	},
 	componentDidMount: function () {
 		this.keepAlive();
@@ -70,63 +72,59 @@ var RunningPage = React.createClass({
         return d;
     },	
 	tick: function() {	
-		var self = this;
-		this.setState({ 
-			duration: this.state.duration + 1
-		});
+		this.setState({
+				duration: this.state.duration + 1
+		});	
 	},	
     //Starts actual tracking of a Run    
 	startChallenge: function () {		
 		console.log("Challenge started");
 		
-		if (this.state.tracking)
+		if (this.state.ChallengeStarted)
 		{
 			this.setState({
-				tracking: false
+				ChallengeStarted: false
 			});			
 			clearInterval(this.intervalID);
 			return;
 		}
 		
 		this.setState({
-				tracking: true
-		});
-		
+			challengeStarted: true
+		});		
         this.intervalID = setInterval(this.tick, 1000);
     },
 	// Stops tracking of a run
-    stopTracking: function () {		
+    stopChallenge: function () {		
 	
 		this.setState({
 			processing: true
 		});
 	
-		console.log("stopTracking" +this.state.tracking);
+		console.log("stopTracking" +this.state.ChallengeStarted);
 		
 		clearInterval(this.intervalID);
 		
 		//Save run
-		this.saveRun();
+		this.saveResult();
 		
 		//reset state		
 		this.setState({
-			tracking: false,
-			duration: 0,
+			ChallengeStarted: false,
 			location: {latitude: 0, longitude: 0},
 		});
 		
 		this.areaKm = 0;
 		this.totalKm = 0;
 		
-		setTimeout(function() {
-			this.showView('page-areaowners', 'fade', {selectedAreaId: this.props.selectedAreaId});
-		}.bind(this), 0);			
-		
-    },
-	
-	saveRun: function() {
+		//setTimeout(function() {
+		//	this.showView('page-areaowners', 'fade', {selectedAreaId: this.props.selectedAreaId});
+		//}.bind(this), 0);					
+    },	
+	saveResult: function() {
 		
 		// ACL, so that only the current user can access this object
+		/*
 		var Area = Parse.Object.extend("Area");		
 		var User = Parse.Object.extend("User"); 		
 		var acl = new Parse.ACL(new User({id: this.data.user.objectId}));
@@ -151,40 +149,97 @@ var RunningPage = React.createClass({
 			user = null,
 			ACL = null;
 		});
+	*/
 	},				
 	render: function () {
+		
 		var totalkm = 0.0;	
 		var inStart = false;
+		var inStop  = false;
 		var distanceToPoint = 0;
-		if (this.state.location.latitude)
+		
+		if (this.state.location)
 		{
-			console.log(this.data.challenge.startPosition.latitude);
-			console.log(this.data.challenge.startPosition.longitude);
-			distanceToPoint = this.gps_distance(this.state.location.latitude, this.state.location.longitude, 
-				this.data.challenge.startPosition.latitude, this.data.challenge.startPosition.longitude);
-			distanceToPoint = (distanceToPoint*1000).toFixed(0);
-			
-			if (this.pointInCircle(distanceToPoint)) 
+			if (!this.state.challengeStarted)
 			{
-				inStart = true;
-			}				
-		}		
-		
-		if (this.state.tracking) {				
-			// Can an optimization be done so that we don't need to loop through all route items?;
-			for (var j = 0; j < this.route.length; j++) {
+				distanceToPoint = this.gps_distance(this.state.location.latitude, this.state.location.longitude, 
+					this.props.challenge.startPosition.latitude, this.props.challenge.startPosition.longitude);
+				distanceToPoint = (distanceToPoint*1000).toFixed(0);
 
-				if (j == (this.route.length - 1)) {
-					break;
-				}			
-				totalkm += this.gps_distance(this.route[j].latitude, this.route[j].longitude, this.route[j + 1].latitude, this.route[j + 1].longitude);												
+				if (this.pointInCircle(distanceToPoint)) 
+				{
+					inStart = true;
+					if (navigator) navigator.vibrate(3000);
+				}				
 			}
-		
-			totalkm = totalkm.toFixed(2);
-			this.totalKm = Number(totalkm);			
-		
-		}
+			else {				
 
+				for (var j = 0; j < this.props.challenge.checkPoints.length; j++) {
+
+					if ((this.gps_distance(this.props.challenge.checkPoints[j].latitude, this.props.challenge.checkPoints[j].longitude,
+						this.state.location.latitude, this.state.location.longitude)*1000).toFixed(0) < 25) {
+							console.log(Number(this.props.challenge.checkPoints[j].order));
+							console.log(this.checkPointOrder + 1);
+							if (Number(this.props.challenge.checkPoints[j].order) === Number(this.checkPointOrder + 1)) {															
+								this.CheckPointCleared(Number(this.props.challenge.checkPoints[j].order));
+								if (navigator) navigator.vibrate(3000);
+								break;
+							}
+							else if (Number(this.props.challenge.checkPoints[j].order) < Number(this.checkPointOrder + 1))
+								break;
+							else {
+								this.CheckPointsFailed(Number(this.props.challenge.checkPoints[j].order));
+								break;
+							}
+					}
+				}
+
+				distanceToPoint = this.gps_distance(this.state.location.latitude, this.state.location.longitude, 
+					this.props.challenge.stopPosition.latitude, this.props.challenge.stopPosition.longitude);
+				distanceToPoint = (distanceToPoint*1000).toFixed(0);
+
+				if (this.pointInCircle(distanceToPoint)) 
+				{
+					inStop = true;
+					console.log(this.checkPointsPassed)
+					
+					//Determine if route was successfully passed;
+					if (this.checkPointsPassed.length < this.props.challenge.checkPoints.length) {
+						console.log("challenge failed: not all checkpoint passed");
+					}
+					else if (_.contains(this.checkPointsPassed, false)) {
+						console.log("challenge failed: Checkpoint(s) failed");
+					}
+					else {
+						if (navigator) navigator.vibrate(3000);
+						console.log("challenge passed");					
+					}
+				}				
+				
+				
+				var lastState = null;
+				var addLocation = true;
+				if (this.route.length) {
+				
+					//Can an optimazation be done so we dont need to user _last?;
+					var lastState = _.last(this.route);
+					addLocation = this.state.location.latitude != lastState.latitude ||
+								  this.state.location.longitude != lastState.longitude;
+				}				
+				if (addLocation) this.route.push(this.state.location);
+				
+				// Can an optimization be done so that we don't need to loop through all route items?;
+				for (var j = 0; j < this.route.length; j++) {
+
+					if (j == (this.route.length - 1)) {
+						break;
+					}			
+					totalkm += this.gps_distance(this.route[j].latitude, this.route[j].longitude, this.route[j + 1].latitude, this.route[j + 1].longitude);												
+				}		
+				totalkm = totalkm.toFixed(1);
+				this.totalKm = Number(totalkm);					
+			}
+		}
 		/*
 		<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length || this.state.processing} className="Modal-loading" />
 		*/		
@@ -194,19 +249,22 @@ var RunningPage = React.createClass({
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" className="runopoly"/>	
 				</UI.Headerbar>
 				<div style={this.getStyle()}>
-					<div className='action-button'><RunTimer duration={this.state.duration} /></div>
-					<div className='action-button'><RunDisplay totalKm={totalkm} color="#43494B"  fontsize={35}/></div>
+					<div style={this.getRunTimerStyle()}><RunTimer duration={this.state.duration} /></div>
+					<div style={this.getRunDisplayStyle()}><RunDisplay totalKm={totalkm} color="#43494B" fontsize={35}/></div>
 					<ChallengeMap
 						challenge={this.props.challenge}
-						initialZoom={15}
+						initialZoom={17}
+						location={this.state.location}
 						height="100%"
+						position="absolute"
+						challengeStarted={this.state.challengeStarted}
 					/>						
 					<Tappable
 						className="checkpoint_button"
 						component="button"
-						disabled={!this.state.tracking}
+						disabled={!inStart && !this.state.ChallengeStarted}
 						style={this.getButtonStyle()} 
-						onTap={this.saveCheckPoint}>{this.state.tracking ? "START" : "NOT READY" }
+						onTap={this.startChallenge}>{inStart ? "START" : "NOT READY" }
 					</Tappable>
 				</div>
 			</View>
@@ -214,21 +272,27 @@ var RunningPage = React.createClass({
 	},
 	pointInCircle: function (distanceToPoint) {
 		var result = false;		
-		if (distanceToPoint<50) result = true;
+		if (distanceToPoint<25) result = true;
 		return result;
+	},
+	CheckPointCleared: function (index) {		
+		if (this.checkPointsPassed.length < index) {
+			this.checkPointsPassed[index-1] = true;	
+			this.checkPointOrder = this.checkPointOrder + 1;
+		}
+	},
+	CheckPointsFailed: function (index) {
+		if (this.checkPointsPassed.length >= index) return;
+		this.checkPointsPassed[index-1] = false;	
 	},
 	getStyle: function () {
 		return {
 			width: '100%',
-			height: '100%'
-			/*backgroundColor: 'transparent'*/
-			
+			height: '100%'			
 		};	
 	},
-	getButtonStyle: function () {
-		
-		var color = this.state.tracking ? 'red' : 'green' ;
-		
+	getButtonStyle: function () {		
+		var color = this.state.tracking ? 'red' : 'green' ;		
 		return {
 		  position:'absolute',
           bottom:'2%',
@@ -246,6 +310,42 @@ var RunningPage = React.createClass({
 		  textTransform: 'uppercase'
 		};	
 	},	
+	getRunTimerStyle: function () {
+		return {
+		  position:'absolute',
+          top:'11%',
+          /*color: '#039E79',*/
+          backgroundColor: '#fff',
+          padding: 5,
+          border: '1px solid transparent',
+          border: 2,
+          outline: 'none',
+          width: '40%',
+          left: 5,
+          textAlign: 'center',
+          textDecoration: 'none',
+          margin: '0px auto',
+		  zIndex: 999
+		};		
+	},
+	getRunDisplayStyle: function () {
+		return {
+		  position:'absolute',
+          top:'11%',
+          /*color: '#039E79',*/
+          backgroundColor: '#fff',
+          padding: 5,
+          border: '1px solid transparent',
+          border: 2,
+          outline: 'none',
+          width: '30%',
+          right: 5,
+          textAlign: 'center',
+          textDecoration: 'none',
+          margin: '0px auto',
+		  zIndex: 999
+		};		
+	},
 });
 
 module.exports = RunningPage;

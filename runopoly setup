@@ -31,6 +31,7 @@
                 <File name="src\js\components\GoogleNativeMap.js" />
                 <File name="src\js\components\BingMap.js" />
                 <File name="src\js\components\ChallengeBingMap.js" />
+                <File name="src\js\components\View.js" />
             </Folder>
             <Folder name="mixins">
                 <File name="src\js\mixins\geolocationMixin.js" />
@@ -45,6 +46,8 @@
                 <File name="src\js\pages\Home.js" />
                 <File name="src\js\pages\Run - Step1.js" />
                 <File name="src\js\pages\Run - Step2.js" />
+                <File name="src\js\pages\Run - Step3.js" />
+                <File name="src\js\pages\Score - Step1.js" />
             </Folder>
             <Folder name="utils">
                 <File name="src\js\utils\markerwithlabel_packed.js" />

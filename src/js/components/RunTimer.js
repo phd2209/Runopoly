@@ -13,9 +13,7 @@ var RunTimer = React.createClass({
 		);
 	},
 	
-	formatDuration: function(seconds) {
-		console.log(seconds);
-		
+	formatDuration: function(seconds) {		
 		var hours = (seconds > 3600 ? Math.floor(seconds / 3600) : 0)		
 		seconds = seconds - hours * 3600;
 		
