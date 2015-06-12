@@ -30,7 +30,7 @@ var Home = React.createClass({
 						</li>
 					</Link>
 				</ul>
-			</View>	
+			</View>
 		);
 	},
 	getHeight: function () {

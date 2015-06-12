@@ -1,8 +1,6 @@
 var React = require("react");
 var Parse = require('parse').Parse;
 var ParseReact = require('parse-react');
-var RunTimer = require("../components/RunTimer");
-var RunDisplay = require("../components/RunDisplay");
 var _ = require('underscore');
 var UI = require('touchstonejs').UI;
 var View = require('../components/View');
@@ -11,7 +9,7 @@ var ChallengeMap = require('../components/ChallengeMap');
 var Navigation = require('touchstonejs').Navigation;
 var geolocationMixin = require('../mixins/geoLocationMixin');
 
-var RunningPage = React.createClass({
+var RunStep3 = React.createClass({
 	mixins: [geolocationMixin, Navigation],
 	propTypes: {
 		challenge: React.PropTypes.object.isRequired
@@ -19,7 +17,7 @@ var RunningPage = React.createClass({
 	getDefaultProps: function () {
         return {
 			prevView: 'page-run-step2',
-			maximumAge: 3000,
+			maximumAge: 4000,
 			timeout: 10000,
 			enableHighAccuracy: true
 		};
@@ -28,12 +26,12 @@ var RunningPage = React.createClass({
 		return {
 			ChallengeStarted: false,
 			location: null,
-			processing: false,
-			duration: 0
+			processing: false
 		};
 	},
 	componentWillMount: function () {
 		this.watchPosition();
+		this.duration = 0;
 		this.totalKm = 0;
 		this.route = [];
 		this.checkPointsPassed = [];
@@ -72,9 +70,7 @@ var RunningPage = React.createClass({
         return d;
     },	
 	tick: function() {	
-		this.setState({
-				duration: this.state.duration + 1
-		});	
+		this.duration = this.duration + 1;
 	},	
     //Starts actual tracking of a Run    
 	startChallenge: function () {		
@@ -154,69 +150,75 @@ var RunningPage = React.createClass({
 	render: function () {
 		
 		var totalkm = 0.0;	
+		var buttonLabel = "GO TO START!";
 		var inStart = false;
+		
 		var inStop  = false;
 		var distanceToPoint = 0;
 		
 		if (this.state.location)
 		{
+			//Check that user is in the start zone
 			if (!this.state.challengeStarted)
 			{
-				distanceToPoint = this.gps_distance(this.state.location.latitude, this.state.location.longitude, 
-					this.props.challenge.startPosition.latitude, this.props.challenge.startPosition.longitude);
-				distanceToPoint = (distanceToPoint*1000).toFixed(0);
-
-				if (this.pointInCircle(distanceToPoint)) 
+				var startposition = this.props.challenge.startPosition;
+				if (this.pointInCircle(this.state.location.latitude, this.state.location.longitude, startposition.latitude, startposition.longitude)) 
 				{
+					buttonLabel = "START";
 					inStart = true;
-					if (navigator) navigator.vibrate(3000);
 				}				
 			}
+			
+			// if challenge is started check if we are in the right checkpoint
 			else {				
-
-				for (var j = 0; j < this.props.challenge.checkPoints.length; j++) {
-
-					if ((this.gps_distance(this.props.challenge.checkPoints[j].latitude, this.props.challenge.checkPoints[j].longitude,
-						this.state.location.latitude, this.state.location.longitude)*1000).toFixed(0) < 25) {
-							console.log(Number(this.props.challenge.checkPoints[j].order));
-							console.log(this.checkPointOrder + 1);
-							if (Number(this.props.challenge.checkPoints[j].order) === Number(this.checkPointOrder + 1)) {															
-								this.CheckPointCleared(Number(this.props.challenge.checkPoints[j].order));
-								if (navigator) navigator.vibrate(3000);
-								break;
-							}
-							else if (Number(this.props.challenge.checkPoints[j].order) < Number(this.checkPointOrder + 1))
-								break;
-							else {
-								this.CheckPointsFailed(Number(this.props.challenge.checkPoints[j].order));
-								break;
-							}
-					}
-				}
-
-				distanceToPoint = this.gps_distance(this.state.location.latitude, this.state.location.longitude, 
-					this.props.challenge.stopPosition.latitude, this.props.challenge.stopPosition.longitude);
-				distanceToPoint = (distanceToPoint*1000).toFixed(0);
-
-				if (this.pointInCircle(distanceToPoint)) 
-				{
-					inStop = true;
-					console.log(this.checkPointsPassed)
+				
+				buttonLabel = "RUNNING";
+				
+				//Make sure that at least one checkpoint has been passed before you are at stopPosition
+				if (this.checkPointOrder > 0) {
+					var stopposition = this.props.challenge.stopPosition;
 					
-					//Determine if route was successfully passed;
-					if (this.checkPointsPassed.length < this.props.challenge.checkPoints.length) {
-						console.log("challenge failed: not all checkpoint passed");
-					}
-					else if (_.contains(this.checkPointsPassed, false)) {
-						console.log("challenge failed: Checkpoint(s) failed");
-					}
-					else {
-						if (navigator) navigator.vibrate(3000);
-						console.log("challenge passed");					
+					if (this.pointInCircle(this.state.location.latitude, this.state.location.longitude, stopposition.latitude, stopposition.longitude)) 
+					{
+						buttonLabel = "FINISH";
+						inStop = true;
+						console.log(this.checkPointsPassed)
+											
+						//Determine if route was successfully passed;
+						if (this.checkPointsPassed.length < this.props.challenge.checkPoints.length) {
+							console.log("challenge failed: not all checkpoint passed");
+						}
+						else if (_.contains(this.checkPointsPassed, false)) {
+							console.log("challenge failed: Checkpoint(s) failed");
+						}
+						else {
+							if (navigator) navigator.vibrate(3000);
+							console.log("challenge passed");					
+						}
 					}
 				}				
 				
+				//Check if checkpoints have been passed successfully
+				var checkpoints = this.props.challenge.checkPoints;
+			
+				for (var j = this.checkPointOrder; j < checkpoints.length; j++) {
+
+					if (this.pointInCircle(this.state.location.latitude, this.state.location.longitude, checkpoints[j].latitude, checkpoints[j].longitude)) {					
+						if (Number(checkpoints[j].order) === Number(this.checkPointOrder + 1)) {															
+							this.CheckPointCleared(Number(checkpoints[j].order));
+							if (navigator) navigator.vibrate(3000);
+							break;
+						}
+						else if (Number(checkpoints[j].order) < Number(this.checkPointOrder + 1))
+							break;
+						else {
+							this.CheckPointsFailed(Number(checkpoints[j].order));
+							break;
+						}
+					}
+				}
 				
+				//Calculate totalKm			
 				var lastState = null;
 				var addLocation = true;
 				if (this.route.length) {
@@ -242,15 +244,19 @@ var RunningPage = React.createClass({
 		}
 		/*
 		<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length || this.state.processing} className="Modal-loading" />
+		<div style={this.getRunTimerStyle()}><RunTimer duration={this.duration} /></div>
+		<div style={this.getRunDisplayStyle()}><RunDisplay totalKm={totalkm} color="#43494B" fontsize={35}/></div>
 		*/		
 		return (
 			<View>
 				<UI.Headerbar label="RUN" type="runopoly">
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" className="runopoly"/>	
 				</UI.Headerbar>
-				<div style={this.getStyle()}>
-					<div style={this.getRunTimerStyle()}><RunTimer duration={this.state.duration} /></div>
-					<div style={this.getRunDisplayStyle()}><RunDisplay totalKm={totalkm} color="#43494B" fontsize={35}/></div>
+				<div style={this.getStyle()}>		
+					<Tappable style={this.getKMStyle()}>
+						<span style={this.getKMNumberStyle()}>{totalkm}</span>
+						<span style={this.getKMUnitStyle()}>Km</span>
+					</Tappable>				
 					<ChallengeMap
 						challenge={this.props.challenge}
 						initialZoom={17}
@@ -262,28 +268,32 @@ var RunningPage = React.createClass({
 					<Tappable
 						className="checkpoint_button"
 						component="button"
-						disabled={!inStart && !this.state.ChallengeStarted}
+						disabled={!inStart && !this.state.ChallengeStarted && !inStop}
 						style={this.getButtonStyle()} 
-						onTap={this.startChallenge}>{inStart ? "START" : "NOT READY" }
+						onTap={this.startChallenge}>{buttonLabel}
 					</Tappable>
 				</div>
 			</View>
 		);
 	},
-	pointInCircle: function (distanceToPoint) {
+	pointInCircle: function (lat1, lon1, lat2, lon2) {		
 		var result = false;		
+		var distanceToPoint = (this.gps_distance(lat1, lon1, lat2, lon2)*1000).toFixed(0);
 		if (distanceToPoint<25) result = true;
 		return result;
 	},
 	CheckPointCleared: function (index) {		
+		console.log("passed " + index);
 		if (this.checkPointsPassed.length < index) {
 			this.checkPointsPassed[index-1] = true;	
 			this.checkPointOrder = this.checkPointOrder + 1;
 		}
 	},
 	CheckPointsFailed: function (index) {
+		console.log("Failed " + index);
 		if (this.checkPointsPassed.length >= index) return;
-		this.checkPointsPassed[index-1] = false;	
+		this.checkPointsPassed[index-1] = false;
+		this.checkPointOrder = this.checkPointOrder + 1;
 	},
 	getStyle: function () {
 		return {
@@ -346,6 +356,39 @@ var RunningPage = React.createClass({
 		  zIndex: 999
 		};		
 	},
+	getKMStyle: function () {
+		return {
+		  position:'absolute',
+          top:'11%',
+          color: '#039E79',
+          backgroundColor: '#fff',
+          padding: 5,
+          border: '1px solid transparent',
+          border: 2,
+          outline: 'none',
+          width: '30%',
+          left: 5,
+          textAlign: 'center',
+          textDecoration: 'none',
+          margin: '0px auto',
+		  zIndex: 999
+		};		
+	},
+	getKMNumberStyle: function () {
+		return {
+          color: '#039E79',
+		  fontSize: 20,
+		  paddingRight: 3,
+		  zIndex: 999
+		};		
+	},
+	getKMUnitStyle: function () {
+		return {
+          color: '#ABD0CB',
+		  fontSize: 12,
+		  zIndex: 999
+		};		
+	},
 });
 
-module.exports = RunningPage;
+module.exports = RunStep3;
