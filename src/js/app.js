@@ -38,6 +38,14 @@ var App = React.createClass({
 		return initialState;
 	},
 
+	render: function () { 
+		return (
+			<ReactCSSTransitionGroup transitionName={this.state.viewTransition.name} transitionEnter={this.state.viewTransition.in} transitionLeave={this.state.viewTransition.out} className="view-wrapper" component="div">		
+				{this.getCurrentView()}
+			</ReactCSSTransitionGroup>		
+		);
+	},
+
 	getViewProps: function () {
 		return {
 			online: this.state.online
@@ -46,14 +54,6 @@ var App = React.createClass({
 
 	gotoDefaultView: function () {
 		this.showView('page-home', 'fade');
-	},
-
-	render: function () { 
-		return (
-			<ReactCSSTransitionGroup transitionName={this.state.viewTransition.name} transitionEnter={this.state.viewTransition.in} transitionLeave={this.state.viewTransition.out} className="view-wrapper" component="div">		
-				{this.getCurrentView()}
-			</ReactCSSTransitionGroup>		
-		);
 	},
 });
 

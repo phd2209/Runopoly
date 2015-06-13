@@ -4,6 +4,7 @@ var ParseReact = require('parse-react');
 var UI = require('touchstonejs').UI;
 var View = require('../components/View');
 var Navigation = require('touchstonejs').Navigation;
+var _ = require('underscore');
 
 var ScoreStep1 = React.createClass({
 	mixins: [Navigation, ParseReact.Mixin],
@@ -12,17 +13,25 @@ var ScoreStep1 = React.createClass({
 			prevView: 'page-home', 
 		};
     },
+	getInitialState: function () {
+		return {
+			processing: true
+		};
+	},	
 	observe: function(props, state) {
 		return {
-			results: (new Parse.Query('Results')) /*,
+			results: (new Parse.Query('Results').include('challenge')),
+			challenges: (new Parse.Query('Challenge'))/*,
 			user: ParseReact.currentUser*/
 		};
 	},	
 	render: function () {	
-		var processResult = 0;
-		processResult = this.processResults(this.data.results);		
-		console.log(processResult);
-		/*<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length} className="Modal-loading" />*/
+		var RunopolyScore = 0;
+		RunopolyScore = this.processChallenges(this.data.challenges);
+		console.log(RunopolyScore);
+		RunopolyScore = RunopolyScore + this.processResults(this.data.results);		
+		console.log(RunopolyScore);
+
 		return (
 			<View>
 				<UI.Headerbar label="Your Score" type="runopoly">
@@ -30,23 +39,45 @@ var ScoreStep1 = React.createClass({
 				</UI.Headerbar> 
 				<UI.ViewContent Scrollable>					
 					<div className="panel-header text-caps">Runopoly Score</div>
-					<h1 style={this.getH1Style()}><span style={this.getScoreText()}>{processResult}</span></h1>
 					<div className="panel">
-						<UI.Textarea value="Run or create a challenge to increase your score!" />
+					<h1 style={this.getH1Style()}><span style={this.getScoreText()}>{RunopolyScore.toFixed(0)}</span></h1>
+					</div>
+					<div className="panel">
+						{!RunopolyScore ?
+							<UI.Textarea value="Run or create a challenge to increase your score!" />
+							:
+							null
+						}
 					</div>
 					<div className="panel-header text-caps">Runopoly Rank</div>
 					<div className="panel">
 						<UI.Textarea value="Run or create a challenge to see your rank!" />
 					</div>
-				</UI.ViewContent>
-				
+				</UI.ViewContent>				
 			</View>
 		);
 	},		
 	
 	processResults: function(results) {	
-		console.log("processing results");
-		return 0;
+		var result = 0;
+		if (!results || !results.length) return result;
+		_.each(results, function (resultItem) {
+			if (resultItem.status) {
+				result = result + Number(resultItem.challenge.stopDistance);
+			}
+			if (resultItem.timeLeft) {
+				result = result + Math.min((60/resultItem.timeLeft).toFixed(0), 60);
+			}
+		});		
+		return result;
+	},
+	processChallenges: function(challenges) {	
+		var result = 0;
+		if (!challenges || !challenges.length) return result;
+		_.each(challenges, function (challengeItem) {
+			result = result + Number(challengeItem.stopDistance);
+		});		
+		return result;
 	},
 	getH1Style: function () {
 		return {

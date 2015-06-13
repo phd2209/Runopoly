@@ -15,20 +15,12 @@ var LoginWrapper = React.createClass({
 			signup: false,
 			processing: false
 		}
-	},
-	
+	},	
 	observe: function () {
 		return {
 			user: ParseReact.currentUser
 		};
 	},
-	
-	changePage: function() {
-		setTimeout(function() {
-			this.showView('page-nearbyarea', 'fade', {});
-		}.bind(this), 0);		
-	},	
-	
 	render: function () {
 		
 		if (this.data.user) this.changePage();
@@ -59,7 +51,11 @@ var LoginWrapper = React.createClass({
 			</UI.FlexLayout>			
 		);
 	},	
-	
+	changePage: function() {
+		setTimeout(function() {
+			this.showView('page-nearbyarea', 'fade', {});
+		}.bind(this), 0);		
+	},	
 	submit: function() {
 		
 		this.setState({
@@ -109,12 +105,10 @@ var LoginWrapper = React.createClass({
 				processing: false
 			});
 		}
-	},
-	
+	},	
 	logOut: function() {
 		Parse.User.logOut();
-	},
-	
+	},	
 	toggleSignup: function() {
 		this.setState({
 			signup: !this.state.signup

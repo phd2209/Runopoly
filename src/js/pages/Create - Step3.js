@@ -24,18 +24,6 @@ var CreateStep3 = React.createClass({
 			stopTime: this.roundToTwo(this.props.challenge.stopTime)
 		});	
 	},	
-	getCheckPointHtml: function() {
-		var self = this;
-		return this.props.challenge.checkPoints.map(function(checkPoint) {
-			return <CheckPointItem 
-				key={checkPoint.order} 
-				order={checkPoint.order}
-				time={checkPoint.time}
-				distance={checkPoint.km}
-				onChange={self.checkPointTimeChange}
-				/>;
-		})	
-	},
 	render: function () {
 		return (
 			<View className={this.props.viewClassName}>
@@ -77,6 +65,18 @@ var CreateStep3 = React.createClass({
 			</View>	
 		);
 	},	
+	getCheckPointHtml: function() {
+		var self = this;
+		return this.props.challenge.checkPoints.map(function(checkPoint) {
+			return <CheckPointItem 
+				key={checkPoint.order} 
+				order={checkPoint.order}
+				time={checkPoint.time}
+				distance={checkPoint.km}
+				onChange={self.checkPointTimeChange}
+				/>;
+		})	
+	},
 	save: function() {
 		console.log("saving");
 		var self =this;		
