@@ -142,12 +142,6 @@ var CreateStep3 = React.createClass({
           textDecoration: 'none'
 		};		
 	},	
-	getStyle: function () {
-		return {
-			width: '100%',
-			height: '100%'
-		};	
-	},	
 	getButtonStyle: function () {
 		
 		return {

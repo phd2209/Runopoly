@@ -57,32 +57,24 @@ var CreateStep2 = React.createClass({
 	},
 	render: function () {
 		var totalkm = 0.0;	
+		var lastState = null;
 		
 		if (this.state.tracking) {
-			//Is this part really neccesary? Should it not log everything;
-			var lastState = null;
+
 			var addLocation = true;
 			if (this.route.length) {
 				
-				//Can an optimazation be done so we dont need to user _last?;
-				var lastState = _.last(this.route);
+				lastState = _.last(this.route);
 				addLocation = this.state.location.latitude != lastState.latitude ||
 							  this.state.location.longitude != lastState.longitude;
 			}				
 			if (addLocation) this.route.push(this.state.location);
-				
-			// Can an optimization be done so that we don't need to loop through all route items?;
-			for (var j = 0; j < this.route.length; j++) {
-
-				if (j == (this.route.length - 1)) {
-					break;
-				}			
-				totalkm += this.gps_distance(this.route[j].latitude, this.route[j].longitude, this.route[j + 1].latitude, this.route[j + 1].longitude);												
-			}
-		
-			totalkm = totalkm.toFixed(2);
-			this.totalKm = Number(totalkm);
 			
+			if (lastState)
+			{
+				totalkm = this.gps_distance(lastState.latitude, lastState.longitude, this.state.location.latitude, this.state.location.longitude);
+				this.totalKm = this.totalKm + Number(totalkm);
+			}			
 		}
 		return (
 			<View>
@@ -91,7 +83,7 @@ var CreateStep2 = React.createClass({
 				</UI.Headerbar>
 				<div style={this.getStyle()}>
 					<Tappable style={this.getKMStyle()}>
-						<span style={this.getKMNumberStyle()}>{totalkm}</span>
+						<span style={this.getKMNumberStyle()}>{this.totalKm.toFixed(1)}</span>
 						<span style={this.getKMUnitStyle()}>Km</span>
 					</Tappable>
 					<GoogleMap 
@@ -206,7 +198,7 @@ var CreateStep2 = React.createClass({
 				route: this.route,
 				criteria: "",
 				stopTime: Number(this.duration),
-				stopDistance: this.totalKm,
+				stopDistance: this.totalKm.toFixed(1),
 				checkPoints: this.checkPoints			
 			});
 		}
@@ -219,7 +211,7 @@ var CreateStep2 = React.createClass({
 				stopPosition: this.stopPosition,
 				route: this.route,
 				criteria: "",
-				stopDistance: this.totalKm,
+				stopDistance: this.totalKm.toFixed(1),
 				checkPoints: this.checkPoints			
 			});			
 		}

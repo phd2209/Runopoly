@@ -42,13 +42,13 @@ var ScoreStep1 = React.createClass({
 					<div className="panel">
 					<h1 style={this.getH1Style()}><span style={this.getScoreText()}>{RunopolyScore.toFixed(0)}</span></h1>
 					</div>
-					<div className="panel">
-						{!RunopolyScore ?
-							<UI.Textarea value="Run or create a challenge to increase your score!" />
+					<div className="panel">						
+					{!RunopolyScore ?
+						<UI.Textarea value="Run or create a challenge to increase your score!" />
 							:
 							null
-						}
-					</div>
+					}	
+					</div>					
 					<div className="panel-header text-caps">Runopoly Rank</div>
 					<div className="panel">
 						<UI.Textarea value="Run or create a challenge to see your rank!" />
