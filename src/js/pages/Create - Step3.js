@@ -38,7 +38,8 @@ var CreateStep3 = React.createClass({
 						</div>
 					</div>
 					<ChallengeMap
-						challenge={this.props.challenge} 
+						challenge={this.props.challenge}
+						radius={50}
 					/>
 					{						
 						(this.props.challenge.type === 1) ?

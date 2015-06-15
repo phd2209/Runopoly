@@ -9,14 +9,16 @@ var ChallengeMap = React.createClass({
 		longitude: React.PropTypes.number,
 		initialZoom: React.PropTypes.number,
 		position: React.PropTypes.string,
-		challengeStarted: React.PropTypes.bool
+		challengeStarted: React.PropTypes.bool,
+		radius: React.PropTypes.number
 	},		
 	getDefaultProps: function () {
         return {			
             initialZoom: 13,
 			height: 300,
 			position: "relative",
-			challengeStarted: false
+			challengeStarted: false,
+			radius: 25
         };
 	},
 	getInitialState: function () {
@@ -31,11 +33,6 @@ var ChallengeMap = React.createClass({
 	componentWillUnMount: function () {
 		this.map = null;
 	},
-	/*shouldComponentUpdate: function(nextProps, nextState) {
-		return (nextProps.latitude !== this.props.latitude || 
-		    nextProps.longitude !== this.props.longitude ||
-			nextProps.challengeStarted !== this.props.challengeStarted);
-	},*/
 	componentDidMount: function () {
 		this.userCircle = null;
 		var self = this;
@@ -54,33 +51,56 @@ var ChallengeMap = React.createClass({
         };		
         this.map = new google.maps.Map(document.getElementById("map"),
             mapOptions);
-		//this.setState({ 
-		//	map: this.map
-		//});
 		google.maps.event.addListener(this.map, 'tilesloaded', function(evt) {
 			self.mapLoaded();
 		});
 	},	
+	shouldComponentUpdate: function(nextProps, nextState) {
+		return (nextProps.challenge !== this.props.challenge || 
+			nextProps.latitude !== this.props.latitude || 
+		    nextProps.longitude !== this.props.longitude ||
+			nextProps.challengeStarted !== this.props.challengeStarted ||
+			nextState.processing !== this.state.processing);
+	},
 	render: function () {
 		
-		/*if (this.state.map) {*/
 		if (this.map) {
 			
 			if (!this.props.challengeStarted)
 			{
-				//this.state.map.setCenter(this.mapCenterLatLng(this.props.challenge.startPosition.latitude,
-				//	this.props.challenge.startPosition.longitude));
 				this.map.setCenter(this.mapCenterLatLng(this.props.challenge.startPosition.latitude,
 					this.props.challenge.startPosition.longitude));				
 			}
 			else {
-				//this.state.map.setCenter(this.mapCenterLatLng(this.props.location.latitude,
-				//	this.props.location.longitude));
 				this.map.setCenter(this.mapCenterLatLng(this.props.latitude,
-					this.props.longitude));
-				
+					this.props.longitude));				
 			}
 			
+			if (this.props.latitude)
+			{
+				if (this.userCircle) {
+					this.userCircle.setCenter(this.mapCenterLatLng(this.props.latitude, this.props.longitude));				
+				}
+				else {
+					this.userCircle = new google.maps.Circle(this.createPoint(
+						this.props.latitude,
+						this.props.longitude,
+						'#FF0000',
+						'#FF0000'
+					));					
+				}				
+			}
+		}		
+		return (
+			<div style={this.getBorderStyle()}>
+				<div id='map' style={this.getStyle()}></div>				
+			</div>
+		);
+	},
+	mapLoaded: function() {
+		this.setState({ 
+			processing: false
+		});
 			var coordinates = [];
 			for (var point in this.props.challenge.route) {
 				coordinates.push(this.mapCenterLatLng(this.props.challenge.route[point].latitude, this.props.challenge.route[point].longitude));
@@ -95,8 +115,7 @@ var ChallengeMap = React.createClass({
 			});
 
 			//route.setMap(this.state.map);
-			route.setMap(this.map);
-			
+			route.setMap(this.map);	
 			var startpoint,
 				startflag,
 				stoppoint,
@@ -153,31 +172,6 @@ var ChallengeMap = React.createClass({
 						-5, 15, 0.75);					
 				}
 			}
-			if (this.props.latitude)
-			{
-				if (this.userCircle) {
-					this.userCircle.setCenter(this.mapCenterLatLng(this.props.latitude, this.props.longitude));				
-				}
-				else {
-					this.userCircle = new google.maps.Circle(this.createPoint(
-						this.props.latitude,
-						this.props.longitude,
-						'#FF0000',
-						'#FF0000'
-					));					
-				}					
-			}
-		}		
-		return (
-			<div style={this.getBorderStyle()}>
-				<div id='map' style={this.getStyle()}></div>				
-			</div>
-		);
-	},
-	mapLoaded: function() {
-		this.setState({ 
-			processing: false
-		});
 	},	
 	createPoint: function(latitude, longitude, strokeColor, fillColor) {
 		return startpointOptions = {
@@ -189,7 +183,7 @@ var ChallengeMap = React.createClass({
 				/*map: this.state.map,*/
 				map: this.map,
 				center: this.mapCenterLatLng(latitude, longitude),
-			    radius: Math.sqrt(1) * 25
+			    radius: this.props.radius
 			};		
 	},
 	markerWithLabel: function(icon, labelContent, latitude, longitude, x, y, opacity) {

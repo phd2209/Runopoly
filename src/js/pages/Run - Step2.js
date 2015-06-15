@@ -26,9 +26,6 @@ var RunStep2 = React.createClass({
 		};
 	},
 	render: function () {	
-		/*				
-			<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length} className="Modal-loading" />					
-		*/
 		return (
 			<View>
 				<UI.Headerbar label="CHALLENGE" type="runopoly">
@@ -54,6 +51,7 @@ var RunStep2 = React.createClass({
 					<ChallengeMap
 						challenge={this.data.challenge[0]}
 						height={350}
+						radius={50}
 					/>
 					: null}
 					<Link to="page-run-step3" viewTransition="fade" params={{prevView: 'page-run-step2', 
@@ -66,9 +64,6 @@ var RunStep2 = React.createClass({
 			</View>	
 		);
 	},
-	startChallenge: function () {		
-		this.showView('page-run-step3', 'fade', {challenge: this.data.challenge[0]});
-	},	
 	getType: function (typeno) {
 		if (typeno === 1) return "Time trial";
 		return "Timeless trial";			
