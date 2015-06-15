@@ -25,7 +25,7 @@ var RunStep3 = React.createClass({
 	getInitialState: function () {
 		return {
 			ChallengeStarted: false,
-			location: null,
+			location: this.props.challenge.startPosition,
 			processing: false
 		};
 	},
@@ -81,14 +81,15 @@ var RunStep3 = React.createClass({
 						inStop = true;
 						
 						//Determine if route was successfully passed;
-						if (this.checkPointsPassed.length < this.props.challenge.checkPoints.length) {
-							console.log("challenge failed: not all checkpoint passed");
+						if (this.checkPointsPassed.length < this.props.challenge.checkPoints.length) {							
+							alert("challenge failed: not all checkpoint passed");
 						}
 						else if (_.contains(this.checkPointsPassed, false)) {
-							console.log("challenge failed: Checkpoint(s) failed");
+							alert("challenge failed: Checkpoint(s) failed");
 						}
 						else {
-							if (navigator) navigator.vibrate(3000);
+							//if (navigator) navigator.vibrate(3000);
+							alert("challenge success: All checkpoint passed");
 							this.status = 1;
 						}
 					}
@@ -97,28 +98,29 @@ var RunStep3 = React.createClass({
 				//Check if checkpoints have been passed successfully
 				var checkpoints = this.props.challenge.checkPoints;
 			
-				for (var j = this.checkPointOrder; j < checkpoints.length; j++) {
+				for (var j = 0; j < checkpoints.length; j++) {
+
+					if (Number(checkpoints[j].order) < Number(this.checkPointOrder + 1))
+						continue;
 
 					if (this.pointInCircle(this.state.location.latitude, this.state.location.longitude, checkpoints[j].latitude, checkpoints[j].longitude)) {					
-						if (Number(checkpoints[j].order) === Number(this.checkPointOrder + 1)) {						
-							this.CheckPointCleared(Number(checkpoints[j].order));								
-							//timeLeft should be calculated based on check
+						if (Number(checkpoints[j].order) === Number(this.checkPointOrder + 1)) {					
+							this.CheckPointCleared(Number(checkpoints[j].order));
+							
 							if (this.props.challenge.type == 1)
 							{
 								this.timeLeft = Math.abs(Number(checkpoints[j].time)-Number(this.duration));
 							}							
-							if (navigator) navigator.vibrate(3000);
-							break;
+							//if (navigator) navigator.vibrate(3000);
+							break;							
 						}
-						else if (Number(checkpoints[j].order) < Number(this.checkPointOrder + 1))
-							break;
 						else {
 							this.CheckPointsFailed(Number(checkpoints[j].order));
 							break;
 						}
 					}
 				}
-				
+					
 				//Calculate totalKm							
 				if (this.lastLocation)
 				{
@@ -146,7 +148,8 @@ var RunStep3 = React.createClass({
 					<ChallengeMap
 						challenge={this.props.challenge}
 						initialZoom={17}
-						location={this.state.location}
+						latitude={this.state.location.latitude}
+						longitude={this.state.location.longitude}
 						height="100%"
 						position="absolute"
 						challengeStarted={this.state.challengeStarted}
@@ -231,7 +234,7 @@ var RunStep3 = React.createClass({
 		if (distanceToPoint<25) result = true;
 		return result;
 	},
-	CheckPointCleared: function (index) {		
+	CheckPointCleared: function (index) {
 		console.log("passed " + index);
 		if (this.checkPointsPassed.length < index) {
 			this.checkPointsPassed[index-1] = true;	
