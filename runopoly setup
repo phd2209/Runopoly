@@ -20,11 +20,6 @@
                 <File name="src\js\components\LabelInput.js" />
                 <File name="src\js\components\NearbyAreaItem.js" />
                 <File name="src\js\components\NearbyAreaList.js" />
-                <File name="src\js\components\RunAreaRank.js" />
-                <File name="src\js\components\RunAreaStatus.js" />
-                <File name="src\js\components\RunButton.js" />
-                <File name="src\js\components\RunDisplay.js" />
-                <File name="src\js\components\RunTimer.js" />
                 <File name="src\js\components\ChallengeMap.js" />
                 <File name="src\js\components\CheckPointItem.js" />
                 <File name="src\js\components\LabelSelect.js" />
@@ -39,7 +34,6 @@
             <Folder name="pages">
                 <File name="src\js\pages\AreaOwnersPage.js" />
                 <File name="src\js\pages\LoginWrapper.js" />
-                <File name="src\js\pages\RunningPage - Kopi.js" />
                 <File name="src\js\pages\Create - Step1.js" />
                 <File name="src\js\pages\Create - Step2.js" />
                 <File name="src\js\pages\Create - Step3.js" />

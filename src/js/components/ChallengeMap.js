@@ -10,7 +10,8 @@ var ChallengeMap = React.createClass({
 		initialZoom: React.PropTypes.number,
 		position: React.PropTypes.string,
 		challengeStarted: React.PropTypes.bool,
-		radius: React.PropTypes.number
+		radius: React.PropTypes.number,
+		checkPoint: React.PropTypes.bool
 	},		
 	getDefaultProps: function () {
         return {			
@@ -18,7 +19,8 @@ var ChallengeMap = React.createClass({
 			height: 300,
 			position: "relative",
 			challengeStarted: false,
-			radius: 25
+			radius: 25,
+			checkPoint: false
         };
 	},
 	getInitialState: function () {
@@ -65,7 +67,7 @@ var ChallengeMap = React.createClass({
 	render: function () {
 		
 		if (this.map) {
-			
+			console.log(this.props.checkPoint);
 			if (!this.props.challengeStarted)
 			{
 				this.map.setCenter(this.mapCenterLatLng(this.props.challenge.startPosition.latitude,
@@ -76,19 +78,23 @@ var ChallengeMap = React.createClass({
 					this.props.longitude));				
 			}
 			
-			if (this.props.latitude)
+			if (this.userCircle) {
+				this.userCircle.setCenter(this.mapCenterLatLng(this.props.latitude, this.props.longitude));				
+			}
+			else {
+				this.userCircle = new google.maps.Circle(this.createPoint(
+					this.props.latitude,
+					this.props.longitude,
+					'#FF0000',
+					'#FF0000'
+				));					
+			}
+			if (this.props.checkPoint)
 			{
-				if (this.userCircle) {
-					this.userCircle.setCenter(this.mapCenterLatLng(this.props.latitude, this.props.longitude));				
-				}
-				else {
-					this.userCircle = new google.maps.Circle(this.createPoint(
-						this.props.latitude,
-						this.props.longitude,
-						'#FF0000',
-						'#FF0000'
-					));					
-				}				
+				var passed = this.markerWithLabel(" ", "<i class='icon ion-ios-checkmark start-flag'></i>", 
+					this.props.latitude,
+					this.props.longitude,
+					5, -15, 0.75);
 			}
 		}		
 		return (

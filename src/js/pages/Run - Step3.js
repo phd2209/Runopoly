@@ -52,6 +52,8 @@ var RunStep3 = React.createClass({
 		var buttonLabel = "GO TO START!";
 		var inStart = false;		
 		var inStop  = false;
+		var checkPoint = false;
+		
 		
 		if (this.state.location)
 		{
@@ -104,7 +106,8 @@ var RunStep3 = React.createClass({
 						continue;
 
 					if (this.pointInCircle(this.state.location.latitude, this.state.location.longitude, checkpoints[j].latitude, checkpoints[j].longitude)) {					
-						if (Number(checkpoints[j].order) === Number(this.checkPointOrder + 1)) {					
+						if (Number(checkpoints[j].order) === Number(this.checkPointOrder + 1)) {
+							checkPoint = true;
 							this.CheckPointCleared(Number(checkpoints[j].order));
 							
 							if (this.props.challenge.type == 1)
@@ -153,6 +156,7 @@ var RunStep3 = React.createClass({
 						height="100%"
 						position="absolute"
 						challengeStarted={this.state.challengeStarted}
+						checkPoint={checkPoint}
 					/>						
 					<Tappable
 						className="checkpoint_button"

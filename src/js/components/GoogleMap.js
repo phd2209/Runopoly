@@ -99,12 +99,7 @@ var GoogleMap = React.createClass({
 				var checkpoint = new google.maps.Circle(checkPointOptions);							
 			}
 		};				
-		/*<UI.Modal showModal={this.state.processing} header="Loading" iconKey="ion-load-c" iconType="default" loading={this.state.processing} className="Modal-loading" />
-						<UI.Popup visible={this.state.processing}>
-					<UI.PopupIcon name="ion-load-c" type="default" spinning={this.state.processing} />
-					<strong>Loading</strong>
-				</UI.Popup>
-		*/
+
 		return (
 			<div style={this.getStyle()}> 
 				<div id='map' style={this.getStyle()}></div>				
