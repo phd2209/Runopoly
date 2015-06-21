@@ -2,7 +2,8 @@ var React = require("react");
 var Tappable = require('react-tappable');
 var Parse = require('parse').Parse;
 var UI = require('touchstonejs').UI;
-var GoogleMap = require('../components/GoogleMap');
+//var GoogleMap = require('../components/GoogleMap');
+var BingMap = require('../components/BingMap');
 var View = require('../components/View');
 var Navigation = require('touchstonejs').Navigation;
 var geolocationMixin = require('../mixins/geoLocationMixin');
@@ -86,7 +87,7 @@ var CreateStep2 = React.createClass({
 						<span style={this.getKMNumberStyle()}>{this.totalKm.toFixed(1)}</span>
 						<span style={this.getKMUnitStyle()}>Km</span>
 					</Tappable>
-					<GoogleMap 
+					<BingMap 
 						latitude={this.state.location.latitude} 
 						longitude={this.state.location.longitude}
 						tracking={this.state.tracking}

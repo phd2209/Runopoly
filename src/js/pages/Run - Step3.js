@@ -5,7 +5,8 @@ var _ = require('underscore');
 var UI = require('touchstonejs').UI;
 var View = require('../components/View');
 var Tappable = require('react-tappable');
-var ChallengeMap = require('../components/ChallengeMap');
+//var ChallengeMap = require('../components/ChallengeMap');
+var ChallengeMap = require('../components/ChallengeBingMap');
 var Navigation = require('touchstonejs').Navigation;
 var geolocationMixin = require('../mixins/geoLocationMixin');
 

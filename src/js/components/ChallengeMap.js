@@ -25,7 +25,6 @@ var ChallengeMap = React.createClass({
 	},
 	getInitialState: function () {
 		return {
-			/*map: null,*/
 			processing: true
 		};
 	},	

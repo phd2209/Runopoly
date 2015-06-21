@@ -4,15 +4,19 @@ var NearbyAreaItem = require('./NearbyAreaItem');
 var NearbyAreaList = React.createClass({
 
 	propTypes: {
-		challenges: React.PropTypes.array.isRequired
+		challenges: React.PropTypes.array.isRequired,
+		filterState: React.PropTypes.number.isRequired
 	},
 
 	render: function () {
+		var filter = this.props.filterState;		
 		return (
 			<div>
 				<div className="panel panel--first avatar-list">
 					{this.props.challenges.map(function(challenge) {
-						return <NearbyAreaItem 
+						
+						if (filter == challenge.completed) { 												
+							return <NearbyAreaItem 
 									key={challenge.objectId} 
 									name={challenge.name}
 									imageUrl={challenge.imageUrl}
@@ -21,6 +25,7 @@ var NearbyAreaList = React.createClass({
 									type={challenge.type}
 									itemIndex={challenge.objectId}
 								/>;
+						}
 					})}
 				</div>
 			</div>

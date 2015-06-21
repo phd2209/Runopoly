@@ -1,6 +1,5 @@
 var React = require("react");
 var UI = require('touchstonejs').UI;
-
 var GoogleMap = React.createClass({
 	propTypes: {
 		latitude: React.PropTypes.number.isRequired,
@@ -49,16 +48,14 @@ var GoogleMap = React.createClass({
 		google.maps.event.addListener(this.map, 'tilesloaded', function(evt) {
 			self.mapLoaded();
 		});
-	},	
-	
+	},		
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return (nextProps.latitude !== this.props.latitude || 
 		    nextProps.longitude !== this.props.longitude ||
 			nextProps.checkPoint !== this.props.checkPoint ||
 			nextProps.tracking !== this.props.tracking ||
 			nextState.processing !== this.state.processing);
-	},
-	
+	},	
 	render: function () {
 		
 		if (this.map) {
@@ -72,6 +69,7 @@ var GoogleMap = React.createClass({
 				this.locationCircle = new google.maps.Circle(circleOptions);					
 			}
 		}
+		
 		if (this.props.tracking) {
 			
 			if (!this.coordinates.length)

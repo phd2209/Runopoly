@@ -5,7 +5,8 @@ var UI = require('touchstonejs').UI;
 var Navigation = require('touchstonejs').Navigation;
 var LabelInput = require('../components/LabelInput');
 var CheckPointItem = require('../components/CheckPointItem');
-var ChallengeMap = require('../components/ChallengeMap');
+//var ChallengeMap = require('../components/ChallengeMap');
+var ChallengeMap = require('../components/ChallengeBingMap');
 var Tappable = require('react-tappable');
 var View = require('../components/View');
 
@@ -61,7 +62,11 @@ var CreateStep3 = React.createClass({
 						this.getCheckPointHtml() :
 						null
 					}
-					<Tappable className="panel-button" style={this.getButtonStyle()} onTap={this.save}>save</Tappable>
+					<Tappable className="panel-button" 
+						component="div"
+						onTap={this.save}>
+							<span className='checkpoint_button' style={this.getButtonStyle()}>SAVE</span>
+					</Tappable>
 				</UI.ViewContent>
 			</View>	
 		);
@@ -79,11 +84,10 @@ var CreateStep3 = React.createClass({
 		})	
 	},
 	save: function() {
-		console.log("saving");
 		var self =this;		
 		this.setState({
 			processing: true
-		});
+		}); 
 		// ACL, so that only the current user can access this object			
 		//var User = Parse.Object.extend("User"); 
 		//var acl = new Parse.ACL(new User({id: this.data.user.objectId}));
@@ -97,7 +101,7 @@ var CreateStep3 = React.createClass({
 			startPosition: this.props.challenge.startPosition,
 			stopPosition: this.props.challenge.stopPosition,
 			stopTime: (this.props.challenge.type===1) ? this.state.stopTime : 0,
-			stopDistance: this.props.challenge.stopDistance,
+			stopDistance: Number(this.props.challenge.stopDistance),
 			route: this.props.challenge.route,
 			criteria: "",
 			checkPoints: this.props.challenge.checkPoints
@@ -105,7 +109,6 @@ var CreateStep3 = React.createClass({
 				self.setState({
 					processing: false
 				});
-				self.showNativeAlert('Challenge Saved', 'Info');
 				self.showView('page-home', 'fade', {});
 		});
 	},
@@ -146,8 +149,8 @@ var CreateStep3 = React.createClass({
 	getButtonStyle: function () {
 		
 		return {
-          color: '#fff',
-          backgroundColor: '#42B49A',
+          color: '#42B49A',
+          backgroundColor: '#fff',
           border: '1px solid transparent',
           border: 2,
 		  marginTop: 10,
@@ -155,17 +158,11 @@ var CreateStep3 = React.createClass({
           width: '96%',
           left: 5,
           textAlign: 'center',
+		  fontWeight: 'bold',
           textDecoration: 'none',
 		  textTransform: 'uppercase',
 		  marginBottom: 10
 		};	
-	},	
-	showNativeAlert: function (message, title) {
-		if (navigator.notification && navigator.notification.alert) {
-			navigator.notification.alert(message, null, title, 'OK');
-		} else {
-			alert(title ? (title + ": " + message) : message);
-		}		
-	} 
+	}
 });
 module.exports = CreateStep3;

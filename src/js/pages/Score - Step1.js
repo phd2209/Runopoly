@@ -56,8 +56,7 @@ var ScoreStep1 = React.createClass({
 				</UI.ViewContent>				
 			</View>
 		);
-	},		
-	
+	},			
 	processResults: function(results) {	
 		var result = 0;
 		if (!results || !results.length) return result;
@@ -86,8 +85,7 @@ var ScoreStep1 = React.createClass({
 			color: "#42B49A",
 			textAlign: "center"
 		};
-	},
-	
+	},	
 	getScoreText: function () {
 		return {
 			position: 'relative',

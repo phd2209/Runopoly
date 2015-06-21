@@ -3,16 +3,28 @@ var UI = require('touchstonejs').UI;
 
 var ChallengeBingMap = React.createClass({
 	propTypes: {
-		challenge: React.PropTypes.object.isRequired
-	},	
+		challenge: React.PropTypes.object.isRequired,
+		height: React.PropTypes.string,
+		latitude: React.PropTypes.number,
+		longitude: React.PropTypes.number,
+		initialZoom: React.PropTypes.number,
+		position: React.PropTypes.string,
+		challengeStarted: React.PropTypes.bool,
+		radius: React.PropTypes.number,
+		checkPoint: React.PropTypes.bool
+	},
 	getDefaultProps: function () {
         return {			
             initialZoom: 13,
+			height: 300,
+			position: "relative",
+			challengeStarted: false,
+			radius: 50,
+			checkPoint: false
         };
 	},
 	getInitialState: function () {
 		return {
-			map: null,
 			processing: true
 		};
 	},	
@@ -31,12 +43,8 @@ var ChallengeBingMap = React.createClass({
 			this.map = null; 
 		} 
 	},	
-	mapLoaded: function() {
-		this.setState({ 
-			processing: false
-		});
-	},	
-	componentDidMount: function () {	
+	componentDidMount: function () {
+		this.userCircle = null;		
 		var self = this;
 		var mapOptions = {
 			credentials: "AuAHBbCwL3pG2rjo0Pb_O4wjIKHzdKQLIUGMndhAaXZUv9d7Oa_JyamaDkNrnuQd",
@@ -49,116 +57,133 @@ var ChallengeBingMap = React.createClass({
 			showDashboard: false
 		};
 		this.map = new Microsoft.Maps.Map(document.getElementById("map"), mapOptions);
-		this.setState({ 
-			map: this.map
-		});
 		this.attachmapviewchangeend = Microsoft.Maps.Events.addHandler(this.map, 'viewchangeend', self.mapLoaded);
-	},		
+	},	
+	shouldComponentUpdate: function(nextProps, nextState) {
+		return (nextProps.challenge !== this.props.challenge || 
+			nextProps.latitude !== this.props.latitude || 
+		    nextProps.longitude !== this.props.longitude ||
+			nextProps.challengeStarted !== this.props.challengeStarted ||
+			nextState.processing !== this.state.processing);
+	},
 	render: function () {
 		
-		if (this.state.map) {
-			
-			this.state.map.setView(this.mapCenterLatLng(this.props.challenge.startPosition.latitude,
-				this.props.challenge.startPosition.longitude));
-
-			var coordinates = [];
-			for (var point in this.props.challenge.route) {
-				coordinates.push(this.mapCenterLatLng(this.props.challenge.route[point].latitude, this.props.challenge.route[point].longitude));
-			}
-			
-			var polyline = new Microsoft.Maps.Polyline(coordinates, null); 
-			this.state.map.entities.push(polyline);
-
-			var startpoint,
-				startflag,
-				stoppoint,
-				stopflag,
-				checkpoint,
-				chekpointflag,
-				checkpointorder;
-			
-			//Start circle
-			var locationCircleOptions = this.drawCircle(this.props.challenge.startPosition.latitude, this.props.challenge.startPosition.longitude);
-			startpoint = new Microsoft.Maps.Polygon(locationCircleOptions,
-					{ fillColor: new Microsoft.Maps.Color(30, 100, 0, 0), strokeColor: new Microsoft.Maps.Color(90, 100, 0, 0), strokeThickness: 1 });
-			this.state.map.entities.push(startpoint);
-			
-			//Start flag
-			var pushpinOptions = {width: 0, height: 32, htmlContent: "<i class='icon ion-ios-flag start-flag'></i>"}; 
-			startflag = new Microsoft.Maps.Pushpin(this.mapCenterLatLng(this.props.challenge.startPosition.latitude,
-				this.props.challenge.startPosition.longitude), pushpinOptions);
-			this.state.map.entities.push(startflag);
-			
-			//Stop Circle
-			var locationCircleOptions = this.drawCircle(this.props.challenge.stopPosition.latitude, this.props.challenge.stopPosition.longitude);
-			stoppoint = new Microsoft.Maps.Polygon(locationCircleOptions,
-					{ fillColor: new Microsoft.Maps.Color(30, 100, 0, 0), strokeColor: new Microsoft.Maps.Color(90, 100, 0, 0), strokeThickness: 1 });
-			this.state.map.entities.push(stoppoint)
-
-			//Stop Flag
-			var pushpinOptions = {width: 0, height: 32, htmlContent: "<i class='icon ion-ios-flag stop-flag'></i>"}; 
-			stopflag = new Microsoft.Maps.Pushpin(this.mapCenterLatLng(this.props.challenge.stopPosition.latitude,
-				this.props.challenge.stopPosition.longitude), pushpinOptions);
-			this.state.map.entities.push(stopflag);
-			
-			if (this.props.challenge.checkPoints)
+		if (this.map) {
+			if (!this.props.challengeStarted)
 			{
-				for (var point in this.props.challenge.checkPoints)
-				{	
-
-					var locationCircleOptions = this.drawCircle(this.props.challenge.checkPoints[point].latitude, this.props.challenge.checkPoints[point].longitude);
-					checkpoint = new Microsoft.Maps.Polygon(locationCircleOptions,
-					{ fillColor: new Microsoft.Maps.Color(30, 100, 0, 0), strokeColor: new Microsoft.Maps.Color(90, 100, 0, 0), strokeThickness: 1 });
-					this.state.map.entities.push(checkpoint)
-			
-					//Stop Flag
-					var pushpinOptions = {width: 0, height: 32, htmlContent: "<i class='icon ion-flag checkpoint-flag'></i>"}; 
-					chekpointflag = new Microsoft.Maps.Pushpin(this.mapCenterLatLng(this.props.challenge.checkPoints[point].latitude,
-					this.props.challenge.checkPoints[point].longitude), pushpinOptions);
-					this.state.map.entities.push(chekpointflag);						
-										
-					var number = this.props.challenge.checkPoints[point].order;
-					var pushpinOptions = {width: 0, height: 16, htmlContent: "<h3>"+number+"</h3>"};					
-					var chekpointnumber = new Microsoft.Maps.Pushpin(this.mapCenterLatLng(this.props.challenge.checkPoints[point].latitude,
-						this.props.challenge.checkPoints[point].longitude), pushpinOptions);
-					this.state.map.entities.push(chekpointnumber);						
-				}
+				this.map.setView(this.mapCenterLatLng(this.props.challenge.startPosition.latitude,
+					this.props.challenge.startPosition.longitude));				
 			}
-		};				
+			else {
+				this.map.setView(this.mapCenterLatLng(this.props.latitude,
+					this.props.longitude));				
+			}			
+		
+			if (this.userCircle) {
+				this.userCircle.setLocations(this.drawCircle(this.props.latitude, this.props.longitude));	
+			}
+			else {
+				var userCircleOptions = this.drawCircle(this.props.latitude, this.props.longitude, this.props.radius);
+				this.userCircle = new Microsoft.Maps.Polygon(userCircleOptions,
+					{ fillColor: new Microsoft.Maps.Color(50, 255, 0, 0), strokeColor: new Microsoft.Maps.Color(90, 255, 0, 0), strokeThickness: 1 });
+				this.map.entities.push(this.userCircle);				
+			}
+			
+			if (this.props.checkPoint)
+			{
+				var pushpinOptions = {width: 0, height: -15, htmlContent: "<i class='icon ion-ios-checkmark  start-flag'></i>"}; 
+				var pushpin= new Microsoft.Maps.Pushpin(this.map.getCenter(), pushpinOptions);
+				this.map.entities.push(pushpin);
+			}
+		}	
 		return (
 			<div style={this.getBorderStyle()}> 
-			<div id='map' style={this.getStyle()}></div>
-			<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.state.processing} className="Modal-loading" />
+				<div id='map' style={this.getStyle()}></div>
 			</div>
 		);
-	},
-	circleOptions: function(strokeColor, strokeOpacity, strokeWeight, fillColor, fillOpacity, num) {
-		return  {
-			strokeColor: strokeColor,
-			strokeOpacity: strokeOpacity,
-			strokeWeight: strokeWeight,
-			fillColor: fillColor,
-			fillOpacity: fillOpacity,
-			map: this.map,
-			center: this.mapCenterLatLng(),
-			radius: Math.sqrt(1) * num
-		};
-	},
+	},		
+	mapLoaded: function() {
+		this.setState({ 
+			processing: false
+		});
+		
+		var coordinates = [];
+		for (var point in this.props.challenge.route) {
+			coordinates.push(this.mapCenterLatLng(this.props.challenge.route[point].latitude, this.props.challenge.route[point].longitude));
+		}
+			
+		var polyline = new Microsoft.Maps.Polyline(coordinates, {strokeColor: new Microsoft.Maps.Color(75, 255, 0, 0), strokeThickness:2}); 
+		this.map.entities.push(polyline);
+
+		var startpoint,
+			startflag,
+			stoppoint,
+			stopflag,
+			checkpoint,
+			chekpointflag,
+			checkpointorder;
+			
+		//Start circle
+		var locationCircleOptions = this.drawCircle(this.props.challenge.startPosition.latitude, this.props.challenge.startPosition.longitude);
+		startpoint = new Microsoft.Maps.Polygon(locationCircleOptions,
+				{ fillColor: new Microsoft.Maps.Color(40, 49, 163, 84), strokeColor: new Microsoft.Maps.Color(75, 49, 163, 84), strokeThickness: 2 });
+		this.map.entities.push(startpoint);
+		
+		//Start flag
+		var pushpinOptions = {width: 0, height: 32, htmlContent: "<i class='icon ion-ios-flag start-flag'></i>"}; 
+		startflag = new Microsoft.Maps.Pushpin(this.mapCenterLatLng(this.props.challenge.startPosition.latitude,
+			this.props.challenge.startPosition.longitude), pushpinOptions);
+		this.map.entities.push(startflag);
+		
+		//Stop Circle
+		var locationCircleOptions = this.drawCircle(this.props.challenge.stopPosition.latitude, this.props.challenge.stopPosition.longitude);
+		stoppoint = new Microsoft.Maps.Polygon(locationCircleOptions,
+				{ fillColor: new Microsoft.Maps.Color(40, 44, 127, 184), strokeColor: new Microsoft.Maps.Color(75, 44, 127, 184), strokeThickness: 2 });
+		this.map.entities.push(stoppoint)
+
+		//Stop Flag
+		var pushpinOptions = {width: 0, height: 32, htmlContent: "<i class='icon ion-ios-flag stop-flag'></i>"}; 
+		stopflag = new Microsoft.Maps.Pushpin(this.mapCenterLatLng(this.props.challenge.stopPosition.latitude,
+			this.props.challenge.stopPosition.longitude), pushpinOptions);
+		this.map.entities.push(stopflag);
+		
+		if (this.props.challenge.checkPoints)
+		{
+			for (var point in this.props.challenge.checkPoints)
+			{	
+
+				var locationCircleOptions = this.drawCircle(this.props.challenge.checkPoints[point].latitude, this.props.challenge.checkPoints[point].longitude);
+				checkpoint = new Microsoft.Maps.Polygon(locationCircleOptions,
+				{ fillColor: new Microsoft.Maps.Color(40, 230, 85, 13), strokeColor: new Microsoft.Maps.Color(75, 230, 85, 13), strokeThickness: 2 });
+				this.map.entities.push(checkpoint)
+		
+				//Stop Flag
+				var pushpinOptions = {width: 0, height: 32, htmlContent: "<i class='icon ion-flag checkpoint-flag'></i>"}; 
+				chekpointflag = new Microsoft.Maps.Pushpin(this.mapCenterLatLng(this.props.challenge.checkPoints[point].latitude,
+				this.props.challenge.checkPoints[point].longitude), pushpinOptions);
+				this.map.entities.push(chekpointflag);						
+									
+				var number = this.props.challenge.checkPoints[point].order;
+				var pushpinOptions = {width: 0, height: 16, htmlContent: "<h3 class='checkpoint-number'>"+number+"</h3>"};					
+				var chekpointnumber = new Microsoft.Maps.Pushpin(this.mapCenterLatLng(this.props.challenge.checkPoints[point].latitude,
+					this.props.challenge.checkPoints[point].longitude), pushpinOptions);
+				this.map.entities.push(chekpointnumber);						
+			}
+		}
+	},				
     mapCenterLatLng: function (latitude, longitude) {
 		return new Microsoft.Maps.Location(latitude, longitude);
     },	
 	drawCircle: function (latitude, longitude) {
+		//constants
 		var R = 6371;
-		var radius = 0.05;
-		var d = parseFloat(radius) / R;
+		var radius = Number(this.props.radius/1000);
+		var circlePoints = new Array();
 		
-		var backgroundColor = new Microsoft.Maps.Color(10, 100, 0, 0);
-		var borderColor = new Microsoft.Maps.Color(150, 200, 0, 0);
-		
+		var d = parseFloat(radius) / R;		
 		var lat = (latitude * Math.PI) / 180;     
 		var lon = (longitude * Math.PI) / 180;
-		
-		var circlePoints = new Array();
+				
 		for (x = 0; x <= 360; x += 5) {
 			var p2 = new Microsoft.Maps.Location(0, 0);
 			brng = x * Math.PI / 180;
@@ -180,9 +205,9 @@ var ChallengeBingMap = React.createClass({
 	getStyle: function () {
 		return {
 			width: '100%',
-			height: 300,
-			position: 'relative'
+			height: this.props.height,
+			position: this.props.position
 		};	
-	},
+	}
 });
 module.exports = ChallengeBingMap;

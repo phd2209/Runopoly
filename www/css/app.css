@@ -6894,17 +6894,31 @@ th {
 .switch {
   margin: -17px 130px;
 }
+.Toggle.blue > .Toggle-item.active,
+.Toggle.primary > .Toggle-item.active {
+  background-color: #039e79;
+  color: #ffffff;
+  box-shadow: 0 0 0 1px #039e79;
+}
+.Toggle.blue > .Toggle-item,
+.Toggle.primary > .Toggle-item {
+  box-shadow: 0 0 0 1px #039e79;
+  color: #039e79;
+}
 .start-flag {
   font-size: 32px;
   color: green;
 }
 .stop-flag {
   font-size: 32px;
-  color: red;
+  color: blue;
 }
 .checkpoint-flag {
   font-size: 32px;
-  color: blue;
+  color: black;
+}
+.checkpoint-number {
+  color: black;
 }
 .user-location {
   font-size: 32px;

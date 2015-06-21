@@ -22,50 +22,69 @@ var RunStep1 = React.createClass({
 		if (state.location)
 		{		
 			var userGeoPoint = new Parse.GeoPoint({latitude: state.location.latitude, longitude: state.location.longitude});		
-			console.log(userGeoPoint);
 			return {
 				challenge: (new Parse.Query('Challenge')
 						.near('startPosition', userGeoPoint)
 						.limit(5)			
-				) /*,									
+				),
+				results: (new Parse.Query('Results').include('challenge'))/*,
 				user: ParseReact.currentUser*/
 			};
 		}
 	},	
 	getInitialState: function () {
 		return {
-			location: null
+			location: null,
+			activeToggleItemKey: 0,
 		};
 	},
 	componentWillMount: function () {
 		this.getPosition();
 	},	
 	render: function () {
-		var nearestChallenges = this.sortChallenges(this.data.challenge);
-		/*<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.pendingQueries().length} className="Modal-loading" />*/
+		var nearestChallenges = this.sortChallenges(this.data.challenge, this.data.results);
+
 		return (
 			<View>
 				<UI.Headerbar label="NEARBY" type="runopoly">
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />
 				</UI.Headerbar> 
+				<UI.Headerbar type="default" height="36px" className="Subheader">
+					<UI.Toggle value={this.state.activeToggleItemKey} onChange={this.handleToggleActiveChange} options={[
+						{ label: 'Available', value: 0 },
+						{ label: 'Completed', value: 1 }
+					]} />
+				</UI.Headerbar>				
 				<UI.ViewContent scrollable>
-					<NearbyAreaList challenges={nearestChallenges} />
+					<NearbyAreaList challenges={nearestChallenges} filterState={this.state.activeToggleItemKey} />
 				</UI.ViewContent>
 				
 			</View>
 		);
-	},		
-	sortChallenges: function(challenges) {	
+	},	
+	handleToggleActiveChange: function (newItem) {
+
+		this.setState({
+			activeToggleItemKey: newItem
+		});
+
+	},
+	
+	sortChallenges: function(challenges, results) {	
 		var self = this;
 		var result = [];
 		if (this.state.location == null || this.state.location == undefined) return result;
-		_.each(challenges, function (val) {
-			var distance = Number(self.gps_distance(val.startPosition.latitude, val.startPosition.longitude,
+		_.each(challenges, function (challenge) {
+			var distance = Number(self.gps_distance(challenge.startPosition.latitude, challenge.startPosition.longitude,
 				self.state.location.latitude, self.state.location.longitude).toFixed(2));
-			var imageUrl = self.renderImagePath(val);
-			val.distance = distance;
-			val.imageUrl = imageUrl;
-			var extendedChallenge = _.extend({distance: distance, imageUrl: imageUrl}, val);
+			var imageUrl = self.renderImagePath(challenge);
+			var extendedChallenge = _.extend({distance: distance, imageUrl: imageUrl, completed: 0}, challenge);
+			_.each(results, function (result) {
+				if (challenge.objectId == result.challenge.objectId) {				
+					if (result.status) 
+						extendedChallenge.completed = 1;
+				}
+			});		
 			result.push(extendedChallenge);
 		});
 		return _.sortBy(result, function (num) { return num.distance; });

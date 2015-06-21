@@ -3,9 +3,10 @@ var Parse = require('parse').Parse;
 var ParseReact = require('parse-react');
 var UI = require('touchstonejs').UI;
 var Navigation = require('touchstonejs').Navigation;
-var ChallengeMap = require('../components/ChallengeMap');
+//var ChallengeMap = require('../components/ChallengeMap');
+var ChallengeMap = require('../components/ChallengeBingMap');
 var Link = require('touchstonejs').Link;
-var Tappable = require('react-tappable');
+//var Tappable = require('react-tappable');
 var View = require('../components/View');
 
 var RunStep2 = React.createClass({

@@ -1,6 +1,5 @@
 var React = require("react");
 var UI = require('touchstonejs').UI;
-
 var BingMap = React.createClass({
 	propTypes: {
 		latitude: React.PropTypes.number.isRequired,
@@ -30,10 +29,10 @@ var BingMap = React.createClass({
 		} 
 		this.coordinates = [];		
 	},
-	componentWillUnMount: function () {
-		Microsoft.Maps.Events.removeHandler(this.attachmapviewchangeend);
+	componentWillUnMount: function () {		
 		if (typeof (this.map) != 'undefined' && this.map != null) 
 		{ 
+			Microsoft.Maps.Events.removeHandler(this.attachmapviewchangeend);
 			this.map.dispose(); 
 			this.map = null; 
 		} 
@@ -46,7 +45,8 @@ var BingMap = React.createClass({
 	},	
 	componentDidMount: function () {		
 		var self = this;
-		this.locationCircle = null; 				
+		this.locationCircle = null; 
+		
 		var mapOptions = {
 			credentials: "AuAHBbCwL3pG2rjo0Pb_O4wjIKHzdKQLIUGMndhAaXZUv9d7Oa_JyamaDkNrnuQd",
 			mapTypeId: Microsoft.Maps.MapTypeId.road,
@@ -55,6 +55,7 @@ var BingMap = React.createClass({
 			disableKeyboardInput: true,
 			showDashboard: false
 		};
+		
 		this.map = new Microsoft.Maps.Map(document.getElementById("map"), mapOptions);
 		this.attachmapviewchangeend = Microsoft.Maps.Events.addHandler(this.map, 'viewchangeend', self.mapLoaded);
 	},		
@@ -74,9 +75,9 @@ var BingMap = React.createClass({
 				this.locationCircle.setLocations(this.drawCircle(this.props.latitude, this.props.longitude));	
 			}
 			else {
-				var locationCircleOptions = this.drawCircle(this.props.latitude, this.props.longitude);
+				var locationCircleOptions = this.drawCircle(this.props.latitude, this.props.longitude, 0.015);
 				this.locationCircle = new Microsoft.Maps.Polygon(locationCircleOptions,
-					{ fillColor: new Microsoft.Maps.Color(30, 100, 0, 0), strokeColor: new Microsoft.Maps.Color(90, 100, 0, 0), strokeThickness: 1 });
+					{ fillColor: new Microsoft.Maps.Color(25, 255, 0, 0), strokeColor: new Microsoft.Maps.Color(50, 255, 0, 0), strokeThickness: 1 });
 				this.map.entities.push(this.locationCircle);				
 			}	
 		}
@@ -92,14 +93,14 @@ var BingMap = React.createClass({
 			
 			this.coordinates.push(this.mapCenterLatLng());
 	
-			var polyline = new Microsoft.Maps.Polyline(this.coordinates, null); 
+			var polyline = new Microsoft.Maps.Polyline(this.coordinates, {strokeColor: new Microsoft.Maps.Color(75, 255, 0, 0), strokeThickness:2}); 
 			this.map.entities.push(polyline);
 	
 			if (this.props.checkPoint)
 			{
-				var checkPointOptions = this.drawCircle(this.props.latitude, this.props.longitude);
+				var checkPointOptions = this.drawCircle(this.props.latitude, this.props.longitude, 0.05);
 				var checkPointPolygon = new Microsoft.Maps.Polygon(checkPointOptions,
-					{ fillColor: new Microsoft.Maps.Color(30, 100, 0, 0), strokeColor: new Microsoft.Maps.Color(90, 100, 0, 0), strokeThickness: 1 });
+					{ fillColor: new Microsoft.Maps.Color(40, 0, 0, 0), strokeColor: new Microsoft.Maps.Color(75, 0, 0, 0), strokeThickness: 1 });
 				var pushpinOptions = {width: 0, height: 32, htmlContent: "<i class='icon ion-flag checkpoint-flag'></i>"}; 
 				var pushpin= new Microsoft.Maps.Pushpin(this.map.getCenter(), pushpinOptions);
 				this.map.entities.push(pushpin);
@@ -109,38 +110,22 @@ var BingMap = React.createClass({
 							
 		return (
 			<div style={this.getStyle()}> 
-			<div id='map' style={this.getStyle()}></div>
-			<UI.Modal header="Loading" iconKey="ion-load-c" iconType="default" visible={this.state.processing} className="Modal-loading" />
+				<div id='map' style={this.getStyle()}></div>
 			</div>
 		);
-	},
-	circleOptions: function(strokeColor, strokeOpacity, strokeWeight, fillColor, fillOpacity, num) {
-		return  {
-			strokeColor: strokeColor,
-			strokeOpacity: strokeOpacity,
-			strokeWeight: strokeWeight,
-			fillColor: fillColor,
-			fillOpacity: fillOpacity,
-			map: this.map,
-			center: this.mapCenterLatLng(),
-			radius: Math.sqrt(1) * num
-		};
 	},
     mapCenterLatLng: function () {
 		return new Microsoft.Maps.Location(this.props.latitude, this.props.longitude);
     },	
-	drawCircle: function (latitude, longitude) {
+	drawCircle: function (latitude, longitude, radius) {
+		//constants
 		var R = 6371;
-		var radius = 0.05;
-		var d = parseFloat(radius) / R;
+		var circlePoints = new Array();
 		
-		var backgroundColor = new Microsoft.Maps.Color(10, 100, 0, 0);
-		var borderColor = new Microsoft.Maps.Color(150, 200, 0, 0);
-		
+		var d = parseFloat(radius) / R;		
 		var lat = (latitude * Math.PI) / 180;     
 		var lon = (longitude * Math.PI) / 180;
-		
-		var circlePoints = new Array();
+				
 		for (x = 0; x <= 360; x += 5) {
 			var p2 = new Microsoft.Maps.Location(0, 0);
 			brng = x * Math.PI / 180;
