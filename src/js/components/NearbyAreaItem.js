@@ -13,14 +13,15 @@ var NearbyAreaItem = React.createClass({
 		imageUrl: React.PropTypes.string.isRequired,
 		distance: React.PropTypes.number.isRequired,
 		difficulty: React.PropTypes.number.isRequired,
-		type: React.PropTypes.number.isRequired,
-		itemIndex: React.PropTypes.string.isRequired
+		itemIndex: React.PropTypes.string.isRequired,
+		completed: React.PropTypes.number.isRequired
 	},
-
-    render: function () {
-		console.log(this.props.type);
+	render: function () {
+		
+		var className = (this.props.completed==1) ? 'list-item completed' : 'list-item';
+		
 		return (
-			<Link to="page-run-step2" viewTransition="show-from-right" params={{ selectedChallengeId: this.props.itemIndex, prevView: 'page-run-step1' }} className="list-item" component="div">
+			<Link to="page-run-step2" viewTransition="show-from-right" params={{ selectedChallengeId: this.props.itemIndex, prevView: 'page-run-step1' }} className={className} component="div">
 				<span className="item-media">
 					<span className="list-avatar">
 						<img src={this.props.imageUrl} />
@@ -29,8 +30,7 @@ var NearbyAreaItem = React.createClass({
 				<div className="item-inner">
 					<div className="item-content">
 						<div className="item-title">{this.props.name}</div>
-						<div className="item-subtitle">{this.getDifficulty(this.props.difficulty)}
-							{(this.props.type === 1) ? <i style={this.getIconStyle()} className='icon ion-ios-stopwatch-outline'></i> : <i style={this.getIconStyle()} className='icon ion-android-walk'></i> } 
+						<div className="item-subtitle">{this.props.difficulty}
 							<i style={this.getIconStyle()} className='icon ion-location'></i>{this.props.distance} Km</div>
 					</div>
 					<div className="item-note default">
@@ -40,11 +40,6 @@ var NearbyAreaItem = React.createClass({
 			</Link>
 		);
 	},
-	getDifficulty: function (difficultyno) {
-		if (difficultyno === 1) return "Easy";
-		else if (difficultyno === 2) return "Moderate";
-		return "Hard";				
-	},	
 	getIconStyle: function() {
 		return {
           paddingLeft: 20,

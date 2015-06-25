@@ -2,20 +2,17 @@ var React = require("react");
 var Tappable = require('react-tappable');
 var Parse = require('parse').Parse;
 var UI = require('touchstonejs').UI;
-//var GoogleMap = require('../components/GoogleMap');
-var BingMap = require('../components/BingMap');
+var GoogleMap = require('../components/GoogleMap');
 var View = require('../components/View');
 var Navigation = require('touchstonejs').Navigation;
 var geolocationMixin = require('../mixins/geoLocationMixin');
 var _ = require('underscore');
 
 var CreateStep2 = React.createClass({
-	mixins: [geolocationMixin, Navigation],	
+	mixins: [geolocationMixin, Navigation],
 	propTypes: {
 		prevView: React.PropTypes.string.isRequired,
 		name: React.PropTypes.string.isRequired,
-		type: React.PropTypes.number.isRequired,
-		difficulty: React.PropTypes.number.isRequired,
 		automatic: React.PropTypes.bool.isRequired
 	},
 	getDefaultProps: function () {
@@ -25,7 +22,7 @@ var CreateStep2 = React.createClass({
 			timeout: 10000,
 			enableHighAccuracy: true
 		};
-    },	
+    },
 	getInitialState: function () {
 		return {
 			tracking: false,
@@ -48,34 +45,29 @@ var CreateStep2 = React.createClass({
 	componentWillUnmount: function () {
 		this.allowSleep();
 		this.unwatchPosition();
-	},	
+	},
 	componentDidUpdate: function () {
 		if (this.props.automatic) {
 		  if (this.checkPoints.length + 1 - this.totalKm <= 0.02) {
 			  this.saveCheckPoint();
 		  }
-		};	
+		}
 	},
 	render: function () {
-		var totalkm = 0.0;	
-		var lastState = null;
-		
+		var totalkm = 0.0, lastState = null;
 		if (this.state.tracking) {
-
 			var addLocation = true;
-			if (this.route.length) {
-				
+			if (this.route.length) {			
 				lastState = _.last(this.route);
 				addLocation = this.state.location.latitude != lastState.latitude ||
 							  this.state.location.longitude != lastState.longitude;
 			}				
 			if (addLocation) this.route.push(this.state.location);
-			
 			if (lastState)
 			{
 				totalkm = this.gps_distance(lastState.latitude, lastState.longitude, this.state.location.latitude, this.state.location.longitude);
 				this.totalKm = this.totalKm + Number(totalkm);
-			}			
+			}
 		}
 		return (
 			<View>
@@ -87,7 +79,7 @@ var CreateStep2 = React.createClass({
 						<span style={this.getKMNumberStyle()}>{this.totalKm.toFixed(1)}</span>
 						<span style={this.getKMUnitStyle()}>Km</span>
 					</Tappable>
-					<BingMap 
+					<GoogleMap 
 						latitude={this.state.location.latitude} 
 						longitude={this.state.location.longitude}
 						tracking={this.state.tracking}
@@ -147,18 +139,17 @@ var CreateStep2 = React.createClass({
 		this.setState({
 			tracking: true
 		});				
-		//Start a timer if it is a time trial
-		if (this.props.type == 1){
-			this.intervalID = setInterval(this.tick, 1000);
-		}		
+		
+		//Start the timer
+		this.intervalID = setInterval(this.tick, 1000);
+
 		//Create Start position
 		this.startPosition = new Parse.GeoPoint(this.state.location.latitude, this.state.location.longitude);		
 	},	
     stopTracking: function () {		
-		//Stop the timer if it is a time trial;
-		if (this.props.type === 1){
-			clearInterval(this.intervalID);
-		}		
+		//Stop the timer;
+		clearInterval(this.intervalID);
+		
 		//stop position
 		this.stopPosition = new Parse.GeoPoint(this.state.location.latitude, this.state.location.longitude);
 		this.showView('page-create-step3', 'fade', {challenge: this.getChallenge()});
@@ -169,53 +160,25 @@ var CreateStep2 = React.createClass({
 		});	
 		
 		var count = this.checkPoints.length + 1;		
-		if (this.props.type === 1){
-			this.checkPoints.push({
-				order: count,
-				latitude: this.state.location.latitude,
-				longitude: this.state.location.longitude,
-				time: this.duration,
-				km: this.totalKm
-			});
-		}
-		else {
-			this.checkPoints.push({
-				order: count,
-				latitude: this.state.location.latitude,
-				longitude: this.state.location.longitude,
-				km: this.totalKm
-			});			
-		}
+		this.checkPoints.push({
+			order: count,
+			latitude: this.state.location.latitude,
+			longitude: this.state.location.longitude,
+			time: this.duration,
+			km: this.totalKm
+		});
 	},	
 	getChallenge: function() {
-		
-		if (this.props.type === 1) {		
-			return challenge = new Object({
-				name: this.props.name,
-				type: this.props.type,
-				difficulty: this.props.difficulty,
-				startPosition: this.startPosition,
-				stopPosition: this.stopPosition,
-				route: this.route,
-				criteria: "",
-				stopTime: Number(this.duration),
-				stopDistance: this.totalKm.toFixed(1),
-				checkPoints: this.checkPoints			
-			});
-		}
-		else {
-			return challenge = new Object({
-				name: this.props.name,
-				type: this.props.type,
-				difficulty: this.props.difficulty,
-				startPosition: this.startPosition,
-				stopPosition: this.stopPosition,
-				route: this.route,
-				criteria: "",
-				stopDistance: this.totalKm.toFixed(1),
-				checkPoints: this.checkPoints			
-			});			
-		}
+		return challenge = new Object({
+			name: this.props.name,
+			startPosition: this.startPosition,
+			stopPosition: this.stopPosition,
+			route: this.route,
+			criteria: "",
+			stopTime: Number(this.duration),
+			stopDistance: this.totalKm.toFixed(1),
+			checkPoints: this.checkPoints			
+		});
 	},		
 	getStyle: function () {
 		return {
@@ -235,7 +198,7 @@ var CreateStep2 = React.createClass({
           border: '1px solid transparent',
           border: 2,
           outline: 'none',
-          width: '30%',
+          width: '40%',
           left: 5,
           textAlign: 'center',
           textDecoration: 'none',
@@ -246,7 +209,7 @@ var CreateStep2 = React.createClass({
 	getKMNumberStyle: function () {
 		return {
           color: '#039E79',
-		  fontSize: 20,
+		  fontSize: 30,
 		  paddingRight: 3,
 		  zIndex: 999
 		};		
@@ -254,14 +217,12 @@ var CreateStep2 = React.createClass({
 	getKMUnitStyle: function () {
 		return {
           color: '#ABD0CB',
-		  fontSize: 12,
+		  fontSize: 15,
 		  zIndex: 999
 		};		
 	},
 	getButtonStyle: function () {
-		
 		var color = this.state.tracking ? 'red' : 'green' ;
-		
 		return {
 		  position:'absolute',
           bottom:'2%',

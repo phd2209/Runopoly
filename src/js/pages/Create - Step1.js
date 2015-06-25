@@ -2,34 +2,30 @@ var React = require("react");
 var UI = require('touchstonejs').UI;
 var Navigation = require('touchstonejs').Navigation;
 var LabelInput = require('../components/LabelInput');
-var LabelSelect = require('../components/LabelSelect');
 var Link = require('touchstonejs').Link;
 var View = require('../components/View');
 
 var CreateStep1 = React.createClass({
-	mixins: [Navigation],	
+	mixins: [Navigation],
 	propTypes: {
 		prevView: React.PropTypes.string.isRequired
-	},		
+	},
 	getDefaultProps: function () {
         return {
-			prevView: 'page-home',
+			prevView: 'page-home'
 		};
-    },	
+    },
 	getInitialState: function () {
 		return {
 			error: '',
 			name: '',
-			type: 1,
-			difficulty: 1,
 			automatic: false
 		};
-	},	
+	},
 	render: function () {
-		
 		return (
 			<View>
-				<UI.Headerbar label="Challenge type" type="runopoly">
+				<UI.Headerbar label="Create Challenge" type="runopoly">
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />				
 				</UI.Headerbar>
 				<UI.ViewContent>
@@ -42,15 +38,6 @@ var CreateStep1 = React.createClass({
 								null
 						}
 						<LabelInput type="text" label="Name" ref="name" defaultValue={this.state.name} onChange={this.handleNameChange}/>						
-						<LabelSelect label="Type" value={this.state.type} onChange={this.handleTypeChange} options={[
-							{ label: 'Time trial',     value: 1 },
-							{ label: 'Timeless trial', value: 2 }
-						]} />
-						<LabelSelect label="Difficulty" value={this.state.difficulty} onChange={this.handleDifficultyChange} options={[
-							{ label: 'Easy',       value: 1 },
-							{ label: 'Moderate',   value: 2 },
-							{ label: 'Hard',       value: 3 }
-						]} />
 						<LabelInput label="Automatic Checkpoints" readonly>
 							<UI.Switch on={this.state.automatic} onTap={this.HandleUpdateTypeChange} type="default" />
 						</LabelInput>						
@@ -62,10 +49,9 @@ var CreateStep1 = React.createClass({
 					}
 					<Link to="page-create-step2" viewTransition="fade" params={{prevView: 'page-create-step1', 
 						name: this.state.name.trim(), 
-						type: Number(this.state.type), 
-						difficulty: Number(this.state.difficulty),
 						automatic: this.state.automatic}} 
-						component="div">						
+						component="div"
+						className="panel-button">							
 						<span className='checkpoint_button' style={this.getButtonStyle()}>NEXT</span>
 					</Link>
 				</UI.ViewContent>
@@ -77,16 +63,6 @@ var CreateStep1 = React.createClass({
 			name: event.target.value
 		});
 	},
-	handleTypeChange: function(newType) {
-		this.setState({
-			type: newType
-		});
-	},
-	handleDifficultyChange: function(newDifficulty) {
-		this.setState({
-			difficulty: newDifficulty
-		});
-	},
 	HandleUpdateTypeChange: function() {
 		this.setState({
 			automatic: !this.state.automatic
@@ -94,20 +70,20 @@ var CreateStep1 = React.createClass({
 	},
 	getButtonStyle: function () {
 		return {
-		  position:'absolute',
-          bottom:'2%',
-          color: '#fff',
-          backgroundColor: '#42B49A',
-          padding: 11,
+          color: '#42B49A',
+          backgroundColor: '#fff',
           border: '1px solid transparent',
           border: 2,
+		  marginTop: 10,
           outline: 'none',
           width: '96%',
           left: 5,
           textAlign: 'center',
+		  fontWeight: 'bold',
           textDecoration: 'none',
-          margin: '0px auto'
+		  textTransform: 'uppercase',
+		  marginBottom: 10
 		};	
-	},	
+	},		
 });
 module.exports = CreateStep1;

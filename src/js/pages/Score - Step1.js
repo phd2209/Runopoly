@@ -10,25 +10,22 @@ var ScoreStep1 = React.createClass({
 	mixins: [Navigation, ParseReact.Mixin],
 	getDefaultProps: function () {
         return {
-			prevView: 'page-home', 
+			prevView: 'page-home'
 		};
     },
 	getInitialState: function () {
 		return {
 			processing: true
 		};
-	},	
-	observe: function(props, state) {
+	},
+	observe: function (props, state) {
 		return {
-			results: (new Parse.Query('Results').include('challenge')),
-			challenges: (new Parse.Query('Challenge'))/*,
+			results: (new Parse.Query('Results').include('challenge'))/*,
 			user: ParseReact.currentUser*/
 		};
 	},	
 	render: function () {	
 		var RunopolyScore = 0;
-		RunopolyScore = this.processChallenges(this.data.challenges);
-		console.log(RunopolyScore);
 		RunopolyScore = RunopolyScore + this.processResults(this.data.results);		
 		console.log(RunopolyScore);
 
@@ -58,25 +55,25 @@ var ScoreStep1 = React.createClass({
 		);
 	},			
 	processResults: function(results) {	
-		var result = 0;
-		if (!results || !results.length) return result;
-		_.each(results, function (resultItem) {
-			if (resultItem.status) {
-				result = result + Number(resultItem.challenge.stopDistance);
-			}
-			if (resultItem.timeLeft) {
-				result = result + Math.min((60/resultItem.timeLeft).toFixed(0), 60);
+		var scoring = [];
+		var seconds = 0;
+		var score = 0;
+		if (!results || !results.length) return score;
+
+		_.each(results, function (result) {
+			if (result.status === 1 && result.checkPoints) {
+				var obj = {objectid: result.challenge.objectId, score: 0};
+				_.each(result.challenge.checkPoints, function (checkpoint, i) {
+					seconds = Math.abs(result.checkPoints[i].duration - checkpoint.time);
+					score = 10 - Math.min((1/checkpoint.km)*(seconds/6),10);
+					obj.score = obj.score + score;
+					console.log(checkpoint.km);
+					console.log(seconds);
+				});				
+				scoring.push(obj);
 			}
 		});		
-		return result;
-	},
-	processChallenges: function(challenges) {	
-		var result = 0;
-		if (!challenges || !challenges.length) return result;
-		_.each(challenges, function (challengeItem) {
-			result = result + Number(challengeItem.stopDistance);
-		});		
-		return result;
+		return score;
 	},
 	getH1Style: function () {
 		return {

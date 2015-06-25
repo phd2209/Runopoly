@@ -21,7 +21,7 @@ module.exports = React.createClass({
 			readonly: false,
 			inputRef: 'input'
 		};
-	},	
+	},
 	getValue: function () {
 		return this.refs.input.getDOMNode().value;
 	},	

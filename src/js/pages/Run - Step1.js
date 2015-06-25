@@ -34,8 +34,7 @@ var RunStep1 = React.createClass({
 	},	
 	getInitialState: function () {
 		return {
-			location: null,
-			activeToggleItemKey: 0,
+			location: null
 		};
 	},
 	componentWillMount: function () {
@@ -49,27 +48,12 @@ var RunStep1 = React.createClass({
 				<UI.Headerbar label="NEARBY" type="runopoly">
 					<UI.HeaderbarButton showView={this.props.prevView} viewTransition="reveal-from-right" label="Back" icon="ion-chevron-left" />
 				</UI.Headerbar> 
-				<UI.Headerbar type="default" height="36px" className="Subheader">
-					<UI.Toggle value={this.state.activeToggleItemKey} onChange={this.handleToggleActiveChange} options={[
-						{ label: 'Available', value: 0 },
-						{ label: 'Completed', value: 1 }
-					]} />
-				</UI.Headerbar>				
 				<UI.ViewContent scrollable>
-					<NearbyAreaList challenges={nearestChallenges} filterState={this.state.activeToggleItemKey} />
-				</UI.ViewContent>
-				
+					<NearbyAreaList challenges={nearestChallenges} />
+				</UI.ViewContent>				
 			</View>
 		);
 	},	
-	handleToggleActiveChange: function (newItem) {
-
-		this.setState({
-			activeToggleItemKey: newItem
-		});
-
-	},
-	
 	sortChallenges: function(challenges, results) {	
 		var self = this;
 		var result = [];

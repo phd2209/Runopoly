@@ -3,10 +3,8 @@ var Parse = require('parse').Parse;
 var ParseReact = require('parse-react');
 var UI = require('touchstonejs').UI;
 var Navigation = require('touchstonejs').Navigation;
-//var ChallengeMap = require('../components/ChallengeMap');
-var ChallengeMap = require('../components/ChallengeBingMap');
+var ChallengeMap = require('../components/ChallengeMap');
 var Link = require('touchstonejs').Link;
-//var Tappable = require('react-tappable');
 var View = require('../components/View');
 
 var RunStep2 = React.createClass({
@@ -37,15 +35,10 @@ var RunStep2 = React.createClass({
 						{this.data.challenge[0] ?
 							<div className="item-inner">							 
 								<span style={this.getInfoItemStyle()}>{this.data.challenge[0].stopDistance} Km</span>
-								<span style={this.getInfoItemStyle()}>{this.getType(this.data.challenge[0].type)}</span>
-								<span style={this.getInfoItemStyle()}>{this.getDifficulty(this.data.challenge[0].difficulty)}</span>								
+								<span style={this.getInfoItemStyle()}>{this.data.challenge[0].checkPoints.length}</span>
+								<span style={this.getInfoItemStyle()}>{this.getDifficulty(this.data.challenge[0].checkPoints.length, this.data.challenge[0].stopDistance)}</span>								
 							</div>
 							: null 
-						}
-						{this.data.challenge[0] ?
-						<UI.Textarea className="challenge-info" value={this.data.challenge[0].criteria} readonly />	
-						:
-						null
 						}
 					</div>
 					{this.data.challenge[0] ? 
@@ -65,14 +58,11 @@ var RunStep2 = React.createClass({
 			</View>	
 		);
 	},
-	getType: function (typeno) {
-		if (typeno === 1) return "Time trial";
-		return "Timeless trial";			
-	},
-	getDifficulty: function (difficultyno) {
-		if (difficultyno === 1) return "Easy";
-		else if (difficultyno === 2) return "Moderate";
-		return "Hard";				
+	getDifficulty: function (checkpoints, km) {
+		var x = Math.pow(checkpoints,0.5)*Math.pow(km,0.5);		
+		if (x < 3) return "Easy";
+		else if (3 <= x < 10) return "Moderate";
+		else return "Hard";				
 	},
 	getInfoItemStyle: function () {
 		return {

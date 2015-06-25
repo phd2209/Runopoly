@@ -5,8 +5,7 @@ var UI = require('touchstonejs').UI;
 var Navigation = require('touchstonejs').Navigation;
 var LabelInput = require('../components/LabelInput');
 var CheckPointItem = require('../components/CheckPointItem');
-//var ChallengeMap = require('../components/ChallengeMap');
-var ChallengeMap = require('../components/ChallengeBingMap');
+var ChallengeMap = require('../components/ChallengeMap');
 var Tappable = require('react-tappable');
 var View = require('../components/View');
 
@@ -14,12 +13,12 @@ var CreateStep3 = React.createClass({
 	mixins: [Navigation],	
 	propTypes: {
 		challenge: React.PropTypes.object.isRequired
-	},			
+	},
 	getInitialState: function () {
 		return {
 			stopTime: 0
 		};
-	},	
+	},
 	componentDidMount: function () {
 		this.setState({			
 			stopTime: this.roundToTwo(this.props.challenge.stopTime)
@@ -34,16 +33,15 @@ var CreateStep3 = React.createClass({
 					<div className="Panel">
 						<div className="item-inner">
 							<span style={this.getInfoItemStyle()}>{this.props.challenge.stopDistance} Km</span>
-							<span style={this.getInfoItemStyle()}>{this.getType(this.props.challenge.type)}</span>
-							<span style={this.getInfoItemStyle()}>{this.getDifficulty(this.props.challenge.difficulty)}</span>
+							<span style={this.getInfoItemStyle()}>{this.props.challenge.checkPoints.length} CPs</span>
+							<span style={this.getInfoItemStyle()}>{this.getDifficulty(this.props.challenge.checkPoints.length, this.props.challenge.stopDistance)}</span>
 						</div>
 					</div>
 					<ChallengeMap
 						challenge={this.props.challenge}
 						radius={50}
 					/>
-					{						
-						(this.props.challenge.type === 1) ?
+
 							<div>
 							<div className="panel-header">Challenge time</div>
 							<div className="panel">
@@ -56,12 +54,7 @@ var CreateStep3 = React.createClass({
 							/>						
 							</div> 
 							</div>
-						: null
-					}
-					{(this.props.challenge.type === 1) ?
-						this.getCheckPointHtml() :
-						null
-					}
+					{this.getCheckPointHtml()}
 					<Tappable className="panel-button" 
 						component="div"
 						onTap={this.save}>
@@ -96,14 +89,11 @@ var CreateStep3 = React.createClass({
 			
 		ParseReact.Mutation.Create('Challenge', {
 			name: this.props.challenge.name,
-			type: this.props.challenge.type,
-			difficulty: this.props.challenge.difficulty,
 			startPosition: this.props.challenge.startPosition,
 			stopPosition: this.props.challenge.stopPosition,
-			stopTime: (this.props.challenge.type===1) ? this.state.stopTime : 0,
+			stopTime: this.state.stopTime,
 			stopDistance: Number(this.props.challenge.stopDistance),
 			route: this.props.challenge.route,
-			criteria: "",
 			checkPoints: this.props.challenge.checkPoints
 			}).dispatch().then(function() {			
 				self.setState({
@@ -125,14 +115,11 @@ var CreateStep3 = React.createClass({
 		var index = item - 1;
 		this.props.challenge.checkPoints[index].time = Number(time) * 60;
 	},
-	getType: function (typeno) {
-		if (typeno === 1) return "Time trial";
-		return "Timeless trial";			
-	},
-	getDifficulty: function (difficultyno) {
-		if (difficultyno === 1) return "Easy";
-		else if (difficultyno === 2) return "Moderate";
-		return "Hard";				
+	getDifficulty: function (checkpoints, km) {
+		var x = Math.pow(checkpoints,0.5)*Math.pow(km,0.5);		
+		if (x < 3) return "Easy";
+		else if (3 <= x < 10) return "Moderate";
+		else return "Hard";				
 	},
 	getInfoItemStyle: function () {
 		return {
@@ -147,7 +134,6 @@ var CreateStep3 = React.createClass({
 		};		
 	},	
 	getButtonStyle: function () {
-		
 		return {
           color: '#42B49A',
           backgroundColor: '#fff',

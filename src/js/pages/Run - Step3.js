@@ -5,8 +5,7 @@ var _ = require('underscore');
 var UI = require('touchstonejs').UI;
 var View = require('../components/View');
 var Tappable = require('react-tappable');
-//var ChallengeMap = require('../components/ChallengeMap');
-var ChallengeMap = require('../components/ChallengeBingMap');
+var ChallengeMap = require('../components/ChallengeMap');
 var Navigation = require('touchstonejs').Navigation;
 var geolocationMixin = require('../mixins/geoLocationMixin');
 
@@ -55,7 +54,6 @@ var RunStep3 = React.createClass({
 		var inStop  = false;
 		var checkPoint = false;
 		
-		
 		if (this.state.location)
 		{
 			//Check that user is in the start zone
@@ -84,15 +82,8 @@ var RunStep3 = React.createClass({
 						inStop = true;
 						
 						//Determine if route was successfully passed;
-						if (this.checkPointsPassed.length < this.props.challenge.checkPoints.length) {							
-							alert("challenge failed: not all checkpoint passed");
-						}
-						else if (_.contains(this.checkPointsPassed, false)) {
-							alert("challenge failed: Checkpoint(s) failed");
-						}
-						else {
-							//if (navigator) navigator.vibrate(3000);
-							alert("challenge success: All checkpoint passed");
+						if (this.checkPointsPassed.length >= this.props.challenge.checkPoints.length) {														
+							if (navigator) navigator.vibrate(3000);
 							this.status = 1;
 						}
 					}
@@ -108,19 +99,11 @@ var RunStep3 = React.createClass({
 
 					if (this.pointInCircle(this.state.location.latitude, this.state.location.longitude, checkpoints[j].latitude, checkpoints[j].longitude)) {					
 						if (Number(checkpoints[j].order) === Number(this.checkPointOrder + 1)) {
-							checkPoint = true;
-							this.CheckPointCleared(Number(checkpoints[j].order));
-							
-							if (this.props.challenge.type == 1)
-							{
-								this.timeLeft = Math.abs(Number(checkpoints[j].time)-Number(this.duration));
-							}							
-							//if (navigator) navigator.vibrate(3000);
+							checkPoint = true;							
+							if (navigator) navigator.vibrate(3000);
+							this.timeLeft = this.timeLeft + Math.abs(Number(checkpoints[j].time)-Number(this.duration));
+							this.CheckPointCleared(Number(checkpoints[j].order), Math.abs(Number(checkpoints[j].time)-Number(this.duration)));
 							break;							
-						}
-						else {
-							this.CheckPointsFailed(Number(checkpoints[j].order));
-							break;
 						}
 					}
 				}
@@ -200,7 +183,6 @@ var RunStep3 = React.createClass({
 	},	
     //Starts actual tracking of a Run    
 	startChallenge: function () {		
-		console.log("Challenge started");
 		if (this.state.ChallengeStarted) return;
 				
 		this.setState({
@@ -228,7 +210,8 @@ var RunStep3 = React.createClass({
 		ParseReact.Mutation.Create('Results', {
 			challenge: new Challenge({id: this.props.challenge.objectId}),
 			status: this.status,
-			timeLeft: this.timeLeft
+			timeLeft: this.timeLeft,
+			checkPoints: this.checkPointsPassed,
 			}).dispatch().then(function() {
 				console.log("saved");
 		});
@@ -239,18 +222,16 @@ var RunStep3 = React.createClass({
 		if (distanceToPoint<25) result = true;
 		return result;
 	},
-	CheckPointCleared: function (index) {
-		console.log("passed " + index);
-		if (this.checkPointsPassed.length < index) {
-			this.checkPointsPassed[index-1] = true;	
+	CheckPointCleared: function (index, time) {
+		if (this.checkPointsPassed.length < index) {			
+			this.checkPointsPassed[index-1] = {
+				order: index,
+				duration: this.duration,
+				timeLeft: time,
+				km: this.totalKm
+			};	
 			this.checkPointOrder = this.checkPointOrder + 1;
 		}
-	},
-	CheckPointsFailed: function (index) {
-		console.log("Failed " + index);
-		if (this.checkPointsPassed.length >= index) return;
-		this.checkPointsPassed[index-1] = false;
-		this.checkPointOrder = this.checkPointOrder + 1;
 	},
 	getStyle: function () {
 		return {
@@ -287,7 +268,7 @@ var RunStep3 = React.createClass({
           border: '1px solid transparent',
           border: 2,
           outline: 'none',
-          width: '30%',
+          width: '40%',
           left: 5,
           textAlign: 'center',
           textDecoration: 'none',
@@ -298,7 +279,7 @@ var RunStep3 = React.createClass({
 	getKMNumberStyle: function () {
 		return {
           color: '#039E79',
-		  fontSize: 20,
+		  fontSize: 30,
 		  paddingRight: 3,
 		  zIndex: 999
 		};		
@@ -306,7 +287,7 @@ var RunStep3 = React.createClass({
 	getKMUnitStyle: function () {
 		return {
           color: '#ABD0CB',
-		  fontSize: 12,
+		  fontSize: 15,
 		  zIndex: 999
 		};		
 	},

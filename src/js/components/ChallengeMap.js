@@ -12,9 +12,9 @@ var ChallengeMap = React.createClass({
 		challengeStarted: React.PropTypes.bool,
 		radius: React.PropTypes.number,
 		checkPoint: React.PropTypes.bool
-	},		
+	},
 	getDefaultProps: function () {
-        return {			
+        return {
             initialZoom: 13,
 			height: 300,
 			position: "relative",
@@ -27,7 +27,7 @@ var ChallengeMap = React.createClass({
 		return {
 			processing: true
 		};
-	},	
+	},
 	componentWillMount: function () {
 		this.map = null;
 	},
