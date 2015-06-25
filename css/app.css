@@ -6934,6 +6934,9 @@ th {
   margin-left: 3px;
   margin-right: 3px;
 }
+.completed {
+  background-color: #dfdfdf;
+}
 .item-media + .item-inner {
   margin-left: 40px;
 }
@@ -6946,10 +6949,12 @@ th {
 .item-title {
   text-transform: uppercase;
   color: #000000;
+  padding-left: 25px;
 }
 .item-subtitle {
   color: #787b84;
   margin-top: 5px;
+  padding-left: 25px;
 }
 .btn-runopoly {
   background-color: #42b49a;
